@@ -1,7 +1,11 @@
 $(function () {
     "use strict";
 
-    var init;
+    var $body = $(document.body),
+        init,
+        fetchState,
+        postState,
+        applyStateToTable;
 
     init = function () {
         // One-time setup stuff.
@@ -57,16 +61,40 @@ $(function () {
             html;
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: NPCs }));
+
+        // Toggle NPC 'found' status on either button click.
+        $npc_table.on("click", "button", function () {
+            $(this).closest(".npc-row").toggleClass("found");
+            $("#found-count").text($(".npc-row.found").length);
+        });
     };
 
     init();
 
-    $("#npc-table").on("click", "button", function () {
-        $(this).closest(".npc-row").toggleClass("found");
-        $("#found-count").text($(".npc-row.found").length);
+    $("#register").submit(function () {
+        var form = this;
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: {
+                name: form.guildname.value,
+                admin_email: form.admin_email.value,
+                admin_pw: form.admin_pw.value,
+                admin_pw_confirm: form.admin_pw_confirm.value,
+                member_pw: form.member_pw.value
+            },
+            success: function () {
+                $body.addClass("logged-in");
+                window.location.hash = "";
+            },
+            error: function (xhr) {
+                // I know this is bad UX but it's low priority.
+                window.alert(xhr.responseText);
+            }
+        });
+
+        return false;
     });
 
-    $("#test").click(function () {
-        $(document.body).toggleClass("logged-in");
-    });
 });

@@ -32,7 +32,7 @@ h1 {
 
 h2 {
     font-size: 2em;
-    margin: 1em 0 0.3em;
+    margin: 0.3em 0;
 }
 
 p {
@@ -57,7 +57,11 @@ em {
     font-weight: bold;
 }
 
-button, input[type="submit"] {
+button,
+input[type="submit"],
+a.button {
+    display: inline-block;
+    text-decoration: none;
     border: 1px solid #ddd;
     padding: 0 0.5em;
     border-radius: 3px;
@@ -69,7 +73,33 @@ button, input[type="submit"] {
     cursor: pointer;
 }
 
-#account, #main {
+button.found, input[type="submit"] {
+    background-color: #D9EEFF;
+    border-color: #2578B8;
+}
+
+button:hover,
+input[type="submit"]:hover,
+a.button:hover {
+    background-image: none;
+    border-color: #333;
+}
+
+button:focus,
+input[type="submit"]:focus,
+a.button:focus {
+    border-color: #000;
+    box-shadow: 0 0 7px 1px rgba(0,0,0,0.3);
+}
+
+button:active,
+input[type="submit"]:active,
+a.button:active {
+    background-image:
+        linear-gradient(bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+}
+
+#account, #main, .dialog > form {
     background: #f4f4f4;
     border: 3px solid #2578B8;
     box-shadow: 0 3px 8px rgba(0,0,0, 0.2);
@@ -119,27 +149,9 @@ body.logged-in .npc-row input {
     visibility: visible;
 }
 
-button.found {
-    background-color: #D9EEFF;
-    border-color: #2578B8;
-}
-
-button:hover, input[type="submit"]:hover {
-    background-image: none;
-    border-color: #333;
-}
-
-button:focus, input[type="submit"]:focus {
-    border-color: #000;
-    box-shadow: 0 0 7px 1px rgba(0,0,0,0.3);
-}
-
-button:active, input[type="submit"]:active {
-    background-image:
-        linear-gradient(bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
-}
-
-input[type="text"], input[type="password"] {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
     border: 1px solid #ddd;
     background: #fff;
     padding: 0 0.5em;
@@ -147,13 +159,55 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
     border-color: #2577B8;
     box-shadow: 0 0 7px 1px rgba(0,0,0,0.3);
 }
 
-th {
-    text-align: left;
+.dialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background: rgba(192,192,192, 0.6);
+}
+
+.dialog > form {
+    max-width: 20em;
+    padding: 1em 3em;
+    margin: 3em auto;
+}
+
+.dialog .info {
+    font-size: 0.777em;
+    display: block;
+    margin-bottom: 1em;
+}
+
+.dialog label {
+    display: block;
+}
+
+.dialog > form > input {
+    margin-bottom: 0.3em;
+    padding: 0.3em 1em;
+    width: 15em;
+}
+
+.dialog-buttons {
+    text-align: right;
+}
+
+#register-dialog {
+    display: none;
+}
+
+#register-dialog:target {
+    display: block;
 }
 
 #npc-table {
@@ -166,6 +220,10 @@ th {
 
 tr:nth-child(even) {
     background: #f4f4f4;
+}
+
+th {
+    text-align: left;
 }
 
 .npc-row td, .npc-row th {

@@ -1,4 +1,4 @@
 <?php
-erroosgdgfd();
+include "config.php";
 include "main.html";
 ?>
