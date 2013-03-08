@@ -1,0 +1,226 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+
+html {
+    background: #D4B27F;
+}
+
+body {
+    color: #333;
+
+    max-width: 55em;
+    margin: 0 auto;
+    padding: 0;
+
+    font: 16px/1.6 "PT Sans", sans-serif;
+}
+
+h1, h2, h3, th {
+    font-family: "Palatino", "Palatino Linotype", "Book Antiqua", serif;
+}
+
+h1, h2, h3 {
+    color: #916D36;
+    text-shadow:
+        0 -1px 0 rgba(0,0,0,0.75),
+        0 1px 0 rgba(255,255,255,1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2em;
+    margin: 1em 0 0.3em;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+#found-count {
+    padding-left: 1em;
+    font-weight: bold;
+    color: #DE921C;
+}
+
+a {
+    color: #2578B8;
+}
+
+a:hover {
+    color: #BAE1FF;
+}
+
+em {
+    font-weight: bold;
+}
+
+button, input[type="submit"] {
+    border: 1px solid #ddd;
+    padding: 0 0.5em;
+    border-radius: 3px;
+    background-color: #eee;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255,255,255, 0.5);
+    background-image:
+        linear-gradient(top, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+    cursor: pointer;
+}
+
+#account, #main {
+    background: #f4f4f4;
+    border: 3px solid #2578B8;
+    box-shadow: 0 3px 8px rgba(0,0,0, 0.2);
+    padding: 1em 5em;
+    margin: 1em 0;
+    border-radius: 3px;
+}
+
+#account {
+    font-size: 0.8em;
+    position: relative;
+}
+
+#account form,
+#logged-in {
+    position: absolute;
+    right: 6.25em;
+    top: 1em;
+}
+
+body.logged-in #account form {
+    display: none;
+}
+
+#logged-in {
+    display: none;
+}
+
+body.logged-in #logged-in {
+    display: block;
+}
+
+#logged-in-guildname {
+    font-weight: bold;
+}
+
+.npc-row button {
+    width: 5em;
+}
+
+.npc-row button, .npc-row input {
+    visibility: hidden;
+}
+
+body.logged-in .npc-row button,
+body.logged-in .npc-row input {
+    visibility: visible;
+}
+
+button.found {
+    background-color: #D9EEFF;
+    border-color: #2578B8;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-image: none;
+    border-color: #333;
+}
+
+button:focus, input[type="submit"]:focus {
+    border-color: #000;
+    box-shadow: 0 0 7px 1px rgba(0,0,0,0.3);
+}
+
+button:active, input[type="submit"]:active {
+    background-image:
+        linear-gradient(bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+}
+
+input[type="text"], input[type="password"] {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 0 0.5em;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #2577B8;
+    box-shadow: 0 0 7px 1px rgba(0,0,0,0.3);
+}
+
+th {
+    text-align: left;
+}
+
+#npc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+tr:nth-child(even) {
+    background: #f4f4f4;
+}
+
+.npc-row td, .npc-row th {
+    padding: 0.3em 0.5em;
+}
+
+td:first-child, th:first-child {
+    padding-left: 1em;
+}
+
+td:last-child, th:last-child {
+    padding-right: 1em;
+}
+
+.npc-row th {
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+}
+
+.npc-row span {
+    display: inline-block;
+}
+
+.npc-row input {
+    width: 100%;
+}
+
+.npc-row .npc-name {
+    width: 13em;
+}
+
+.npc-row .npc-location {
+    width: 13em;
+}
+
+.npc-row .lost {
+    display: none;
+}
+
+.npc-row.found {
+    background: #8f8;
+}
+
+.npc-row.found:nth-child(even) {
+    background: #8e8;
+}
+
+.npc-row.found td {
+    text-shadow: 0 1px 0 rgba(192,239,192, 0.7);
+}
+
+.npc-row.found .found {
+    display: none;
+}
+
+.npc-row.found .lost {
+    display: inline-block;
+}
