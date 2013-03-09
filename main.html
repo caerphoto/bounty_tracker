@@ -32,18 +32,21 @@
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
-        <span class="info">The guild name is not case-sensitive. Valid
+        <p class="info">The guild name is not case-sensitive. Valid
           characters are <em>letters</em>, <em>numbers</em> and
-          <em>spaces</em>.</span>
+          <em>spaces</em>.</p>
 
         <label for="register-admin-email">Admin email:</label>
         <input id="register-admin-email" name="admin_email" type="text">
-        <span class="info">This is so you can reset the admin password if you
-          forget it. You can leave it blank but this is not recommended.</span>
+        <p class="info">This is so you can reset the admin password if you
+          forget it. You can leave it blank but this is not recommended.</p>
 
         <label for="register-admin-pw">Admin password:</label>
         <input id="register-admin-pw" name="admin_pw" type="password">
-        <span class="info">This is your login password.</span>
+        <p class="info">This is your login password.<br>
+        <strong>WARNING!</strong> I'm still testing this site, so your password
+        is <em>not currently encrypted</em>. Don't use the same password
+        you've used anywhere else!</p>
 
         <label for="register-admin-pw-confirm">Confirm admin password:</label>
         <input id="register-admin-pw-confirm" name="admin_pw_confirm" type="password">
@@ -52,8 +55,10 @@
 
         <label for="register-member-pw">Member password:</label>
         <input id="register-member-pw" name="member_pw" type="text">
-        <span class="info">This is what regular guild members will use to log
-          in.</span>
+        <p class="info">This is what regular guild members will use to log
+        in.<br>
+        It is <em>not encrypted</em>, since you&rsquo;ll be sharing it with lots
+        of (hopefully trustworthy) people anyway.</p>
 
         <div class="dialog-buttons">
           <a href="#" class="button">Cancel</a>
@@ -66,6 +71,10 @@
       <h1>Guild Bounty Tracker</h1>
       <p class="intro info">This tool is to assist guilds with the <em>Guild
         Bounty</em> mission in Guild Wars 2.</p>
+
+      <p class="intro info"><strong>NOTE:</strong> this tool is still under
+      construction, so some of the error messages and so on aren't very polished
+      or friendly.</p>
 
       <p class="intro info">If you&rsquo;re a guild leader/officer, you can
       register your guild, then set up a password for other guild members to log

@@ -57,6 +57,11 @@ em {
     font-weight: bold;
 }
 
+strong {
+    font-weight: bold;
+    color: #d00;
+}
+
 button,
 input[type="submit"],
 a.button {
@@ -196,22 +201,25 @@ input[type="email"]:focus {
 }
 
 .dialog > form {
-    max-width: 20em;
+    width: 35em;
     padding: 1em 3em;
     margin: 3em auto;
 }
 
 .dialog .info {
     font-size: 0.777em;
-    display: block;
     margin-bottom: 1em;
+    float: right;
+    width: 24em;
 }
 
 .dialog label {
     display: block;
+    clear: both;
 }
 
 .dialog > form > input {
+    box-sizing: border-box;
     margin-bottom: 0.3em;
     padding: 0.3em 1em;
     width: 15em;
@@ -219,6 +227,7 @@ input[type="email"]:focus {
 
 .dialog-buttons {
     text-align: right;
+    clear: both;
 }
 
 #register-dialog {
