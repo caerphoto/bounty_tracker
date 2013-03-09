@@ -3,22 +3,26 @@
   <head>
     <link rel="stylesheet" href="../reset.css">
     <link rel="stylesheet" href="main.css">
+    <script src="../prefixfree.min.js"></script>
     <title>Guild Bounty Tracker</title>
   </head>
-  <body>
+  <body class="<?php echo $body_class; ?>">
     <section id="account">
-      <a href="#register-dialog">Register Your Guild</a>
+      <a href="#register-dialog" id="register-link">Register your guild</a>
 
-      <form id="login">
+      <form id="login" action="login.php" method="POST">
         <label for="login-guildname">Guild name:</label>
-        <input type="text" id="login-guildname">
+        <input type="text" id="login-guildname" name="guildname">
         <label for="login-password">Password:</label>
-        <input type="password" id="login-password">
+        <input type="password" id="login-password" name="password">
         <input type="submit" value="Log In">
       </form>
 
-      <div id="logged-in">Logged in to guild
-        <span id="logged-in-guildname">guildname</span> &middot;
+      <div id="logged-in">Logged in as a<span id="logged-in-admin">n admin
+          of</span><span id="logged-in-member"> member of</span>
+        <span id="logged-in-guildname"><?php echo $guild_data["name"];?></span> &middot;
+        <span id="logged-in-options"><a href="#options-dialog">options</a>
+          &middot; </span>
         <button id="log-out">Log Out</button>
       </div>
     </section>
@@ -108,7 +112,10 @@
 
     </section>
 
-    <script src="../prefixfree.min.js"></script>
+    <script id="guild-data" type="application/json">
+<?php echo json_encode($guild_data); ?>
+    </script>
+
     <script src="../jquery.js"></script>
     <script src="../mustache.js"></script>
     <script src="bounty.js"></script>

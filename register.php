@@ -67,18 +67,18 @@ function validateRequest(&$params) {
   );
 } // validateRequest()
 
-function createGuild(&$guild) {
+function createGuild($guild) {
   // Guilty until proven innocent.
-  header('HTTP/1.0 500');
+  header("HTTP/1.0 500");
 
-  global $db_conn, $db_user, $db_pw, $guilds_table_cols;
+  global $db_conn, $db_user, $db_pw, $register_guild_cols;
 
   $dbh = new PDO($db_conn, $db_user, $db_pw);
 
   // makeQueryParam is from common.php. It returns ":value" when passed "value".
-  $query_params = array_map("makeQueryParam", $guilds_table_cols);
+  $query_params = array_map("makeQueryParam", $register_guild_cols);
   $query_params = join(", ", $query_params);
-  $columns = join(", ", $guilds_table_cols);
+  $columns = join(", ", $register_guild_cols);
 
   $query = $dbh->prepare(
     "insert into guild_bounty.guilds (" .
@@ -88,7 +88,11 @@ function createGuild(&$guild) {
     ");"
   );
 
-  foreach ($guilds_table_cols as $col) {
+  $guild["admin_pw"] = encryptPassword($guild["admin_pw"]);
+  // Member password is not encrypted, since they can't really do anything 
+  // harmful anyway.
+
+  foreach ($register_guild_cols as $col) {
     $query->bindParam(":" . $col, $guild[$col]);
   }
 
@@ -103,14 +107,15 @@ function createGuild(&$guild) {
     return false;
   }
 
-  return $guild;
+  // Return actual stored data.
+  return fetchGuildData("name", $guild["name"], true);
 }
 
 // ==========================
 // Main execution begins here
 // ==========================
 
-//ob_start();
+ob_start();
 
 header("Content-type: application/json; charset=UTF-8");
 
@@ -130,6 +135,10 @@ if (!$new_guild) {
 
 // If we've got this far, everything's ok.
 header("HTTP/1.0 200 OK");
+
+session_start();
+$_SESSION["admin logged in"] = "yes";
+$_SESSION["guild id"] = $new_guild["id"];
 
 echo json_encode($new_guild);
 

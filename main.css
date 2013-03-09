@@ -69,7 +69,7 @@ a.button {
     color: #555;
     text-shadow: 0 1px 0 rgba(255,255,255, 0.5);
     background-image:
-        linear-gradient(top, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+        linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
     cursor: pointer;
 }
 
@@ -96,7 +96,7 @@ button:active,
 input[type="submit"]:active,
 a.button:active {
     background-image:
-        linear-gradient(bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
+        linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
 }
 
 #account, #main, .dialog > form {
@@ -128,13 +128,32 @@ body.logged-in #account form {
     display: none;
 }
 
+/* Default is to display normal member login status, but if the document body
+ * has the "admin" class, show admin-y login stuff instead. */
+
 body.logged-in #logged-in {
-    display: block;
+    display: inline;
 }
 
 #logged-in-guildname {
     font-weight: bold;
 }
+
+#logged-in-admin,
+#logged-in-options {
+    display: none;
+}
+
+body.admin #logged-in-admin,
+body.admin #logged-in-options {
+    display: inline;
+}
+
+body.admin #logged-in-member {
+    display: none;
+}
+
+/* NPC table stuff */
 
 .npc-row button {
     width: 5em;

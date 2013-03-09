@@ -71,7 +71,16 @@ $(function () {
 
     init();
 
+    $("#register-link").click(function () {
+        // Move the focus call to the end of the queue so it gets called after
+        // the dialog is made visible.
+        setTimeout(function () {
+            $("#register-guildname").focus();
+        }, 0);
+    });
+
     $("#register").submit(function () {
+        // Override form submit handling to use ajax instead.
         var form = this;
 
         $.ajax({
@@ -87,6 +96,9 @@ $(function () {
             success: function () {
                 $body.addClass("logged-in");
                 window.location.hash = "";
+
+                // TODO: change this to something less terrible
+                window.alert("Success!");
             },
             error: function (xhr) {
                 // I know this is bad UX but it's low priority.
@@ -94,7 +106,54 @@ $(function () {
             }
         });
 
+        return false; // prevent default handling of form submission
+    });
+
+    $("#login").submit(function () {
+        var form = this;
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: {
+                guildname: form.guildname.value,
+                password: form.password.value
+            },
+            dataType: "json",
+            success: function (response) {
+                $body.addClass("logged-in");
+
+                if (response.admin_pw) {
+                    $body.addClass("admin");
+                }
+                window.location.hash = "";
+
+                $("#logged-in-guildname").text(response.name);
+
+                form.password.value = "";
+            },
+            error: function (xhr) {
+                // I know this is bad UX but it's low priority.
+                window.alert(xhr.statusCode());
+            }
+        });
+
         return false;
+    });
+
+    $("#log-out").click(function () {
+        $.ajax({
+            url: "logout.php",
+            type: "POST",
+            success: function () {
+                $body.removeClass("admin logged-in");
+                window.location.hash = "";
+            },
+            error: function (xhr) {
+                // I know this is bad UX but it's low priority.
+                window.alert(xhr.statusCode());
+            }
+        });
     });
 
 });
