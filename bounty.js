@@ -93,9 +93,11 @@ $(function () {
                 admin_pw_confirm: form.admin_pw_confirm.value,
                 member_pw: form.member_pw.value
             },
-            success: function () {
+            dataType: "json",
+            success: function (response) {
                 $body.addClass("logged-in");
                 window.location.hash = "";
+                $("#logged-in-guildname").text(response.name);
 
                 // TODO: change this to something less terrible
                 window.alert("Success!");
@@ -127,7 +129,6 @@ $(function () {
                     $body.addClass("admin");
                 }
                 window.location.hash = "";
-
                 $("#logged-in-guildname").text(response.name);
 
                 form.password.value = "";

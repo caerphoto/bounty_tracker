@@ -4,13 +4,13 @@
 include "config.php";
 include "common.php";
 
-function failValidation($field, $reason) {
-  echo json_encode(array($field, $reason));
+function failValidation($field, $reason, $extra) {
+  echo json_encode(array($field, $reason, $extra));
 
   return false;
 }
 
-function validateRequest(&$params) {
+function validateRequest($params) {
   global $db_conn, $db_user, $db_pw, $required_registration_fields;
 
   // Default header - will be overriden later if validation passes.
@@ -25,9 +25,9 @@ function validateRequest(&$params) {
 
   // Length check. 100 characters was chosen because it's plenty of space for 
   // almost anything, but not so big as to be unwieldy.
-  foreach ($params as $field) {
-    if (strlen($field) > 100) {
-      return failValidation($field, "length");
+  foreach ($all_registration_fields as $field) {
+    if (mb_strlen($field) > 100) {
+      return failValidation($field, "length", $params);
     }
   }
 
@@ -71,14 +71,14 @@ function createGuild($guild) {
   // Guilty until proven innocent.
   header("HTTP/1.0 500");
 
-  global $db_conn, $db_user, $db_pw, $register_guild_cols;
+  global $db_conn, $db_user, $db_pw, $create_guild_cols;
 
   $dbh = new PDO($db_conn, $db_user, $db_pw);
 
   // makeQueryParam is from common.php. It returns ":value" when passed "value".
-  $query_params = array_map("makeQueryParam", $register_guild_cols);
+  $query_params = array_map("makeQueryParam", $create_guild_cols);
   $query_params = join(", ", $query_params);
-  $columns = join(", ", $register_guild_cols);
+  $columns = join(", ", $create_guild_cols);
 
   $query = $dbh->prepare(
     "insert into guild_bounty.guilds (" .
@@ -92,7 +92,7 @@ function createGuild($guild) {
   // Member password is not encrypted, since they can't really do anything 
   // harmful anyway.
 
-  foreach ($register_guild_cols as $col) {
+  foreach ($create_guild_cols as $col) {
     $query->bindParam(":" . $col, $guild[$col]);
   }
 
