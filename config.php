@@ -12,25 +12,21 @@ $member_guild_cols = array(
 );
 
 // Used when retrieving guild data for admins. A superset of $member_guild_cols
-$admin_guild_cols = array_merge($member_guild_cols,
-  array(
-    "admin_email",
-    "admin_pw",
-  )
-);
+$admin_guild_cols = array_slice($member_guild_cols, 0);
+array_push($admin_guild_cols, "admin_email", "admin_pw");
 
 // Used when validating registration data.
 $required_registration_fields = array(
   "name",
-  // admin_email is not required for registration
   "admin_pw",
   "admin_pw_confirm",
   "member_pw"
 );
 
-$all_registration_fields = array_merge($required_registration_fields,
-  array("admin_email")
-);
+// admin_email is not required for registration, but it still needs to be 
+// validated.
+$all_registration_fields = array_slice($required_registration_fields, 0);
+array_push($all_registration_fields, "admin_email");
 
 // Columns used when creating a guild record.
 $create_guild_cols = array(

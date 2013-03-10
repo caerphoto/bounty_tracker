@@ -10,7 +10,10 @@ header("HTTP/1.0 403 Forbidden");
 
 $guildname = $_REQUEST["guildname"];
 $password = $_REQUEST["password"];
-$encrypted_password = encryptPassword($password);
+
+$hasher = new PasswordHash(8, false);
+$hashed_password = $hasher->HashPassword($password);
+unset($hasher);
 
 $guild = fetchGuildData("name", $guildname, true);
 
@@ -20,7 +23,7 @@ if (!$guild) {
   exit(0);
 }
 
-if ($encrypted_password === $guild["admin_pw"]) {
+if ($hashed_password === $guild["admin_pw"]) {
   session_start();
 
   header("HTTP/1.0 200 OK");
@@ -56,8 +59,5 @@ if ($password === $guild["member_pw"]) {
   exit(0);
 }
 
-print_r($guild);
-echo "\nProvided password: " . $password . "\n";
-echo "Encrypted password: " . $encrypted_password . "\n";
 ob_flush();
 ?>

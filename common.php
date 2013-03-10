@@ -42,10 +42,4 @@ function fetchGuildData($col, $term, $admin) {
 
 }
 
-function encryptPassword($pw) {
-  // Returns the encrypted version of the given password string.
-  // TODO: encryption *cough*
-  return $pw;
-}
-
 ?>

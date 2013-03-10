@@ -95,7 +95,7 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                $body.addClass("logged-in");
+                $body.addClass("admin logged-in");
                 window.location.hash = "";
                 $("#logged-in-guildname").text(response.name);
 

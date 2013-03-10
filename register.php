@@ -3,15 +3,17 @@
 
 include "config.php";
 include "common.php";
+include "../PasswordHash.php";
 
-function failValidation($field, $reason, $extra) {
+function failValidation($field, $reason, $extra="") {
   echo json_encode(array($field, $reason, $extra));
 
   return false;
 }
 
 function validateRequest($params) {
-  global $db_conn, $db_user, $db_pw, $required_registration_fields;
+  global $db_conn, $db_user, $db_pw, $required_registration_fields,
+    $all_registration_fields;
 
   // Default header - will be overriden later if validation passes.
   header("HTTP/1.0 400 Bad Request");
@@ -23,10 +25,10 @@ function validateRequest($params) {
     }
   }
 
-  // Length check. 100 characters was chosen because it's plenty of space for 
+  // Length check. 200 characters was chosen because it's plenty of space for 
   // almost anything, but not so big as to be unwieldy.
   foreach ($all_registration_fields as $field) {
-    if (mb_strlen($field) > 100) {
+    if (mb_strlen($field) > 200) {
       return failValidation($field, "length", $params);
     }
   }
@@ -44,18 +46,7 @@ function validateRequest($params) {
   }
 
   // Make sure the guild does not already exist.
-  $dbh = new PDO($db_conn, $db_user, $db_pw);
-  $query = $dbh->prepare(
-    "select name from guild_bounty.guilds where name = :name;"
-  );
-
-  $query->bindParam(":name", $guildname);
-  $query->execute();
-  $results = $query->fetchAll();
-
-  unset($dbh);
-
-  if (count($results) > 0) {
+  if (fetchGuildData("name", $guildname, false)) {
     return failValidation("name", "exists");
   }
 
@@ -88,8 +79,10 @@ function createGuild($guild) {
     ");"
   );
 
-  $guild["admin_pw"] = encryptPassword($guild["admin_pw"]);
-  // Member password is not encrypted, since they can't really do anything 
+  $hasher = new PasswordHash(8, false);
+  $guild["admin_pw"] = $hasher->HashPassword($guild["admin_pw"]);
+  unset($hasher);
+  // Member password is not hashed, since they can't really do anything
   // harmful anyway.
 
   foreach ($create_guild_cols as $col) {
@@ -109,7 +102,7 @@ function createGuild($guild) {
 
   // Return actual stored data.
   return fetchGuildData("name", $guild["name"], true);
-}
+} // createGuild()
 
 // ==========================
 // Main execution begins here
