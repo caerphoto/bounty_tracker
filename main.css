@@ -368,6 +368,14 @@ body.demo .npc-row.found:nth-child(even) {
     display: none;
 }
 
+#refresh {
+    display: none;
+}
+
+body.logged-in #refresh {
+    display: inline-block;
+}
+
 body.admin.logged-in #reset-buttons,
 body.demo #reset-buttons {
     /* TODO: functionality for these buttons */
