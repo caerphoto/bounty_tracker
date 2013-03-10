@@ -134,8 +134,12 @@ $(function () {
                 form.password.value = "";
             },
             error: function (xhr) {
-                // I know this is bad UX but it's low priority.
-                window.alert(xhr.statusCode());
+                if (xhr.status === 403) {
+                    window.alert("Invalid guild name or password.");
+                } else {
+                    // I know this is bad UX but it's low priority.
+                    window.alert(xhr.status + " " + xhr.statusText);
+                }
             }
         });
 

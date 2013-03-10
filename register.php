@@ -3,7 +3,7 @@
 
 include "config.php";
 include "common.php";
-include "../PasswordHash.php";
+include "PasswordHash.php";
 
 function failValidation($field, $reason, $extra="") {
   echo json_encode(array($field, $reason, $extra));

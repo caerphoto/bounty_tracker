@@ -2,6 +2,7 @@
 
 include "config.php";
 include "common.php";
+include "PasswordHash.php";
 
 ob_start();
 
@@ -11,19 +12,18 @@ header("HTTP/1.0 403 Forbidden");
 $guildname = $_REQUEST["guildname"];
 $password = $_REQUEST["password"];
 
-$hasher = new PasswordHash(8, false);
-$hashed_password = $hasher->HashPassword($password);
-unset($hasher);
-
 $guild = fetchGuildData("name", $guildname, true);
 
 if (!$guild) {
-  header("HTTP/1.0 404 Not Found");
   ob_flush();
   exit(0);
 }
 
-if ($hashed_password === $guild["admin_pw"]) {
+$hasher = new PasswordHash(8, false);
+$is_admin_password = $hasher->CheckPassword($password, $guild["admin_pw"]);
+unset($hasher);
+
+if ($is_admin_password) {
   session_start();
 
   header("HTTP/1.0 200 OK");
