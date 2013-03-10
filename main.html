@@ -136,8 +136,10 @@
     </footer>
 
     <script>
-      var GBT = {};
-      GBT.guild_data = <?php echo json_encode($guild_data); ?>;
+      var GBT = {
+        guild_data: <?php echo json_encode($guild_data); ?>,
+        npc_list: <?php echo json_encode($npc_list); ?>
+      };
     </script>
 
     <script src="../jquery.js"></script>

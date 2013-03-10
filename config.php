@@ -50,6 +50,14 @@ $state_table_cols = array(
   "state"
 );
 
+$dbh = new PDO($db_conn, $db_user, $db_pw);
+$query = $dbh->prepare(
+  "select name, location, short_name, url from guild_bounty.npcs order by name;"
+);
+$query->execute();
+$npc_list = $query->fetchAll(PDO::FETCH_ASSOC);
+unset($dbh);
+
 // Enable error output if in local (dev) environment.
 if (!file_exists('../local.txt')) {
     error_reporting(0);

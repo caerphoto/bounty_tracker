@@ -101,7 +101,7 @@ function createGuild($guild) {
   }
 
   // Return actual stored data.
-  return fetchGuildData("name", $guild["name"], true);
+  return fetchGuildData("name", $guild["name"], $admin_guild_cols);
 } // createGuild()
 
 // ==========================
