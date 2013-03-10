@@ -37,6 +37,7 @@ if ($is_admin_password) {
   }
   $response["is_admin"] = true;
   $response["guild_data"] = $guild_data;
+  $response["search_state"] = fetchSearchState($guild["id"], true);
 
   echo json_encode($response);
 
@@ -58,6 +59,7 @@ if ($password === $guild["member_pw"]) {
   }
   $response["is_admin"] = false;
   $response["guild_data"] = $guild_data;
+  $response["search_state"] = fetchSearchState($guild["id"], true);
 
   echo json_encode($response);
 

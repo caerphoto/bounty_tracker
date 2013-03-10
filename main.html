@@ -107,7 +107,7 @@
 
   <tbody>
   {{#NPCs}}
-    <tr class="npc-row">
+    <tr class="npc-row" id="npc-{{short_name}}">
       <td class="npc-name"><a href="{{url}}" target="_blank">{{{name}}}</a></td>
       <td class="npc-location">{{{location}}}</td>
       <td class="player-name"><input type="text"></td>
@@ -122,6 +122,12 @@
       </script>
 
       <div id="npcs"></div>
+
+      <!-- temporary manual refresh -->
+      <div class="button-bar">
+        <button id="refresh">Refresh</button>
+      </div>
+
       <div class="button-bar" id="reset-buttons">
         <button id="reset-state">Reset State</button>
         <button id="reset-names">Reset Names</button>
@@ -138,7 +144,8 @@
     <script>
       var GBT = {
         guild_data: <?php echo json_encode($guild_data); ?>,
-        npc_list: <?php echo json_encode($npc_list); ?>
+        npc_list: <?php echo json_encode($npc_list); ?>,
+        search_state: <?php echo $search_state ? $search_state : "false"; ?>
       };
     </script>
 

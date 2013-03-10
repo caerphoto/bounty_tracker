@@ -105,6 +105,11 @@ a.button:active {
         linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
 }
 
+button.working,
+input[type="submit"].working {
+    opacity: 0.5;
+}
+
 header, #main, footer, .dialog > form {
     background: #f4f4f4;
     border: 3px solid #2578B8;

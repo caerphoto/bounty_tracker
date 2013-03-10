@@ -133,7 +133,10 @@ session_start();
 $_SESSION["admin logged in"] = "yes";
 $_SESSION["guild id"] = $new_guild["id"];
 
-echo json_encode($new_guild);
+$response = array(
+  "guild_data" => $new_guild
+);
+echo json_encode($response);
 
 ob_flush();
 
