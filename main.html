@@ -7,7 +7,7 @@
     <title>Guild Bounty Tracker</title>
   </head>
   <body class="<?php echo $body_class; ?>">
-    <section id="account">
+    <header>
       <a href="#register-dialog" id="register-link">Register your guild</a>
 
       <form id="login" action="login.php" method="POST">
@@ -25,7 +25,7 @@
           &middot; </span>
         <button id="log-out">Log Out</button>
       </div>
-    </section>
+    </header>
 
     <section id="register-dialog" class="dialog">
       <form id="register" action="register.php" method="POST">
@@ -59,7 +59,7 @@
         It is <em>not encrypted</em>, since you&rsquo;ll be sharing it with lots
         of (hopefully trustworthy) people anyway.</p>
 
-        <div class="dialog-buttons">
+        <div class="button-bar">
           <a href="#" class="button">Cancel</a>
           <input type="submit" value="Register Guild">
         </div>
@@ -69,26 +69,31 @@
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
       <p class="intro info">This tool is to assist guilds with the <em>Guild
-        Bounty</em> mission in Guild Wars 2.</p>
+        Bounty</em> mission in Guild Wars 2, by allowing everyone to keep track
+      of who has found which bounty NPC.</p>
 
       <p class="intro info"><strong>NOTE:</strong> this tool is still under
-      construction, so some of the error messages and so on aren't very polished
+      construction, so some of the error messages etc. on aren't very polished
       or friendly.</p>
 
       <p class="intro info">If you&rsquo;re a guild leader/officer, you can
       register your guild, then set up a password for other guild members to log
-      in with.</p>
-
-      <p class="instructions info">Enter your name in one of the boxes below.
-      When you've found the relevant NPC, click <button
-        class="found" id="test">Found!</button></p>
+      in with. Other guild members, log in with the password an officer gives
+      you.</p>
 
       <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s
         guide</a> in a new window, wherein you can find a picture of the NPC and
       a map of their route.</p>
 
-      <h2>Found so far: <span id="found-count">0</span></h2>
+      <p class="intro info">To see what the tracker looks like without
+      registering/logging in, try the demo:<button id="demo-toggle">Toggle
+        Demo</button></p>
+
+      <p class="instructions info">Enter your name in one of the boxes below.
+      When you've found the relevant NPC, click the <em>Found!</em> button.</p>
+
+      <h2 id="found-display">Found so far: <span id="found-count">0</span></h2>
 
       <script id="npc-row-template" type="text/mustache">
 <table id="npc-table">
@@ -117,8 +122,18 @@
       </script>
 
       <div id="npcs"></div>
+      <div class="button-bar" id="reset-buttons">
+        <button id="reset-state">Reset State</button>
+        <button id="reset-names">Reset Names</button>
+        <button id="reset-all">Reset All</button>
+      </div>
 
     </section>
+
+    <footer>
+      <p>By <a href="//caerphoto.com/">Andy Farrell</a> &middot; <del>source
+        available <a href="#">on GitHub</a></del> (coming soon!)</p>
+    </footer>
 
     <script id="guild-data" type="application/json">
 <?php echo json_encode($guild_data); ?>

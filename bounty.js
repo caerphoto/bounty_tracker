@@ -161,4 +161,7 @@ $(function () {
         });
     });
 
+    $("#demo-toggle").click(function () {
+        $body.toggleClass("demo");
+    });
 });

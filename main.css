@@ -62,12 +62,13 @@ strong {
     color: #d00;
 }
 
+/* Default button style */
 button,
 input[type="submit"],
 a.button {
     display: inline-block;
     text-decoration: none;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     padding: 0 0.5em;
     border-radius: 3px;
     background-color: #eee;
@@ -80,14 +81,14 @@ a.button {
 
 button.found, input[type="submit"] {
     background-color: #D9EEFF;
-    border-color: #2578B8;
+    border-color: #9cd;
 }
 
 button:hover,
 input[type="submit"]:hover,
 a.button:hover {
     background-image: none;
-    border-color: #333;
+    border-color: #888;
 }
 
 button:focus,
@@ -104,7 +105,7 @@ a.button:active {
         linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
 }
 
-#account, #main, .dialog > form {
+header, #main, footer, .dialog > form {
     background: #f4f4f4;
     border: 3px solid #2578B8;
     box-shadow: 0 3px 8px rgba(0,0,0, 0.2);
@@ -113,19 +114,23 @@ a.button:active {
     border-radius: 3px;
 }
 
-#account {
+header, footer {
     font-size: 0.8em;
     position: relative;
 }
 
-#account form,
+footer p {
+    margin: 0;
+}
+
+header form,
 #logged-in {
     position: absolute;
     right: 6.25em;
     top: 1em;
 }
 
-body.logged-in #account form {
+body.logged-in header form {
     display: none;
 }
 
@@ -158,6 +163,33 @@ body.admin #logged-in-member {
     display: none;
 }
 
+body.logged-in .intro {
+    display: none;
+}
+
+.instructions,
+#found-display {
+    display: none;
+}
+
+body.logged-in #found-display,
+body.demo #found-display,
+body.logged-in .instructions,
+body.demo .instructions {
+    display: block;
+}
+
+#demo-toggle {
+    display: block;
+    width: 10em;
+    padding: 0.5em 1em;
+    margin: 1em auto;
+
+    background-color: #DE921C;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+}
+
 /* NPC table stuff */
 
 .npc-row button {
@@ -169,7 +201,9 @@ body.admin #logged-in-member {
 }
 
 body.logged-in .npc-row button,
-body.logged-in .npc-row input {
+body.logged-in .npc-row input,
+body.demo .npc-row button,
+body.demo .npc-row input {
     visibility: visible;
 }
 
@@ -225,9 +259,15 @@ input[type="email"]:focus {
     width: 15em;
 }
 
-.dialog-buttons {
+.button-bar {
     text-align: right;
     clear: both;
+}
+
+.button-bar button,
+.button-bar input[type="submit"],
+.button-bar a.button {
+    margin-left: 0.5em;
 }
 
 #register-dialog {
@@ -291,11 +331,13 @@ td:last-child, th:last-child {
     display: none;
 }
 
-.npc-row.found {
+body.logged-in .npc-row.found,
+body.demo .npc-row.found {
     background: #8f8;
 }
 
-.npc-row.found:nth-child(even) {
+body.logged-in .npc-row.found:nth-child(even),
+body.demo .npc-row.found:nth-child(even) {
     background: #8e8;
 }
 
@@ -309,4 +351,14 @@ td:last-child, th:last-child {
 
 .npc-row.found .lost {
     display: inline-block;
+}
+
+#reset-buttons {
+    display: none;
+}
+
+body.admin.logged-in #reset-buttons,
+body.demo #reset-buttons {
+    /* TODO: functionality for these buttons */
+    /*display: block;*/
 }
