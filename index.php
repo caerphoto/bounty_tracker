@@ -14,7 +14,7 @@ if (isset($_SESSION["member logged in"])) {
 
 if (isset($_SESSION["admin logged in"])) {
   $body_class = "admin logged-in";
-  $guild_data = fetchGuildData("id", $_SESSION["guild id"], true);
+  $guild_data = fetchGuildData("id", $_SESSION["guild id"], $admin_guild_cols);
 }
 
 include "main.html";

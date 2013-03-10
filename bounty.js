@@ -1,3 +1,4 @@
+/*global GBT */
 $(function () {
     "use strict";
 
@@ -97,7 +98,8 @@ $(function () {
             success: function (response) {
                 $body.addClass("admin logged-in");
                 window.location.hash = "";
-                $("#logged-in-guildname").text(response.name);
+                GBT.guild_data = response.guild_data;
+                $("#logged-in-guildname").text(GBT.guild_data.name);
 
                 // TODO: change this to something less terrible
                 window.alert("Success!");
@@ -125,11 +127,12 @@ $(function () {
             success: function (response) {
                 $body.addClass("logged-in");
 
-                if (response.admin_pw) {
+                if (response.is_admin) {
                     $body.addClass("admin");
                 }
                 window.location.hash = "";
-                $("#logged-in-guildname").text(response.name);
+                GBT.guild_data = response.guild_data;
+                $("#logged-in-guildname").text(GBT.guild_data.name);
 
                 form.password.value = "";
             },

@@ -46,7 +46,7 @@ function validateRequest($params) {
   }
 
   // Make sure the guild does not already exist.
-  if (fetchGuildData("name", $guildname, false)) {
+  if (fetchGuildData("name", $guildname)) {
     return failValidation("name", "exists");
   }
 

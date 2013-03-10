@@ -4,20 +4,13 @@ function makeQueryParam($value) {
   return ":" . $value;
 };
 
-function fetchGuildData($col, $term, $admin) {
+function fetchGuildData($col, $term, $select_cols=array("id", "name")) {
   // Returns id, name and member password based on the given search info
   // $col: which column to match against
   // $term: the data in $col to match against
-  // $admin: if true, also returns admin email and (encrypted) password.
-  global $db_conn, $db_user, $db_pw, $admin_guild_cols, $member_guild_cols;
+  global $db_conn, $db_user, $db_pw;
 
   $dbh = new PDO($db_conn, $db_user, $db_pw);
-
-  if ($admin) {
-    $select_cols = $admin_guild_cols;
-  } else {
-    $select_cols = $member_guild_cols;
-  }
 
   $query = $dbh->prepare(
     "select ".
@@ -27,8 +20,8 @@ function fetchGuildData($col, $term, $admin) {
   );
 
   $query->bindParam(":" . $col, $term);
-
   $result = $query->execute();
+
   unset($dbh);
 
   if (!$result) {

@@ -135,8 +135,9 @@
         available <a href="#">on GitHub</a></del> (coming soon!)</p>
     </footer>
 
-    <script id="guild-data" type="application/json">
-<?php echo json_encode($guild_data); ?>
+    <script>
+      var GBT = {};
+      GBT.guild_data = <?php echo json_encode($guild_data); ?>;
     </script>
 
     <script src="../jquery.js"></script>

@@ -4,6 +4,14 @@ mb_internal_encoding("UTF-8");
 
 // Global variables used by various things.
 
+$login_check_cols = array(
+  "id",
+  "name",
+  "admin_pw",
+  "admin_email",
+  "member_pw"
+);
+
 // Used when retrieving guild data for members.
 $member_guild_cols = array(
   "id",
@@ -13,7 +21,7 @@ $member_guild_cols = array(
 
 // Used when retrieving guild data for admins. A superset of $member_guild_cols
 $admin_guild_cols = array_slice($member_guild_cols, 0);
-array_push($admin_guild_cols, "admin_email", "admin_pw");
+array_push($admin_guild_cols, "admin_email");
 
 // Used when validating registration data.
 $required_registration_fields = array(
