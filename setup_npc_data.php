@@ -4,6 +4,39 @@ include "private.php";
 
 // Run this file once to store NPC data in the database.
 
+$dbh = new PDO($db_conn, $db_user, $db_pw);
+
+// Set up table and sequence stuff for NPC data.
+echo $dbh->exec("CREATE TABLE guild_bounty.npcs
+(
+  name character varying NOT NULL,
+  short_name character varying NOT NULL,
+  location character varying,
+  url character varying,
+  id serial NOT NULL,
+  CONSTRAINT npcs_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);");
+
+echo $dbh->exec("ALTER TABLE guild_bounty.npcs
+  OWNER TO caerpho_guild;");
+
+echo $dbh->exec("CREATE SEQUENCE guild_bounty.guilds_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 7
+  CACHE 1;");
+
+echo $dbh->exec("ALTER TABLE guild_bounty.guilds_id_seq
+  OWNER TO caerpho_guild;");
+
+echo $dbh->exec("ALTER TABLE guild_bounty.guilds ALTER COLUMN id SET DEFAULT nextval('guild_bounty.guilds_id_seq'::regclass);");
+
+unset($query);
+
 $npc_list = array(
   array(
     "name" => "Ander &ldquo;Wildman&rdquo; Westward",
@@ -97,8 +130,7 @@ $npc_list = array(
   )
 );
 
-$dbh = new PDO($db_conn, $db_user, $db_pw);
-
+// Insert each NPC into the newly-created table.
 foreach ($npc_list as $npc) {
   $query = $dbh->prepare(
     "insert into guild_bounty.npcs (name, location, short_name, url) values " .
