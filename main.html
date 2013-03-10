@@ -66,6 +66,19 @@
       </form>
     </section>
 
+    <section id="options-dialog" class="dialog">
+      <form id="options" action="options.php" method="POST">
+        <h2>Options</h2>
+
+        <p>Member password: <span id="options-member-pw"><?php echo
+          $guild_data["member_pw"];?></span></p>
+
+        <div class="button-bar">
+          <a href="#" class="button">Cancel</a>
+        </div>
+      </form>
+    </section>
+
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
       <p class="intro info">This tool is to assist guilds with the <em>Guild

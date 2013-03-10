@@ -110,7 +110,10 @@ input[type="submit"].working {
     opacity: 0.5;
 }
 
-header, #main, footer, .dialog > form {
+header,
+#main,
+footer,
+.dialog > form {
     background: #f4f4f4;
     border: 3px solid #2578B8;
     box-shadow: 0 3px 8px rgba(0,0,0, 0.2);
@@ -119,7 +122,8 @@ header, #main, footer, .dialog > form {
     border-radius: 3px;
 }
 
-header, footer {
+header,
+footer {
     font-size: 0.8em;
     position: relative;
 }
@@ -275,11 +279,13 @@ input[type="email"]:focus {
     margin-left: 0.5em;
 }
 
-#register-dialog {
+#register-dialog,
+#options-dialog {
     display: none;
 }
 
-#register-dialog:target {
+#register-dialog:target,
+#options-dialog:target {
     display: block;
 }
 

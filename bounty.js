@@ -96,6 +96,7 @@ $(function () {
                 window.location.hash = "";
                 GBT.guild_data = response.guild_data;
                 $("#logged-in-guildname").text(GBT.guild_data.name);
+                $("#options-member-pw").text(GBT.guild_data.member_pw);
 
                 // TODO: change this to something less terrible
                 window.alert("Success!");
@@ -137,6 +138,7 @@ $(function () {
                 }
 
                 $("#logged-in-guildname").text(GBT.guild_data.name);
+                $("#options-member-pw").text(GBT.guild_data.member_pw);
 
                 form.password.value = "";
             },
