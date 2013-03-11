@@ -36,11 +36,16 @@ $(function () {
     };
 
     applyState = function (state) {
+        var count = 0;
         $.each(state, function (short_name, status) {
             var $row = $("#npc-" + short_name);
+            if (status.found) {
+                count += 1;
+            }
             $row.toggleClass("found", status.found).
                 find(".player-name input").val(status.player);
         });
+        $("#found-count").text(count);
     };
 
     postState = function (short_name, player, found, callback) {
