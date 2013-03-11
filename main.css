@@ -87,6 +87,13 @@ button.found, input[type="submit"] {
     border-color: #9bd;
 }
 
+button.disabled,
+input[type="submit"].disabled,
+a.button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 button:hover,
 input[type="submit"]:hover,
 a.button:hover {
@@ -374,20 +381,19 @@ body.demo .npc-row.found:nth-child(even) {
     display: inline-block;
 }
 
-#reset-buttons {
+#list-controls {
     display: none;
 }
 
-#refresh {
+body.logged-in #list-controls,
+body.demo #list-controls {
+    display: block;
+}
+
+button.reset {
     display: none;
 }
 
-body.logged-in #refresh {
+body.admin.logged-in button.reset {
     display: inline-block;
-}
-
-body.admin.logged-in #reset-buttons,
-body.demo #reset-buttons {
-    /* TODO: functionality for these buttons */
-    /*display: block;*/
 }

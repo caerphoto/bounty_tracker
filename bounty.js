@@ -4,6 +4,7 @@ $(function () {
 
     var $body = $(document.body),
         $npc_table = $("#npcs"),
+        $manual_refresh = $("#manual-refresh"),
 
         min_sync_interval = 4000, // miniumum time in ms between sync requests
         sync_interval = min_sync_interval,
@@ -79,8 +80,8 @@ $(function () {
             type: "POST",
             data: {
                 short_name: short_name,
-                player: player,
-                found: found
+                player: player || "",
+                found: !!found
             },
             dataType: "json",
             success: function (response) {
@@ -106,7 +107,9 @@ $(function () {
                 sync_interval = sync_interval * 2;
             }
 
-            sync_timer = setTimeout(beginAutoSync, sync_interval);
+            if (document.getElementById("toggle-autosync").checked) {
+                sync_timer = setTimeout(beginAutoSync, sync_interval);
+            }
         });
     };
 
@@ -292,8 +295,28 @@ $(function () {
         beginAutoSync();
     }
 
-    $("#manual-refresh").click(function () {
+    $("#toggle-autosync").change(function () {
+        $manual_refresh.toggleClass("disabled", this.checked);
+        if (this.checked) {
+            beginAutoSync();
+        } else {
+            clearTimeout(sync_timer);
+        }
+    });
+
+    $manual_refresh.click(function () {
         fetchState();
+    });
+
+    $("#reset").click(function () {
+        var $button = $(this);
+        $button.addClass("working");
+
+        postState("__ALL__", "", false, function () {
+            $button.removeClass("working");
+            $(".npc-row").removeClass("found");
+            $npc_table.find("input").val("");
+        });
     });
 
 });

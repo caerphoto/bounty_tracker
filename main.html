@@ -137,15 +137,13 @@
 
       <div id="npcs"></div>
 
-      <!-- temporary manual refresh -->
-      <div class="button-bar">
-        <button id="manual-refresh">Refresh</button>
-      </div>
+      <div class="button-bar" id="list-controls">
+        <input id="toggle-autosync" type="checkbox" checked>
+        <label for="toggle-autosync">Auto-sync</label>
 
-      <div class="button-bar" id="reset-buttons">
-        <button id="reset-state">Reset State</button>
-        <button id="reset-names">Reset Names</button>
-        <button id="reset-all">Reset All</button>
+        <button id="manual-refresh" class="disabled">Refresh</button>
+
+        <button id="reset" class="reset">Reset</button>
       </div>
 
     </section>

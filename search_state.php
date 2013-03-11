@@ -67,10 +67,15 @@ if (!$player) {
 }
 $found = $_REQUEST["found"] === "true";
 
-$state[$short_name] = array(
-  "player" => $player,
-  "found" => $found
-);
+if ($short_name === "__ALL__") {
+  // Reset state to blank default.
+  $state = createNewState();
+} else {
+  $state[$short_name] = array(
+    "player" => $player,
+    "found" => $found
+  );
+}
 
 $state = json_encode($state);
 
