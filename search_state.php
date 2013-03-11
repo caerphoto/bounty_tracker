@@ -60,8 +60,8 @@ if ($state) {
 
 // TODO: validate these params!
 
-$short_name = $_REQUEST["short_name"];
-$player = $_REQUEST["player"];
+$short_name = fix_slashes($_REQUEST["short_name"]);
+$player = fix_slashes($_REQUEST["player"]);
 if (!$player) {
   $player = "";
 }

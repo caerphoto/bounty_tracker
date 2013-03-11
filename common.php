@@ -1,4 +1,9 @@
 <?php
+function fix_slashes(&$str) {
+  // I hate that this is even necessary.
+  return get_magic_quotes_gpc() ? stripslashes($str) : $str;
+}
+
 function makeQueryParam($value) {
   // Very simple function, generally used with array_map
   return ":" . $value;
