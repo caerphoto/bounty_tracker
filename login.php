@@ -9,7 +9,7 @@ ob_start();
 header("Content-Type: application/json");
 header("HTTP/1.0 403 Forbidden");
 
-$guildname = $_REQUEST["guildname"];
+$guildname = mb_strtolower($_REQUEST["guildname"]);
 $password = $_REQUEST["password"];
 
 $guild = fetchGuildData("name", $guildname, $login_check_cols);
