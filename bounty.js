@@ -29,7 +29,7 @@ $(function () {
                 }
             },
             error: function (xhr) {
-                console.log(xhr.responseText);
+                //console.log(xhr.responseText);
             }
         });
 
@@ -55,11 +55,13 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (typeof callback === "function") {
-                    callback();
+                    callback(true);
                 }
             },
             error: function (xhr) {
-                console.log(xhr.responseText);
+                if (typeof callback === "function") {
+                    callback(false, xhr.responseText);
+                }
             }
         });
     };
@@ -92,9 +94,10 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $body.addClass("admin logged-in");
-                $submit_button.removeClass("working");
                 window.location.hash = "";
                 GBT.guild_data = response.guild_data;
+
+                // TODO: make a function to do this stuff
                 $("#logged-in-guildname").text(GBT.guild_data.name);
                 $("#options-member-pw").text(GBT.guild_data.member_pw);
 
@@ -104,6 +107,9 @@ $(function () {
             error: function (xhr) {
                 // I know this is bad UX but it's low priority.
                 window.alert(xhr.responseText);
+            },
+            complete: function () {
+                $submit_button.removeClass("working");
             }
         });
 
@@ -126,7 +132,6 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $body.addClass("logged-in");
-                $submit_button.removeClass("working");
 
                 if (response.is_admin) {
                     $body.addClass("admin");
@@ -149,6 +154,9 @@ $(function () {
                     // I know this is bad UX but it's low priority.
                     window.alert(xhr.status + " " + xhr.statusText);
                 }
+            },
+            complete: function () {
+                $submit_button.removeClass("working");
             }
         });
 
@@ -165,12 +173,14 @@ $(function () {
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");
-                $button.removeClass("working");
                 window.location.hash = "";
             },
             error: function (xhr) {
                 // I know this is bad UX but it's low priority.
                 window.alert(xhr.statusCode());
+            },
+            complete: function () {
+                $button.removeClass("working");
             }
         });
     });
@@ -191,7 +201,7 @@ $(function () {
         postState($row.attr("id").slice(4),
             $row.find(".player-name input").val(),
             found,
-            function () {
+            function (success, error_message) {
                 $buttons.removeClass("working");
             }
         );
