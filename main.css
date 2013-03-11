@@ -70,7 +70,9 @@ a.button {
     text-decoration: none;
     border: 1px solid #ccc;
     padding: 0 0.5em;
+    font-size: 100%;
     border-radius: 3px;
+    box-sizing: border-box;
     background-color: #eee;
     color: #555;
     text-shadow: 0 1px 0 rgba(255,255,255, 0.5);
@@ -219,9 +221,11 @@ body.demo .npc-row input {
 input[type="text"],
 input[type="password"],
 input[type="email"] {
+    display: inline-block;
     border: 1px solid #ddd;
     background: #fff;
-    padding: 0 0.5em;
+    padding: 0.15em 0.5em;
+    line-height: 1;
     border-radius: 3px;
     box-sizing: border-box;
 }
@@ -264,7 +268,7 @@ input[type="email"]:focus {
 .dialog > form > input {
     box-sizing: border-box;
     margin-bottom: 0.3em;
-    padding: 0.3em 1em;
+    padding: 0.5em 1em;
     width: 15em;
 }
 
