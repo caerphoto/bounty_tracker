@@ -4,10 +4,21 @@ $(function () {
 
     var $body = $(document.body),
         $npc_table = $("#npcs"),
+
+        min_sync_interval = 4000, // miniumum time in ms between sync requests
+        sync_interval = min_sync_interval,
+        sync_timer, // handle returned by setTimeout()
+
+        prev_text,
+        row_timer, // for slightly delaying sync on keyboard input
+
         initTable,
         fetchState,
         postState,
-        applyState;
+        applyState,
+        beginAutoSync,
+        logIn,
+        updateRow;
 
     initTable = function () {
         // One-time setup stuff.
@@ -18,32 +29,46 @@ $(function () {
 
     };
 
-    fetchState = function () {
+    fetchState = function (callback) {
         $.ajax({
             url: "search_state.php",
             type: "GET",
             dataType: "json",
             success: function (response) {
                 if (response) {
-                    applyState(response);
+                    GBT.search_state = response;
+                    applyState();
+                }
+                if (typeof callback === "function") {
+                    callback(true);
                 }
             },
             error: function (xhr) {
-                //console.log(xhr.responseText);
+                if (typeof callback === "function") {
+                    callback(false);
+                }
             }
         });
 
     };
 
-    applyState = function (state) {
-        var count = 0;
+    applyState = function () {
+        var count = 0,
+            state = GBT.search_state;
+
         $.each(state, function (short_name, status) {
-            var $row = $("#npc-" + short_name);
+            var $row = $("#npc-" + short_name),
+                $input;
             if (status.found) {
                 count += 1;
             }
-            $row.toggleClass("found", status.found).
-                find(".player-name input").val(status.player);
+            $row.toggleClass("found", status.found);
+
+            // Only apply input box updates if they don't have focus
+            $input = $row.find(".player-name input");
+            if (!$input.is(":focus")) {
+                $input.val(status.player);
+            }
         });
         $("#found-count").text(count);
     };
@@ -69,6 +94,37 @@ $(function () {
                 }
             }
         });
+    };
+
+    beginAutoSync = function () {
+        fetchState(function (success) {
+            if (success) {
+                if (sync_interval > min_sync_interval) {
+                    sync_interval = sync_interval / 2;
+                }
+            } else {
+                sync_interval *= 2;
+            }
+
+            sync_timer = setTimeout(beginAutoSync, sync_interval);
+        });
+    };
+
+    logIn = function (is_admin) {
+        $body.addClass("logged-in");
+        if (is_admin) {
+            $body.addClass("admin");
+        }
+        window.location.hash = "";
+
+        $("#logged-in-guildname").text(GBT.guild_data.name);
+        $("#options-member-pw").text(GBT.guild_data.member_pw);
+
+        if (GBT.search_state) {
+            applyState();
+        }
+
+        beginAutoSync();
     };
 
     $("#register-link").click(function () {
@@ -98,13 +154,8 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                $body.addClass("admin logged-in");
-                window.location.hash = "";
                 GBT.guild_data = response.guild_data;
-
-                // TODO: make a function to do this stuff
-                $("#logged-in-guildname").text(GBT.guild_data.name);
-                $("#options-member-pw").text(GBT.guild_data.member_pw);
+                logIn(true);
 
                 // TODO: change this to something less terrible
                 window.alert("Success!");
@@ -136,20 +187,9 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                $body.addClass("logged-in");
-
-                if (response.is_admin) {
-                    $body.addClass("admin");
-                }
-                window.location.hash = "";
                 GBT.guild_data = response.guild_data;
-                if (response.search_state) {
-                    applyState(response.search_state);
-                }
-
-                $("#logged-in-guildname").text(GBT.guild_data.name);
-                $("#options-member-pw").text(GBT.guild_data.member_pw);
-
+                GBT.search_state = response.search_state;
+                logIn(response.is_admin);
                 form.password.value = "";
             },
             error: function (xhr) {
@@ -179,6 +219,7 @@ $(function () {
             success: function () {
                 $body.removeClass("admin logged-in");
                 window.location.hash = "";
+                clearTimeout(sync_timer);
             },
             error: function (xhr) {
                 // I know this is bad UX but it's low priority.
@@ -194,33 +235,65 @@ $(function () {
         $body.toggleClass("demo");
     });
 
-    // Toggle NPC 'found' status on either button click.
-    $npc_table.on("click", "button", function () {
-        var $row = $(this).closest(".npc-row"),
-            $buttons = $row.find("button"),
-            found = !$row.hasClass("found");
+    updateRow = function ($row, found) {
+        var $buttons = $row.find("button");
 
-        $row.toggleClass("found");
+        $row.toggleClass("found", found);
         $buttons.addClass("working");
+
+        // Prevent other sync stuff until this request has completed.
+        clearTimeout(sync_timer);
 
         postState($row.attr("id").slice(4),
             $row.find(".player-name input").val(),
             found,
             function (success, error_message) {
                 $buttons.removeClass("working");
+                sync_timer = setTimeout(beginAutoSync, sync_interval);
             }
         );
 
         $("#found-count").text($(".npc-row.found").length);
-    });
+    };
 
-    $("#refresh").click(function () {
-        fetchState();
+    // Toggle NPC 'found' status on either button click.
+    $npc_table.on("click", "button", function () {
+        var $button = $(this);
+        updateRow($button.closest(".npc-row"), $button.hasClass("found"));
+    }).on("keydown", ".player-name input", function () {
+        // Delay posting update for a bit to avoid spamming server for every
+        // single keypress. Also only update if text has changed (so not on
+        // presses of arrow keys etc.).
+        var input = this,
+            $row = $(this).closest(".npc-row");
+
+        if (row_timer) {
+            clearTimeout(row_timer);
+        }
+
+        if (prev_text && this.value !== prev_text) {
+            row_timer = setTimeout(function () {
+                updateRow($row, $row.hasClass("found"));
+            }, 300);
+        }
+        prev_text = input.value;
+    }).on("blur", ".player-name input", function () {
+        var $row = $(this).closest(".npc-row");
+        updateRow($row, $row.hasClass("found"));
     });
 
     initTable();
     if (GBT.search_state) {
         applyState(GBT.search_state);
     }
+
+    // Start sync if user appears to be logged in.
+    if (GBT.guild_data) {
+        beginAutoSync();
+    }
+
+    $("#manual-refresh").click(function () {
+        beginAutoSync();
+    });
 
 });

@@ -5,7 +5,7 @@ include "config.php";
 include "common.php";
 
 $body_class = "";
-$guild_data = array();
+$guild_data = false;
 
 if (isset($_SESSION["member logged in"])) {
   $body_class = "logged-in";

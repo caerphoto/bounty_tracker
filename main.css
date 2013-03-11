@@ -67,6 +67,7 @@ button,
 input[type="submit"],
 a.button {
     display: inline-block;
+    position: relative;
     text-decoration: none;
     border: 1px solid #ccc;
     padding: 0 0.5em;
@@ -109,7 +110,11 @@ a.button:active {
 
 button.working,
 input[type="submit"].working {
-    opacity: 0.5;
+    background-image: url("working.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    color: transparent;
+    text-shadow: none;
 }
 
 header,
@@ -244,6 +249,7 @@ input[type="email"]:focus {
     bottom: 0;
     left: 0;
 
+    z-index: 2;
     background: rgba(192,192,192, 0.6);
 }
 
