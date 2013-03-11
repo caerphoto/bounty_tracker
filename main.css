@@ -230,6 +230,11 @@ body.demo .npc-row input {
     visibility: visible;
 }
 
+input:invalid {
+    box-shadow: none;
+}
+
+
 input[type="text"],
 input[type="password"],
 input[type="email"] {
@@ -379,6 +384,11 @@ body.demo .npc-row.found:nth-child(even) {
 
 .npc-row.found .lost {
     display: inline-block;
+}
+
+.npc-row.found input:invalid {
+    background: #fcc;
+    border-color: #b99;
 }
 
 #list-controls {
