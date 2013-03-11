@@ -103,7 +103,7 @@ $(function () {
                     sync_interval = sync_interval / 2;
                 }
             } else {
-                sync_interval *= 2;
+                sync_interval = sync_interval * 2;
             }
 
             sync_timer = setTimeout(beginAutoSync, sync_interval);
@@ -293,7 +293,7 @@ $(function () {
     }
 
     $("#manual-refresh").click(function () {
-        beginAutoSync();
+        fetchState();
     });
 
 });
