@@ -71,8 +71,9 @@
       <form id="options" action="options.php" method="POST">
         <h2>Options</h2>
 
-        <p>Member password: <span id="options-member-pw"><?php echo
-          $guild_data["member_pw"];?></span></p>
+        <label for="options-member-pw">Member password:</label>
+        <input type="text" id="options-member-pw" name="member_pw" value="<?php
+        echo $guild_data["member_pw"];?>">
 
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>

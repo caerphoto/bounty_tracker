@@ -121,7 +121,7 @@ $(function () {
         window.location.hash = "";
 
         $("#logged-in-guildname").text(GBT.guild_data.name);
-        $("#options-member-pw").text(GBT.guild_data.member_pw);
+        $("#options-member-pw").val(GBT.guild_data.member_pw);
 
         if (GBT.search_state) {
             applyState();

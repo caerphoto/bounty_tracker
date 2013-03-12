@@ -62,7 +62,7 @@ function createGuild($guild) {
   // Guilty until proven innocent.
   header("HTTP/1.0 500");
 
-  global $db_conn, $db_user, $db_pw, $create_guild_cols;
+  global $db_conn, $db_user, $db_pw, $create_guild_cols, $admin_guild_cols;
 
   $dbh = new PDO($db_conn, $db_user, $db_pw);
 
