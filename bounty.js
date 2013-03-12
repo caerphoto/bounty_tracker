@@ -10,6 +10,9 @@ $(function () {
         sync_interval = min_sync_interval,
         sync_timer, // handle returned by setTimeout()
 
+        idle_time,
+        idle_timer,
+
         prev_text,
         row_timer, // for slightly delaying sync on keyboard input
 
@@ -19,7 +22,8 @@ $(function () {
         applyState,
         beginAutoSync,
         logIn,
-        updateRow;
+        updateRow,
+        incrementIdleTime;
 
     initTable = function () {
         // One-time setup stuff.
@@ -98,6 +102,11 @@ $(function () {
     };
 
     beginAutoSync = function () {
+        if (!idle_timer) {
+            idle_time = 0;
+            idle_timer = setInterval(incrementIdleTime, 600000); // 10 minutes
+        }
+
         fetchState(function (success) {
             if (success) {
                 if (sync_interval > min_sync_interval) {
@@ -285,16 +294,6 @@ $(function () {
         updateRow($row, $row.hasClass("found"));
     });
 
-    initTable();
-    if (GBT.search_state) {
-        applyState(GBT.search_state);
-    }
-
-    // Start sync if user appears to be logged in.
-    if (GBT.guild_data) {
-        beginAutoSync();
-    }
-
     $("#toggle-autosync").change(function () {
         $manual_refresh.toggleClass("disabled", this.checked);
         if (this.checked) {
@@ -318,5 +317,29 @@ $(function () {
             $npc_table.find("input").val("");
         });
     });
+
+    // Idle timer: disable auto-sync if no activity for 3 hours.
+    $body.on("mousemove keyup", function () {
+        idle_time = 0;
+    });
+
+    incrementIdleTime = function () {
+        idle_time += 1; // Timer is incremented every 10 minutes.
+        if (idle_time >= 18) { // 3 hours (3 x 10 mins)
+            clearTimeout(sync_timer);
+            idle_timer = clearTimeout(idle_timer);
+            $("#toggle-autosync").get(0).checked = false;
+        }
+    };
+
+    initTable();
+    if (GBT.search_state) {
+        applyState(GBT.search_state);
+    }
+
+    // Start sync if user appears to be logged in.
+    if (GBT.guild_data) {
+        beginAutoSync();
+    }
 
 });
