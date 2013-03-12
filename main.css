@@ -1,5 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
-
 html {
     background: #D4B27F;
 }
@@ -11,7 +9,7 @@ body {
     margin: 0 auto;
     padding: 0;
 
-    font: 16px/1.6 "PT Sans", sans-serif;
+    font: 16px/1.6 "Source Sans Pro", sans-serif;
 }
 
 h1, h2, h3, th {
@@ -353,11 +351,11 @@ td:last-child, th:last-child {
 }
 
 .npc-row .npc-name {
-    width: 13em;
+    width: 15em;
 }
 
 .npc-row .npc-location {
-    width: 13em;
+    width: 11em;
 }
 
 .npc-row .lost {
