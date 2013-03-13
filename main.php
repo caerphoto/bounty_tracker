@@ -27,12 +27,20 @@ hgroup {
     <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-    <link rel="stylesheet" href="../reset.css">
-    <link rel="stylesheet" href="main.css">
+<?php
+  if (file_exists('cssfiles')) {
+    $file = file('cssfiles');
+
+    foreach ($file as $i => $line) {
+      $line = trim(preg_replace('/\s+/', ' ', $line));
+      echo '<link rel="stylesheet" href="' . $line . '">' . "\n";
+    }
+  } else {
+    echo '<link rel="stylesheet" href="bounty-all.css">';
+  }
+?>
 
     <link rel="shortcut icon" href="favicon.ico">
-
-    <script src="../prefixfree.min.js"></script>
 
     <title>Guild Bounty Tracker</title>
   </head>
@@ -225,10 +233,18 @@ hgroup {
       };
     </script>
 
-    <script src="../jquery.js"></script>
-    <script src="../mustache.js"></script>
-    <script src="lib/soundmanager2-min.js"></script>
-    <script src="bounty.js"></script>
+<?php
+  if (file_exists('jsfiles')) {
+    $file = file('jsfiles');
+
+    foreach ($file as $i => $line) {
+      $line = trim(preg_replace('/\s+/', ' ', $line));
+      echo '<script src="' . $line . '"></script>' . "\n";
+    }
+  } else {
+    echo '<script src="bounty.min.js"></script>';
+  }
+?>
   </body>
 </html>
 

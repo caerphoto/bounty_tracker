@@ -20,5 +20,5 @@ if (isset($_SESSION["admin logged in"])) {
   $search_state = fetchSearchState($_SESSION["guild id"]);
 }
 
-include "main.html";
+include "main.php";
 ?>
