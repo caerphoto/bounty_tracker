@@ -336,6 +336,12 @@ $(function () {
         var $buttons = $row.find("button");
 
         $row.toggleClass("found", found);
+
+        if (!$body.hasClass("logged-in")) {
+            // Nothing more to do since page is in demo mode.
+            return;
+        }
+
         $buttons.addClass("working");
 
         // Prevent other sync stuff until this request has completed.
