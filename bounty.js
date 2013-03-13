@@ -246,7 +246,7 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
-                guildname: form.guildname.value
+                admin_email: form.admin_email.value
             },
             dataType: "json",
             success: function (response) {
@@ -316,6 +316,7 @@ $(function () {
     });
 
     $(window).on("hashchange", function () {
+        // Generic dialog input box focusser thing.
         var hash = window.location.hash,
             $input;
 
@@ -325,10 +326,6 @@ $(function () {
 
         $input = $(hash + " > form > input").first();
         $input.focus();
-
-        if (hash === "#forgot-password-dialog") {
-            $input.val($("#login-guildname").val());
-        }
     });
 
     $("#demo-toggle").click(function () {

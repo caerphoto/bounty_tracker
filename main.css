@@ -319,16 +319,16 @@ input + .button-bar {
     text-align: center;
 }
 
-#register-dialog,
-#options-dialog,
-#forgot-password-dialog {
+.dialog {
     display: none;
 }
 
-#register-dialog:target,
-#options-dialog:target,
-#forgot-password-dialog:target {
+.dialog:target {
     display: block;
+}
+
+#reset-password > input {
+    width: 20em;
 }
 
 #npc-table {

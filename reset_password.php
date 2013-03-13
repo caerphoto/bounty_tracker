@@ -8,8 +8,8 @@ ob_start();
 
 header("HTTP/1.0 404 Not Found");
 
-$guildname = mb_strtolower($_REQUEST["guildname"]);
-$guild = fetchGuildData("name", $guildname, $reset_password_cols);
+$email = mb_strtolower($_REQUEST["admin_email"]);
+$guild = fetchGuildData("admin_email", $email, $reset_password_cols);
 
 if (!$guild) {
   exit;
