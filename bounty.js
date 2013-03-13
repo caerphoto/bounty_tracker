@@ -374,15 +374,11 @@ $(function () {
 
         $buttons.addClass("working");
 
-        // Pause sync until this request has completed.
-        clearTimeout(sync_timer);
-
         postState($row.attr("id").slice(4),
             $row.find(".player-name input").val(),
             found,
             function (success, error_message) {
                 $buttons.removeClass("working");
-                sync_timer = setTimeout(beginAutoSync, sync_interval);
             }
         );
     };
