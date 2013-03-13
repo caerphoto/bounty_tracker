@@ -131,6 +131,7 @@ $(function () {
 
         $("#logged-in-guildname").text(GBT.guild_data.name);
         $("#options-member-pw").val(GBT.guild_data.member_pw);
+        $("#options-admin-email").val(GBT.guild_data.admin_email);
 
         if (GBT.search_state) {
             applyState();
@@ -138,14 +139,6 @@ $(function () {
 
         beginAutoSync();
     };
-
-    $("#register-link").click(function () {
-        // Move the focus call to the end of the queue so it gets called after
-        // the dialog is made visible.
-        setTimeout(function () {
-            $("#register-guildname").focus();
-        }, 0);
-    });
 
     $("#register").submit(function () {
         // Override form submit handling to use ajax instead.
@@ -241,6 +234,101 @@ $(function () {
                 $button.removeClass("working");
             }
         });
+    });
+
+    $("#reset-password").submit(function () {
+        var form = this,
+            $submit_button = $(form).find('input[type="submit"]');
+
+        $submit_button.addClass("working");
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: {
+                guildname: form.guildname.value
+            },
+            dataType: "json",
+            success: function (response) {
+                window.location.hash = "";
+                window.alert("Your password has been reset. Please check your email.");
+            },
+            error: function (xhr) {
+                if (xhr.status === 404) {
+                    window.alert("Couldn't find a guild named\n\n" +
+                        form.guildname.value + "'");
+                } else {
+                    // I know this is bad UX but it's low priority.
+                    window.alert(xhr.status + " " + xhr.statusText);
+                }
+            },
+            complete: function () {
+                $submit_button.removeClass("working");
+            }
+        });
+
+        return false;
+    });
+
+    $("#options").submit(function () {
+        var form = this,
+            $submit_button = $(form).find('input[type="submit"]'),
+            data = {};
+
+        $submit_button.addClass("working");
+
+        // Only send field data if they're not blank.
+        if (form.member_pw.value) {
+            data.member_pw = form.member_pw.value;
+        }
+        if (form.admin_email.value) {
+            data.admin_email = form.admin_email.value;
+        }
+        if (form.admin_pw.value) {
+            data.admin_pw = form.admin_pw.value;
+            data.admin_pw_confirm = form.admin_pw_confirm.value;
+        }
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                GBT.guild_data.member_pw = response.member_pw;
+                GBT.guild_data.admin_email = response.admin_email;
+
+                form.admin_pw.value = "";
+                form.admin_pw_confirm.value = "";
+
+                window.location.hash = "";
+            },
+            error: function (xhr) {
+                window.alert("Unable to save options.\n\n" +
+                    "Error " + xhr.status + ": " + xhr.statusText);
+            },
+            complete: function () {
+                $submit_button.removeClass("working");
+            }
+        });
+
+        return false;
+    });
+
+    $(window).on("hashchange", function () {
+        var hash = window.location.hash,
+            $input;
+
+        if (!hash) {
+            return;
+        }
+
+        $input = $(hash + " > form > input").first();
+        $input.focus();
+
+        if (hash === "#forgot-password-dialog") {
+            $input.val($("#login-guildname").val());
+        }
     });
 
     $("#demo-toggle").click(function () {

@@ -17,6 +17,7 @@
         <input type="text" id="login-guildname" name="guildname">
         <label for="login-password">Password:</label>
         <input type="password" id="login-password" name="password">
+        <a href="#forgot-password-dialog" id="forgot-password">forgot?</a>
         <input type="submit" value="Log In">
       </form>
 
@@ -69,15 +70,43 @@
     </section>
 
     <section id="options-dialog" class="dialog">
-      <form id="options" action="options.php" method="POST">
+      <form id="options" action="update_info.php" method="POST">
         <h2>Options</h2>
 
         <label for="options-member-pw">Member password:</label>
         <input type="text" id="options-member-pw" name="member_pw" value="<?php
         echo $guild_data["member_pw"];?>">
 
+        <label for="options-admin-email">Admin email:</label>
+        <input type="text" id="options-admin-email" name="admin_email" value="<?php
+        echo $guild_data["admin_email"];?>">
+
+        <label for="options-admin-pw">Change admin password:</label>
+        <input type="password" id="options-admin-pw" name="admin_pw">
+
+        <label for="options-admin-pw-confirm">Confirm new admin password:</label>
+        <input type="password" id="options-admin-pw-confirm" name="admin_pw_confirm">
+
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>
+          <input type="submit" value="OK">
+        </div>
+      </form>
+    </section>
+
+    <section id="forgot-password-dialog" class="dialog">
+      <form id="reset-password" action="reset_password.php" method="POST">
+        <h2>Forgot Your Password?</h2>
+        <p>Enter your guild name in the box below then lick the <em>Reset</em>
+        button to reset your password to a new random one. An email will be sent
+        to the address you registered with containing the new password.</p>
+
+        <label for="forgot-password-guildname">Guild name:</label>
+        <input id="forgot-password-guildname" type="text" name="guildname">
+
+        <div class="button-bar">
+          <a href="#" class="button">Cancel</a>
+          <input type="submit" value="Reset">
         </div>
       </form>
     </section>
@@ -141,7 +170,7 @@
 
       <div class="button-bar" id="list-controls">
         <input id="toggle-autosync" type="checkbox" checked>
-        <label for="toggle-autosync">Auto-sync</label>
+        <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
         <button id="manual-refresh" class="disabled">Refresh</button>
 

@@ -151,6 +151,11 @@ header form,
     top: 1em;
 }
 
+#forgot-password {
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
 body.logged-in header form {
     display: none;
 }
@@ -265,15 +270,24 @@ input[type="email"]:focus {
 
 .dialog > form {
     width: 35em;
-    padding: 1em 3em;
+    padding: 1em 3em 0;
     margin: 3em auto;
+}
+
+#options {
+    width: 15em;
 }
 
 .dialog .info {
     font-size: 0.777em;
-    margin-bottom: 1em;
     float: right;
     width: 24em;
+}
+
+.dialog .info,
+.dialog input[type="text"],
+.dialog input[type="password"] {
+    margin-bottom: 1em;
 }
 
 .dialog label {
@@ -283,7 +297,6 @@ input[type="email"]:focus {
 
 .dialog > form > input {
     box-sizing: border-box;
-    margin-bottom: 0.3em;
     padding: 0.5em 1em;
     width: 15em;
 }
@@ -291,21 +304,30 @@ input[type="email"]:focus {
 .button-bar {
     text-align: right;
     clear: both;
+    margin: 1em 0 1.5em;
+}
+
+input + .button-bar {
+    margin-top: 0;
 }
 
 .button-bar button,
 .button-bar input[type="submit"],
 .button-bar a.button {
     margin-left: 0.5em;
+    min-width: 5em;
+    text-align: center;
 }
 
 #register-dialog,
-#options-dialog {
+#options-dialog,
+#forgot-password-dialog {
     display: none;
 }
 
 #register-dialog:target,
-#options-dialog:target {
+#options-dialog:target,
+#forgot-password-dialog:target {
     display: block;
 }
 

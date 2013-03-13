@@ -12,6 +12,12 @@ $login_check_cols = array(
   "member_pw"
 );
 
+$reset_password_cols = array(
+  "id",
+  "name",
+  "admin_email"
+);
+
 // Used when retrieving guild data for members.
 $member_guild_cols = array(
   "id",
@@ -44,10 +50,9 @@ $create_guild_cols = array(
   "member_pw"
 );
 
-$state_table_cols = array(
-  "id",
-  "guild_id",
-  "state"
+$update_info_cols = array(
+  "admin_email",
+  "member_pw"
 );
 
 $dbh = new PDO($db_conn, $db_user, $db_pw);
