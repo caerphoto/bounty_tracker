@@ -46,7 +46,7 @@ $result = mail(
   $guild["admin_email"],
   "[Guild Bounty Tracker] Password reset for " . $guild["name"],
   $message,
-  "From: no-reply@caerphoto.com"
+  "From: no-reply@caerphoto.com\r\n"
 );
 
 if ($result) {
