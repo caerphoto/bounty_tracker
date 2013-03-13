@@ -9,6 +9,21 @@ function makeQueryParam($value) {
   return ":" . $value;
 };
 
+function createNewState() {
+  // Create a new default search state.
+  global $npc_list;
+
+  $new_state = array();
+  foreach ($npc_list as $npc) {
+    $new_state[$npc["short_name"]] = array(
+      "player" => "",
+      "found" => false
+    );
+  }
+
+  return $new_state;
+}
+
 function fetchGuildData($col, $term, $select_cols=false) {
   // Returns id, name and member password based on the given search info
   // $col: which column to match against

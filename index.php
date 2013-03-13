@@ -6,6 +6,7 @@ include "common.php";
 
 $body_class = "";
 $guild_data = false;
+$search_state = json_encode(createNewState());
 
 if (isset($_SESSION["member logged in"])) {
   $body_class = "logged-in";

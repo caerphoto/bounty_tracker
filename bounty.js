@@ -1,4 +1,4 @@
-/*global GBT */
+/*global GBT, soundManager */
 $(function () {
     "use strict";
 
@@ -15,6 +15,10 @@ $(function () {
 
         prev_text,
         row_timer, // for slightly delaying sync on keyboard input
+
+        has_played_sound = false,
+
+        base_doc_title = document.title,
 
         initTable,
         fetchState,
@@ -75,10 +79,31 @@ $(function () {
                 $input.val(status.player);
             }
         });
+
+        if (count >= 15) {
+            if (!has_played_sound) {
+                soundManager.play("all_found");
+                has_played_sound = true;
+            }
+        } else {
+            has_played_sound = false;
+        }
+
         $("#found-count").text(count);
+        document.title = "(" + count + ") " + base_doc_title;
     };
 
     postState = function (short_name, player, found, callback) {
+        if ($body.hasClass("demo")) {
+            // Don't send updates to the server, since they'll get rejected
+            // anyway.
+            GBT.search_state[short_name].player = player;
+            GBT.search_state[short_name].found = found;
+            applyState();
+            callback(true);
+            return;
+        }
+
         $.ajax({
             url: "search_state.php",
             type: "POST",
@@ -89,6 +114,9 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
+                GBT.search_state = response;
+                applyState();
+
                 if (typeof callback === "function") {
                     callback(true);
                 }
@@ -102,6 +130,10 @@ $(function () {
     };
 
     beginAutoSync = function () {
+        if ($body.hasClass("demo")) {
+            return;
+        }
+
         if (!idle_timer) {
             idle_time = 0;
             idle_timer = setInterval(incrementIdleTime, 600000); // 10 minutes
@@ -225,6 +257,7 @@ $(function () {
                 $body.removeClass("admin logged-in");
                 window.location.hash = "";
                 clearTimeout(sync_timer);
+                document.title = base_doc_title;
             },
             error: function (xhr) {
                 // I know this is bad UX but it's low priority.
@@ -330,21 +363,17 @@ $(function () {
 
     $("#demo-toggle").click(function () {
         $body.toggleClass("demo");
+        if (!$body.hasClass("demo")) {
+            document.title = base_doc_title;
+        }
     });
 
     updateRow = function ($row, found) {
         var $buttons = $row.find("button");
 
-        $row.toggleClass("found", found);
-
-        if (!$body.hasClass("logged-in")) {
-            // Nothing more to do since page is in demo mode.
-            return;
-        }
-
         $buttons.addClass("working");
 
-        // Prevent other sync stuff until this request has completed.
+        // Pause sync until this request has completed.
         clearTimeout(sync_timer);
 
         postState($row.attr("id").slice(4),
@@ -355,8 +384,6 @@ $(function () {
                 sync_timer = setTimeout(beginAutoSync, sync_interval);
             }
         );
-
-        $("#found-count").text($(".npc-row.found").length);
     };
 
     // Toggle NPC 'found' status on either button click.
@@ -423,8 +450,19 @@ $(function () {
         }
     };
 
+    soundManager.setup({
+        url: "lib/soundmanager2.swf",
+        onready: function () {
+            // SM2 is ready to play audio!
+            soundManager.createSound({
+                id: "all_found",
+                url: "all_found.mp3"
+            });
+        }
+    });
+
     initTable();
-    if (GBT.search_state) {
+    if (GBT.guild_data && GBT.search_state) {
         applyState(GBT.search_state);
     }
 

@@ -221,12 +221,13 @@ hgroup {
       var GBT = {
         guild_data: <?php echo json_encode($guild_data); ?>,
         npc_list: <?php echo json_encode($npc_list); ?>,
-        search_state: <?php echo $search_state ? $search_state : "false"; ?>
+        search_state: <?php echo $search_state; ?>
       };
     </script>
 
     <script src="../jquery.js"></script>
     <script src="../mustache.js"></script>
+    <script src="lib/soundmanager2-min.js"></script>
     <script src="bounty.js"></script>
   </body>
 </html>
