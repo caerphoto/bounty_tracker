@@ -319,7 +319,7 @@ $(function () {
         var hash = window.location.hash,
             $input;
 
-        if (!hash) {
+        if (!hash || hash === "#") {
             return;
         }
 
