@@ -36,7 +36,7 @@ hgroup {
       echo '<link rel="stylesheet" href="' . $line . '">' . "\n";
     }
   } else {
-    echo '<link rel="stylesheet" href="bounty-all.css">';
+    echo '<link rel="stylesheet" href="bounty_all.css">';
   }
 ?>
 
