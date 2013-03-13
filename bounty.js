@@ -40,7 +40,7 @@ $(function () {
 
     fetchState = function (callback) {
         $.ajax({
-            url: "search_state.php",
+            url: "api/search_state.php",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -105,7 +105,7 @@ $(function () {
         }
 
         $.ajax({
-            url: "search_state.php",
+            url: "api/search_state.php",
             type: "POST",
             data: {
                 short_name: short_name,
@@ -252,7 +252,7 @@ $(function () {
         $button.addClass("working");
 
         $.ajax({
-            url: "logout.php",
+            url: "api/logout.php",
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");
@@ -453,7 +453,7 @@ $(function () {
             // SM2 is ready to play audio!
             soundManager.createSound({
                 id: "all_found",
-                url: "all_found.mp3"
+                url: "media/all_found.mp3"
             });
         }
     });

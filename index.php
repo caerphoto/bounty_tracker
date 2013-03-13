@@ -2,7 +2,7 @@
 session_start();
 header("Content-type: text/html; charset=UTF-8");
 include "config.php";
-include "common.php";
+include "lib/common.php";
 
 $body_class = "";
 $guild_data = false;

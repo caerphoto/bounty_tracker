@@ -1,9 +1,9 @@
 <?php
 // Handles requests to register guilds.
 
-include "config.php";
-include "common.php";
-include "PasswordHash.php";
+include "../config.php";
+include "../lib/common.php";
+include "../lib/PasswordHash.php";
 
 function createGuild($guild) {
   // Guilty until proven innocent.

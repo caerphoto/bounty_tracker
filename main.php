@@ -35,12 +35,13 @@ hgroup {
       $line = trim(preg_replace('/\s+/', ' ', $line));
       echo '<link rel="stylesheet" href="' . $line . '">' . "\n";
     }
+    unset($file);
   } else {
     echo '<link rel="stylesheet" href="bounty_all.css">';
   }
 ?>
 
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="media/favicon.ico">
 
     <title>Guild Bounty Tracker</title>
   </head>
@@ -48,7 +49,7 @@ hgroup {
     <header>
       <a href="#register-dialog" id="register-link">Register your guild</a>
 
-      <form id="login" action="login.php" method="POST">
+      <form id="login" action="api/login.php" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
         <label for="login-password">Password:</label>
@@ -67,7 +68,7 @@ hgroup {
     </header>
 
     <section id="register-dialog" class="dialog">
-      <form id="register" action="register.php" method="POST">
+      <form id="register" action="api/register.php" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
@@ -103,7 +104,7 @@ hgroup {
     </section>
 
     <section id="options-dialog" class="dialog">
-      <form id="options" action="update_info.php" method="POST">
+      <form id="options" action="api/update_info.php" method="POST">
         <h2>Options</h2>
 
         <label for="options-member-pw">Member password:</label>
@@ -128,7 +129,7 @@ hgroup {
     </section>
 
     <section id="forgot-password-dialog" class="dialog">
-      <form id="reset-password" action="reset_password.php" method="POST">
+      <form id="reset-password" action="api/reset_password.php" method="POST">
         <h2>Forgot Your Password?</h2>
         <p>Enter the admin email address in the box below then click the
         <em>Reset</em> button to reset the <em>admin password</em> to a new
@@ -241,6 +242,7 @@ hgroup {
       $line = trim(preg_replace('/\s+/', ' ', $line));
       echo '<script src="' . $line . '"></script>' . "\n";
     }
+    unset($file);
   } else {
     echo '<script src="bounty.min.js"></script>';
   }

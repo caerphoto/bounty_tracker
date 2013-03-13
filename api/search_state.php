@@ -11,8 +11,8 @@ if (!$guild_id) {
   exit(0);
 }
 
-include "config.php";
-include "common.php";
+include "../config.php";
+include "../lib/common.php";
 
 $state = fetchSearchState($guild_id);
 
