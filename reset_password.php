@@ -35,18 +35,23 @@ if (!$result) {
   exit;
 }
 
-$email_message = "The admin password for the guild\r\n\r\r" .
-  $guild["name"] . "\r\n\r\n" .
-  "has beeen reset to:\r\n\r\n" .
-  $new_password . "\r\n\r\n" .
-  "For extra security (and because it's not very memorable), please\r\n\r\n" .
-  "change it the next time you log in.";
+$msg = array();
+$msg[] = "The admin password for the guild";
+$msg[] = $guild["name"];
+$msg[] = "has beeen reset to:";
+$msg[] = $new_password;
+$msg [] = "For extra security (and because it's not very memorable), please change it the next time you log in.";
+$msg = join("\r\n\r\n", $msg);
+
+$headers = array();
+$headers[] = "From: no-reply@caerphoto.com";
+$headers[] = "Content-Type: text/plain; charset=utf-8";
 
 $result = mail(
   $guild["admin_email"],
   "[Guild Bounty Tracker] Password reset for " . $guild["name"],
-  $message,
-  "From: no-reply@caerphoto.com\r\n"
+  $msg,
+  join("\r\n", $headers)
 );
 
 if ($result) {
