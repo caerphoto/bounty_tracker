@@ -221,8 +221,8 @@ hgroup {
     </section>
 
     <footer>
-      <p>By <a href="//caerphoto.com/">Andy Farrell</a> &middot; <del>source
-        available <a href="#">on GitHub</a></del> (coming soon!)</p>
+      <p>By <a href="//caerphoto.com/">Andy Farrell</a> &middot; source
+        available <a href="https://github.com/caerphoto/bounty_tracker">on GitHub</a></p>
     </footer>
 
     <script>
