@@ -18,7 +18,18 @@ if (!$guild) {
 // Just in case something goes wrong saving/sending the new password.
 header("HTTP/1.0 500 Internal Server Error");
 
-$new_password = "something really random";
+function randomPassword($length) {
+  $chars = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789_";
+  $pass = array();
+  $chars_length = mb_strlen($chars) - 1; // cache length-1 of string
+  for ($i = 0; $i < $length; $i += 1) {
+      $n = rand(0, $chars_length);
+      $pass[] = $chars[$n];
+  }
+  return implode($pass);
+}
+
+$new_password = randomPassword(20);
 $hasher = new PasswordHash(8, false);
 $hashed_password = $hasher->HashPassword($new_password);
 
@@ -36,11 +47,10 @@ if (!$result) {
 }
 
 $msg = array();
-$msg[] = "The admin password for the guild";
-$msg[] = $guild["name"];
-$msg[] = "has beeen reset to:";
+$msg[] = "The admin password for the guild '" . $guild["name"] . "' has beeen reset to:";
 $msg[] = $new_password;
 $msg [] = "For extra security (and because it's not very memorable), please change it the next time you log in.";
+$msg [] = "- Guild Bounty Tracker · http://caerphoto.com/guild_bounty/";
 $msg = join("\r\n\r\n", $msg);
 
 $headers = array();
