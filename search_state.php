@@ -33,20 +33,6 @@ if ($req_method === "GET") {
 
 // Request method is POST, meaning the page is sending a state update.
 
-function createNewState() {
-  global $npc_list;
-
-  $new_state = array();
-  foreach ($npc_list as $npc) {
-    $new_state[$npc["short_name"]] = array(
-      "player" => "",
-      "found" => false
-    );
-  }
-
-  return $new_state;
-}
-
 if ($state) {
   $state = json_decode($state, true);
 } else {

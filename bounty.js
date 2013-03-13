@@ -155,6 +155,7 @@ $(function () {
     };
 
     logIn = function (is_admin) {
+        $body.removeClass("demo");
         $body.addClass("logged-in");
         if (is_admin) {
             $body.addClass("admin");
