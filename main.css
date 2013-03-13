@@ -9,11 +9,12 @@ body {
     margin: 0 auto;
     padding: 0;
 
-    font: 15px/1.6 "Open Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font: 16px/1.6 "museo-sans", "Candara", "Tahoma", sans-serif;
+    font-weight: 300;
 }
 
 h1, h2, h3, th {
-    font-family: "Palatino", "Palatino Linotype", "Book Antiqua", serif;
+    /*font-family: "Palatino", "Palatino Linotype", "Book Antiqua", serif;*/
 }
 
 h1, h2, h3 {
@@ -52,11 +53,12 @@ a:hover {
 }
 
 em {
-    font-weight: bold;
+    color: #000;
+    font-weight: 700;
 }
 
 strong {
-    font-weight: bold;
+    font-weight: 700;
     color: #d00;
 }
 
@@ -172,7 +174,7 @@ body.logged-in #logged-in {
 }
 
 #logged-in-guildname {
-    font-weight: bold;
+    font-weight: 700;
 }
 
 #logged-in-admin,
