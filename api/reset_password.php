@@ -1,8 +1,8 @@
 <?php
 
-include "config.php";
-include "common.php";
-include "PasswordHash.php";
+include "../config.php";
+include "../lib/common.php";
+include "../lib/PasswordHash.php";
 
 ob_start();
 
