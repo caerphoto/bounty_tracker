@@ -61,8 +61,7 @@ body {
     margin: 0 auto;
     padding: 0;
 
-    font: 16px/1.6 "museo-sans", "Candara", "Tahoma", sans-serif;
-    font-weight: 300;
+    font: 16px/1.6 "PT Sans", "Arial", sans-serif;
 }
 
 h1, h2, h3, th {
