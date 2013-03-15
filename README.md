@@ -35,6 +35,7 @@ There is a reference in `config.php` and `setup_npc_data.php` to a file called
 `private.php`. This file is not included in source control, as it contains the
 username, password and connection details to your database. It is required for
 the app to work, and looks like this:
+
     <?php
     $db_user = "your_db_username";
     $db_pw = "your_db_password";
