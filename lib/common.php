@@ -40,21 +40,20 @@ function fetchGuildData($col, $term, $select_cols=false) {
     "select ".
     join(", ", $select_cols) .
     " from guild_bounty.guilds" .
-    " where " . $col . " = :" . $col
+    " where LOWER(" . $col . ") = LOWER(:" . $col . ");"
   );
 
   $query->bindParam(":" . $col, $term);
+
   $result = $query->execute();
+  $guild = $query->fetch(PDO::FETCH_ASSOC);
 
   unset($dbh);
 
-  if (!$result) {
-    //header('HTTP/1.0 404 Not Found');
-    //$error = $query->errorInfo();
-    //var_dump($error);
+  if (!$guild) {
     return false;
   } else {
-    return $query->fetch(PDO::FETCH_ASSOC);
+    return $guild;
   }
 
 }

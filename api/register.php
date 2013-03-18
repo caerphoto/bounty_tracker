@@ -66,6 +66,7 @@ foreach ($required_registration_fields as $field) {
   }
 }
 
+$guildname = $_REQUEST["name"];
 // Make sure the guild does not already exist.
 if (fetchGuildData("name", $guildname)) {
   outputError("name", "exists");

@@ -34,7 +34,7 @@ once I'm comfortable with the general polish of the app itself.
 There is a reference in `config.php` and `setup_npc_data.php` to a file called
 `private.php`. This file is not included in source control, as it contains the
 username, password and connection details to your database. It is required for
-the app to work, and looks like this:
+the app to work, however, and looks like this:
 
     <?php
     $db_user = "your_db_username";
