@@ -5,6 +5,8 @@ $(function () {
     var $body = $(document.body),
         $npc_table = $("#npcs"),
         $manual_refresh = $("#manual-refresh"),
+        $error = $("#error"),
+        error_template = $("#error-template").html(),
 
         min_sync_interval = 4000, // miniumum time in ms between sync requests
         sync_interval = min_sync_interval,
@@ -20,7 +22,23 @@ $(function () {
 
         base_doc_title = document.title,
 
+        error_messages = {
+            "exists": "A guild with that name already exists.",
+            "missing": "The <em>%s</em> field cannot be left blank.",
+            "length": "The <em>%s</em> field cannot be longer than <em>%d</em> characters.",
+            "mismatch": "The <em>%s</em> does not match.",
+            "invalid": "The <em>%s</em> contains invalid characters."
+        },
+        field_names = {
+            "name": "guild name",
+            "admin_pw": "admin password",
+            "admin_email": "admin email",
+            "admin_pw_confirm": "admin password confirmation",
+            "member_pw": "member password"
+        },
+
         initTable,
+        errorDialog,
         fetchState,
         postState,
         applyState,
@@ -36,6 +54,11 @@ $(function () {
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: GBT.npc_list }));
 
+    };
+
+    errorDialog = function (view) {
+        $error.html(Mustache.render(error_template, view));
+        window.location.hash = "error-dialog";
     };
 
     fetchState = function (callback) {
@@ -199,8 +222,17 @@ $(function () {
                 window.alert("Success!");
             },
             error: function (xhr) {
-                // I know this is bad UX but it's low priority.
-                window.alert(xhr.responseText);
+                var error = JSON.parse(xhr.responseText),
+                    view = {
+                        message: error_messages[error[1]],
+                        code: xhr.status,
+                        prev_location: window.location.hash
+                    };
+
+                view.message = view.message.replace("%s", field_names[error[0]]);
+                view.message = view.message.replace("%d", error[2]);
+
+                errorDialog(view);
             },
             complete: function () {
                 $submit_button.removeClass("working");
@@ -231,10 +263,17 @@ $(function () {
                 form.password.value = "";
             },
             error: function (xhr) {
+                var view = {
+                    message: "Invalid guild name or password.",
+                    code: xhr.status,
+                    prev_location: "#"
+                };
+
                 if (xhr.status === 403) {
-                    window.alert("Invalid guild name or password.");
+                    errorDialog(view);
                 } else {
-                    // I know this is bad UX but it's low priority.
+                    // I know this is bad UX but it's low priority, since it's
+                    // unlikely to happen anyway.
                     window.alert(xhr.status + " " + xhr.statusText);
                 }
             },
@@ -261,7 +300,7 @@ $(function () {
                 document.title = base_doc_title;
             },
             error: function (xhr) {
-                // I know this is bad UX but it's low priority.
+                // I hope this never happens. It shouldn't, right?
                 window.alert(xhr.statusCode());
             },
             complete: function () {
@@ -288,11 +327,18 @@ $(function () {
                 window.alert("Your password has been reset. Please check your email.");
             },
             error: function (xhr) {
+                var view = {
+                    "message": "No guild found with an admin email address of <em>%s</em>.",
+                    code: xhr.status,
+                    prev_location: "#forgot-password-dialog"
+                };
+
+                view.message = view.message.replace("%s", form.admin_email.value);
+
                 if (xhr.status === 404) {
-                    window.alert("Couldn't find a guild named\n\n" +
-                        form.guildname.value + "'");
+                    errorDialog(view);
                 } else {
-                    // I know this is bad UX but it's low priority.
+                    // Should not happen, so use basic browser alert.
                     window.alert(xhr.status + " " + xhr.statusText);
                 }
             },

@@ -145,6 +145,20 @@ hgroup {
       </form>
     </section>
 
+    <script type="text/mustache" id="error-template">
+      <h2>Error</h2>
+      <p>{{{message}}}</p>
+      <p class="error-code">HTTP response code: {{code}}</p>
+
+      <div class="button-bar">
+        <a href="{{prev_location}}" class="button">OK</a>
+      </div>
+    </script>
+
+    <section id="error-dialog" class="dialog">
+      <div id="error"></div>
+    </section>
+
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
       <p class="intro info">This tool is to assist guilds with the <em>Guild

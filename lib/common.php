@@ -92,7 +92,7 @@ function validateParams($params) {
   // almost anything, but not so big as to be unwieldy.
   foreach ($params as $field) {
     if (mb_strlen($field) > 200) {
-      return outputError($field, "length");
+      return outputError($field, "length", 200);
     }
   }
 
@@ -104,7 +104,7 @@ function validateParams($params) {
 
     // Check the two given passwords match.
     if ($params["admin_pw"] !== $params["admin_pw_confirm"]) {
-      return outputError("admin_pw", "mismatch");
+      return outputError("admin_pw_confirm", "mismatch");
     }
   }
 
