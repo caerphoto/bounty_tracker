@@ -24,8 +24,6 @@ hgroup {
 </style>
 <![endif]-->
 
-    <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
 <?php
   if (file_exists('cssfiles')) {
@@ -262,6 +260,8 @@ hgroup {
     echo '<script src="bounty.min.js"></script>';
   }
 ?>
+    <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </body>
 </html>
 

@@ -59,6 +59,7 @@ $(function () {
     errorDialog = function (view) {
         $error.html(Mustache.render(error_template, view));
         window.location.hash = "error-dialog";
+        $error.find("a.button").focus();
     };
 
     fetchState = function (callback) {
