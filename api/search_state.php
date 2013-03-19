@@ -8,7 +8,7 @@ header("HTTP/1.0 403 Forbidden");
 $guild_id = isset($_SESSION["guild id"]) ? $_SESSION["guild id"] : null;
 if (!$guild_id) {
   ob_flush();
-  exit(0);
+  exit;
 }
 
 include "../config.php";

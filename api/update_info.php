@@ -15,7 +15,6 @@ if (!isset($_SESSION["guild id"])) {
   exit;
 }
 
-
 if (!isset($_SESSION["admin logged in"])) {
   exit;
 }
@@ -40,6 +39,9 @@ if (isset($_REQUEST["admin_email"])) {
 
 if (isset($_REQUEST["member_pw"])) {
   $cols_to_update["member_pw"] = $_REQUEST["member_pw"];
+} else {
+  outputError("member_pw", "missing");
+  exit;
 }
 
 if (isset($_REQUEST["admin_pw"]) && $_REQUEST["admin_pw"] !== "") {

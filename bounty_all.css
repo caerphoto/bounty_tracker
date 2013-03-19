@@ -179,7 +179,8 @@ input[type="submit"].working {
 header,
 #main,
 footer,
-.dialog > form {
+.dialog > form,
+.dialog > div {
     background: #f4f4f4;
     border: 3px solid #2578B8;
     box-shadow: 0 3px 8px rgba(0,0,0, 0.2);
@@ -322,14 +323,25 @@ input[type="email"]:focus {
     background: rgba(192,192,192, 0.6);
 }
 
-.dialog > form {
+.dialog > form,
+.dialog > div {
     width: 35em;
     padding: 1em 3em 0;
     margin: 3em auto;
 }
 
+#error {
+    width: 20em;
+    border-color: #800;
+}
+
 #options {
     width: 15em;
+}
+
+.error-code {
+    font-size: 0.8em;
+    color: #777;
 }
 
 .dialog .info {

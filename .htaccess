@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+
+RewriteEngine on
+
+RewriteRule ^api/([a-z_]+)$ api/$1.php

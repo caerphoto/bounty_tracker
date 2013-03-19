@@ -9,3 +9,5 @@ jsmin < temp.js > bounty.min.js
 
 echo "Deleting temporary JavaScript file..."
 rm temp.js
+
+echo "Done!"

@@ -15,8 +15,11 @@ function createGuild($guild) {
 
   // makeQueryParam is from common.php. It returns ":value" when passed "value".
   $query_params = array_map("makeQueryParam", $create_guild_cols);
+  $query_params[] = ":search_state";
   $query_params = join(", ", $query_params);
-  $columns = join(", ", $create_guild_cols);
+
+  $columns = array_merge($create_guild_cols, (array)"search_state");
+  $columns = join(", ", $columns);
 
   $query = $dbh->prepare(
     "insert into guild_bounty.guilds (" .
@@ -35,6 +38,8 @@ function createGuild($guild) {
   foreach ($create_guild_cols as $col) {
     $query->bindParam(":" . $col, $guild[$col]);
   }
+  $default_state = json_encode(createNewState());
+  $query->bindParam(":search_state", $default_state);
 
   $result = $query->execute();
 
@@ -91,6 +96,8 @@ header("HTTP/1.0 200 OK");
 session_start();
 $_SESSION["admin logged in"] = "yes";
 $_SESSION["guild id"] = $new_guild["id"];
+
+unset($new_guild["id"]); // don't return this value to the page
 
 $response = array(
   "guild_data" => $new_guild

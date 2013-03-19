@@ -63,7 +63,7 @@ $(function () {
 
     fetchState = function (callback) {
         $.ajax({
-            url: "api/search_state.php",
+            url: "api/search_state/",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -128,7 +128,7 @@ $(function () {
         }
 
         $.ajax({
-            url: "api/search_state.php",
+            url: "api/search_state/",
             type: "POST",
             data: {
                 short_name: short_name,
@@ -291,7 +291,7 @@ $(function () {
         $button.addClass("working");
 
         $.ajax({
-            url: "api/logout.php",
+            url: "api/logout/",
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");
@@ -384,8 +384,17 @@ $(function () {
                 window.location.hash = "";
             },
             error: function (xhr) {
-                window.alert("Unable to save options.\n\n" +
-                    "Error " + xhr.status + ": " + xhr.statusText);
+                var error = JSON.parse(xhr.responseText),
+                    view = {
+                        message: error_messages[error[1]],
+                        code: xhr.status,
+                        prev_location: window.location.hash
+                    };
+
+                view.message = view.message.replace("%s", field_names[error[0]]);
+                view.message = view.message.replace("%d", error[2]);
+
+                errorDialog(view);
             },
             complete: function () {
                 $submit_button.removeClass("working");

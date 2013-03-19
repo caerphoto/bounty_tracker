@@ -49,7 +49,7 @@ hgroup {
     <header>
       <a href="#register-dialog" id="register-link">Register your guild</a>
 
-      <form id="login" action="api/login.php" method="POST">
+      <form id="login" action="api/login/" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
         <label for="login-password">Password:</label>
@@ -68,7 +68,7 @@ hgroup {
     </header>
 
     <section id="register-dialog" class="dialog">
-      <form id="register" action="api/register.php" method="POST">
+      <form id="register" action="api/register/" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
@@ -104,7 +104,7 @@ hgroup {
     </section>
 
     <section id="options-dialog" class="dialog">
-      <form id="options" action="api/update_info.php" method="POST">
+      <form id="options" action="api/update_info/" method="POST">
         <h2>Options</h2>
 
         <label for="options-member-pw">Member password:</label>
@@ -129,7 +129,7 @@ hgroup {
     </section>
 
     <section id="forgot-password-dialog" class="dialog">
-      <form id="reset-password" action="api/reset_password.php" method="POST">
+      <form id="reset-password" action="api/reset_password/" method="POST">
         <h2>Forgot Your Password?</h2>
         <p>Enter the admin email address in the box below then click the
         <em>Reset</em> button to reset the <em>admin password</em> to a new
@@ -169,10 +169,6 @@ hgroup {
       issue where it was possible to register using a guild name that already
       exists. Unfortunately this has meant I've had to remove duplicate entries,
       so you may need to reset your password.</p>
-
-      <p class="intro info"><strong>NOTE:</strong> this tool is still under
-      construction, so some of the error messages etc. on aren't very polished
-      or friendly.</p>
 
 <!--[if lt IE 9]>
       <p class="intro info"><strong>NOTE:</strong> you appear to be using an

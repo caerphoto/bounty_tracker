@@ -36,13 +36,23 @@ function fetchGuildData($col, $term, $select_cols=false) {
 
   $dbh = new PDO($db_conn, $db_user, $db_pw);
 
-  $query = $dbh->prepare(
-    "select ".
-    join(", ", $select_cols) .
-    " from guild_bounty.guilds" .
-    " where LOWER(" . $col . ") = LOWER(:" . $col . ");"
-  );
+  if ($col === "id") {
+    $query = $dbh->prepare(
+      "select ".
+      join(", ", $select_cols) .
+      " from guild_bounty.guilds" .
+      " where " . $col . " = :" . $col . ";"
+    );
 
+  } else {
+    $query = $dbh->prepare(
+      "select ".
+      join(", ", $select_cols) .
+      " from guild_bounty.guilds" .
+      " where LOWER(" . $col . ") = LOWER(:" . $col . ");"
+    );
+
+  }
   $query->bindParam(":" . $col, $term);
 
   $result = $query->execute();
