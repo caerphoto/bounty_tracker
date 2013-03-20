@@ -4,10 +4,13 @@ ob_start();
 header("Content-Type: application/json");
 header("HTTP/1.0 403 Forbidden");
 
+// Minimise HTTP response size.
+header_remove("X-Powered-By");
+header_remove("Expires");
+
 // Abort if not logged in
 $guild_id = isset($_SESSION["guild id"]) ? $_SESSION["guild id"] : null;
 if (!$guild_id) {
-  ob_flush();
   exit;
 }
 
@@ -15,20 +18,21 @@ include "../config.php";
 include "../lib/common.php";
 
 $state = fetchSearchState($guild_id);
+$prev_state = $_SESSION["prev_state"];
 
 $req_method = isset($_SERVER["REQUEST_METHOD"]) ? $_SERVER["REQUEST_METHOD"] : "GET";
 if ($req_method === "GET") {
   // Simplest case: fetch current search state.
-  if (!$state) {
+  if (!$state || $state === $prev_state) {
     // No state yet, so nothing to return. Note that this isn't an error code.
     header("HTTP/1.0 204 No Content");
   } else {
     header("HTTP/1.0 200 OK");
     echo $state;
+    $_SESSION["prev_state"] = $state;
   }
 
-  ob_flush();
-  exit(0);
+  exit;
 }
 
 // Request method is POST, meaning the page is sending a state update.
@@ -76,6 +80,7 @@ $result = $query->execute();
 if ($result) {
   header("HTTP/1.0 200 OK");
   echo $state;
+  $_SESSION["prev_state"] = $state;
 } else {
   header("HTTP/1.0 500 Internal Server Error");
   $error = $query->errorInfo();

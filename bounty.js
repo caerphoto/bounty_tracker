@@ -8,7 +8,7 @@ $(function () {
         $error = $("#error"),
         error_template = $("#error-template").html(),
 
-        min_sync_interval = 4000, // miniumum time in ms between sync requests
+        min_sync_interval = 5000, // miniumum time in ms between sync requests
         sync_interval = min_sync_interval,
         sync_timer, // handle returned by setTimeout()
 
@@ -68,6 +68,8 @@ $(function () {
             type: "GET",
             dataType: "json",
             success: function (response) {
+                // Server may return HTTP 204, indicating success but that the
+                // state has not changed since the previous request.
                 if (response) {
                     GBT.search_state = response;
                     applyState();
@@ -164,6 +166,8 @@ $(function () {
         }
 
         fetchState(function (success) {
+            // If successful, reduce sync interval until at minimum, otherwise
+            // double it. The idea is to be tolerant of network problems.
             if (success) {
                 if (sync_interval > min_sync_interval) {
                     sync_interval = sync_interval / 2;
