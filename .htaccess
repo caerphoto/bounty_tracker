@@ -3,3 +3,9 @@ Options +FollowSymlinks
 #RewriteEngine on
 
 RewriteRule ^api/([a-z_]+)\/$ api/$1.php
+
+Header unset X-Powered-By
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+</IfModule>
