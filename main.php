@@ -35,7 +35,7 @@ hgroup {
     }
     unset($file);
   } else {
-    echo '<link rel="stylesheet" href="bounty_all.css">';
+    echo '<link rel="stylesheet" href="bounty.min.css">';
   }
 ?>
 

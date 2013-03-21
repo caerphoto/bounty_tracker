@@ -1,13 +1,11 @@
-echo "Combining CSS files..."
-cat `cat cssfiles` > bounty_all.css
+echo "Combining and minifying CSS files..."
+cat `cat cssfiles` > temp.css
+node minify_css.js < temp.css > bounty.min.css
+rm temp.css
 
-echo "Combining JavaScript files..."
+echo "Combining and minifying JavaScript files..."
 cat `cat jsfiles` > temp.js
-
-echo "Minifying JavaScript..."
 jsmin < temp.js > bounty.min.js
-
-echo "Deleting temporary JavaScript file..."
 rm temp.js
 
 echo "Done!"
