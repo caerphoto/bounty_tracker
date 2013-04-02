@@ -23,7 +23,7 @@ WITH (
 );");
 
 echo $dbh->exec("ALTER TABLE guild_bounty.npcs
-  OWNER TO caerpho_guild;");
+  OWNER TO " . $db_user . ";");
 
 echo $dbh->exec("CREATE SEQUENCE guild_bounty.guilds_id_seq
   INCREMENT 1
@@ -33,7 +33,7 @@ echo $dbh->exec("CREATE SEQUENCE guild_bounty.guilds_id_seq
   CACHE 1;");
 
 echo $dbh->exec("ALTER TABLE guild_bounty.guilds_id_seq
-  OWNER TO caerpho_guild;");
+  OWNER TO " . $db_user . ";");
 
 echo $dbh->exec("ALTER TABLE guild_bounty.guilds ALTER COLUMN id SET DEFAULT nextval('guild_bounty.guilds_id_seq'::regclass);");
 
