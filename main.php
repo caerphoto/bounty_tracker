@@ -163,11 +163,6 @@ hgroup {
         Bounty</em> mission in Guild Wars 2, by allowing everyone to keep track
       of who has found which bounty NPC.</p>
 
-      <p class="intro info"><strong>UPDATE 2013-03-18:</strong> I've fixed an
-      issue where it was possible to register using a guild name that already
-      exists. Unfortunately this has meant I've had to remove duplicate entries,
-      so you may need to reset your password.</p>
-
 <!--[if lt IE 9]>
       <p class="intro info"><strong>NOTE:</strong> you appear to be using an
       outdated version of <em>Internet Explorer</em>. Although the primary

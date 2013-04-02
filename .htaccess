@@ -1,7 +1,6 @@
 Options +FollowSymlinks
 
-#RewriteEngine on
-
+# Convert, e.g., '/guild_bounty/api/login/' to '/guild_bounty/api/login.php'
 RewriteRule ^api/([a-z_]+)\/$ api/$1.php
 
 Header unset X-Powered-By

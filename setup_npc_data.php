@@ -3,7 +3,7 @@
 include "private.php";
 
 // Run this file once to store NPC data in the database.
-// TODO: modify this to be a general setup script, which creates the guilds 
+// TODO: modify this to be a general setup script, which creates the guilds
 // table too.
 
 $dbh = new PDO($db_conn, $db_user, $db_pw);

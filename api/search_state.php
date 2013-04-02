@@ -1,12 +1,13 @@
 <?php
 session_start();
 ob_start();
-header("Content-Type: application/json");
 header("HTTP/1.0 403 Forbidden");
 
 // Minimise HTTP response size.
 header_remove("X-Powered-By");
 header_remove("Expires");
+header_remove("Pragma");
+header("Cache-Control: no-cache");
 
 // Abort if not logged in
 $guild_id = isset($_SESSION["guild id"]) ? $_SESSION["guild id"] : null;
@@ -26,7 +27,10 @@ if ($req_method === "GET") {
   if (!$state || $state === $prev_state) {
     // No state yet, so nothing to return. Note that this isn't an error code.
     header("HTTP/1.0 204 No Content");
+    // Since there's no content, no point wasting bytes specifying a type.
+    header("Content-Type:");
   } else {
+    header("Content-Type: application/json");
     header("HTTP/1.0 200 OK");
     echo $state;
     $_SESSION["prev_state"] = $state;
