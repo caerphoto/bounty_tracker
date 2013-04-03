@@ -106,7 +106,7 @@ $(function () {
             }
         });
 
-        if (count >= 15) {
+        if (count >= GBT.npc_list.length) {
             if (!has_played_sound) {
                 soundManager.play("all_found");
                 has_played_sound = true;
