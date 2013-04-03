@@ -176,6 +176,9 @@ hgroup {
       in with. Other guild members, log in with the password an officer gives
       you.</p>
 
+      <p class="intro info"><strong>Update 2013&ndash;04&ndash;03:</strong> added
+      the three new bounty NPCs. Sorry for the delay!</p>
+
       <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s
         guide</a> in a new window, wherein you can find a picture of the NPC and
