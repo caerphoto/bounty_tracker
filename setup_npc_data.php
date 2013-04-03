@@ -8,6 +8,9 @@ include "private.php";
 
 $dbh = new PDO($db_conn, $db_user, $db_pw);
 
+// Start over.
+echo $dbh->exec("DROP TABLE guild_bounty.npcs CASCADE");
+
 // Set up table and sequence stuff for NPC data.
 echo $dbh->exec("CREATE TABLE guild_bounty.npcs
 (
@@ -40,6 +43,27 @@ echo $dbh->exec("ALTER TABLE guild_bounty.guilds ALTER COLUMN id SET DEFAULT nex
 unset($query);
 
 $npc_list = array(
+  // New NPCs added 2013-04-03.
+  array(
+    "name" => "2-MULT",
+    "short_name" => "twomult",
+    "location" => "Timberline Falls",
+    "url" => "http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/#0"
+  ),
+  array(
+    "name" => "Big Mayana",
+    "short_name" => "mayana",
+    "location" => "Sparkfly Fen",
+    "url" => "http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/#1b"
+  ),
+  array(
+    "name" => "Yanonka the Rat-Wrangler",
+    "short_name" => "yanonka",
+    "location" => "Fields of Ruin",
+    "url" => "http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/#16"
+  ),
+
+  // Original NPCs.
   array(
     "name" => "Ander &ldquo;Wildman&rdquo; Westward",
     "short_name" => "ander",
