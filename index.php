@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 header("Content-type: text/html; charset=UTF-8");
 ob_start("ob_gzhandler");
 

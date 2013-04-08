@@ -148,6 +148,11 @@ footer,
     border-radius: 3px;
 }
 
+/* TEMPORARY FIX TO DISABLE REGISTER/LOGIN */
+header {
+    display: none;
+}
+
 header,
 footer {
     font-size: 0.8em;
@@ -205,6 +210,16 @@ body.admin #logged-in-member {
 
 body.logged-in .intro {
     display: none;
+}
+
+.important.info {
+    background: #fed;
+    padding: 1em;
+    margin: 0 -1em;
+}
+
+.important + .important {
+    margin-bottom: 1em;
 }
 
 .instructions,

@@ -176,8 +176,14 @@ hgroup {
       in with. Other guild members, log in with the password an officer gives
       you.</p>
 
-      <p class="intro info"><strong>Update 2013&ndash;04&ndash;03:</strong> added
-      the three new bounty NPCs. Sorry for the delay!</p>
+      <h2><strong>Service Unavailable</strong></h2>
+      <p class="important info">Unfortunately, the popularity of this tool has 
+      exceeded the capacity of
+      the shared server on which it's hosted, so it's currently disabled until I can
+      find a dedicated host somewhere. I'm working on this as best I can, but real
+      life is currently priority so I don't know how long it'll take, sorry.</p>
+
+<p class="important info">If you'd like to try setting up the app on your own server, the source code is <a href="">available on GitHub</a> but be warned, the setup procedure is not very friendly and not very well documented. An alternative may be <a href="http://www.reddit.com/r/Guildwars2/comments/1baesm/we_like_guild_bounties_so_i_made_a_bounty_tracker/">this Reddit thread</a>, but I don't know what progress kcolttam has made.</a>
 
       <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s

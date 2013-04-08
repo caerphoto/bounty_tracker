@@ -156,9 +156,9 @@ $(function () {
     };
 
     beginAutoSync = function () {
-        if ($body.hasClass("demo")) {
+        //if ($body.hasClass("demo")) {
             return;
-        }
+        //}
 
         if (!idle_timer) {
             idle_time = 0;
