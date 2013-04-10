@@ -324,6 +324,7 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
+                guildname: form.guildname.value,
                 admin_email: form.admin_email.value
             },
             dataType: "json",
@@ -333,14 +334,18 @@ $(function () {
             },
             error: function (xhr) {
                 var view = {
-                    "message": "No guild found with an admin email address of <em>%s</em>.",
                     code: xhr.status,
                     prev_location: "#forgot-password-dialog"
+                },
+                messages = {
+                    "400": "Neither field can be left blank.",
+                    "403": "Incorrect email address.",
+                    "404": "No guild found called <em>%s</em>."
                 };
 
-                view.message = view.message.replace("%s", form.admin_email.value);
-
-                if (xhr.status === 404) {
+                if (messages[xhr.status.toString()]) {
+                    view.message = messages[xhr.status.toString()].
+                        replace("%s", form.guildname.value);
                     errorDialog(view);
                 } else {
                     // Should not happen, so use basic browser alert.

@@ -7,6 +7,7 @@ var express = require("express"),
     session = require("./api/session"),
     search_state = require("./api/search_state"),
     guild_info = require("./api/guild_info"),
+    password = require("./api/password"),
 
     npc_list = require("npc_data").list,
 
@@ -73,6 +74,7 @@ app.post("/api/login", session.create);
 app.get("/api/search_state", search_state.fetch);
 app.post("/api/search_state", search_state.update);
 app.post("/api/guild_info", guild_info.update);
+app.post("/api/reset_password", password.reset);
 
 app.listen(3000);
 console.log("Listening on port 3000");
