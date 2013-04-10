@@ -5,6 +5,7 @@ exports.create = function (req, res) {
 
     var utils = require("utils"),
         redis = require("redis"),
+        bcrypt = require("bcrypt"),
         valid = utils.validateParams(req.body),
         required_fields = [
             "guildname",
@@ -12,7 +13,6 @@ exports.create = function (req, res) {
         ],
         stored_fields = [
             "guildname",
-            "admin_pw",
             "admin_email",
             "member_pw"
         ],
@@ -56,23 +56,32 @@ exports.create = function (req, res) {
 
         req.body.admin_email = req.body.admin_email.toLowerCase();
 
-        // Create an array of field/value strings to pass to redis.
         stored_fields.forEach(function (field) {
             values[field] = req.body[field];
         });
         values.search_state = JSON.stringify(utils.createNewState());
+        bcrypt.hash(req.body.admin_pw, 8, function (err, hash) {
+            values.admin_pw = hash;
 
-        db.hmset("guild:" + guild_key, values);
+            db.hmset("guild:" + guild_key, values);
+            db.hgetall("guild:" + guild_key, function (err, reply) {
+                var new_guild;
 
-        db.hgetall("guild:" + guild_key, function (err, reply) {
-            db.quit();
-            if (reply) {
-                req.session.guild_key = guild_key;
-                req.session.is_admin = true;
-                res.json(200, { guild_data: reply });
-            } else {
-                res.send(404);
-            }
+                db.quit();
+                if (reply) {
+                    req.session.guild_key = guild_key;
+                    req.session.is_admin = true;
+                    new_guild = {
+                        admin_email: reply.admin_email,
+                        member_pw: reply.member_pw,
+                        guildname: reply.guildname,
+                        search_state: reply.search_state
+                    };
+                    res.json(200, { guild_data: new_guild });
+                } else {
+                    res.send(404);
+                }
+            });
         });
     });
 };

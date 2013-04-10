@@ -13,6 +13,7 @@ exports.create = function (req, res) {
     "use strict";
     var redis = require("redis"),
         utils = require("utils"),
+        bcrypt = require("bcrypt"),
         db = redis.createClient(),
         guild_key;
 
@@ -27,31 +28,36 @@ exports.create = function (req, res) {
 
         db.quit();
         if (!reply) {
-            return res.send(404);
+            return res.send(403);
         }
+        bcrypt.compare(req.body.password, reply.admin_pw, function (err, match) {
+            if (match) {
+                req.session.guild_key = guild_key;
+                req.session.is_admin = true;
 
-        if (req.body.password === reply.admin_pw) {
-            req.session.guild_key = guild_key;
-            req.session.is_admin = true;
+                response_data.is_admin = true;
+                response_data.guild_data = {
+                    guildname: reply.guildname,
+                    admin_email: reply.admin_email,
+                    member_pw: reply.member_pw
+                };
+                response_data.search_state = JSON.parse(reply.search_state);
+                return res.json(response_data);
+            }
 
-            response_data.is_admin = true;
-            response_data.guild_data = {
-                guildname: reply.guildname,
-                admin_email: reply.admin_email,
-                member_pw: reply.member_pw
-            };
-            response_data.search_state = JSON.parse(reply.search_state);
-            return res.json(response_data);
-        }
+            // Doesn't match admin password, so maybe it matches member pw?
+            if (req.body.password === reply.member_pw) {
+                req.session.guild_key = guild_key;
 
-        if (req.body.password === reply.member_pw) {
-            req.session.guild_key = guild_key;
+                response_data.guild_data = {
+                    guildname: reply.guildname
+                };
+                response_data.search_state = JSON.parse(reply.search_state);
+                return res.json(response_data);
+            }
 
-            response_data.guild_data = {
-                guildname: reply.guildname
-            };
-            response_data.search_state = JSON.parse(reply.search_state);
-            return res.json(response_data);
-        }
+            // Doesn't match anything.
+            return res.send(403);
+        });
     });
 };

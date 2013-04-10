@@ -53,8 +53,8 @@ init = function (env) {
             }
         });
     } else {
-        cssfiles = [ "/css/bounty.min.css" ];
-        jsfiles = [ "/js/bounty.min.js" ];
+        cssfiles = ["/css/bounty.min.css"];
+        jsfiles = ["/js/bounty.min.js"];
     }
 
     app.locals({
