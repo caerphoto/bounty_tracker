@@ -1,5 +1,5 @@
-lib/prefixfree.min.js
-lib/jquery-1.9.1.min.js
-lib/mustache.js
-lib/soundmanager2-min.js
-bounty.js
+public/js/lib/prefixfree.min.js
+public/js/lib/jquery-1.9.1.min.js
+public/js/lib/mustache.js
+public/js/lib/soundmanager2-min.js
+public/js/bounty.js
