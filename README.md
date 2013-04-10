@@ -27,17 +27,17 @@ in one go.
 
 ## Installation
 
+Not recommended yet.
+
 It's complicated at the moment, as there's no automatic database setup script,
-so you kinda have to do everything manually. I'll get round to sorting this out
-once I'm comfortable with the general polish of the app itself.
+so you kinda have to do everything manually, and there's not a whole lot of
+documentation explaining how to do this.
 
-There is a reference in `config.php` and `setup_npc_data.php` to a file called
-`private.php`. This file is not included in source control, as it contains the
-username, password and connection details to your database. It is required for
-the app to work, however, and looks like this:
+The app is currently undergoing a rewrite in Node, but I understand many people
+will be using shared servers where the only options are PHP and MySQL, so once
+the Node version is up and running, I'll get to work on making the installation
+of the PHP version much simpler. Ideally it'd just be a case of running a
+`setup.php` script and everything is magically done for you.
 
-    <?php
-    $db_user = "your_db_username";
-    $db_pw = "your_db_password";
-    $db_conn = "pgsql:dbname=your_db_name;host=localhost;port=your_db_port";
-    ?>
+For the Node version specifically, I haven't even set it up on my staging server
+yet, so I don't know how that's going to go :D
