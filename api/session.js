@@ -40,7 +40,7 @@ exports.create = function (req, res) {
                 admin_email: reply.admin_email,
                 member_pw: reply.member_pw
             };
-            response_data.search_state = reply.search_state;
+            response_data.search_state = JSON.parse(reply.search_state);
             return res.json(response_data);
         }
 
@@ -50,7 +50,7 @@ exports.create = function (req, res) {
             response_data.guild_data = {
                 guildname: reply.guildname
             };
-            response_data.search_state = reply.search_state;
+            response_data.search_state = JSON.parse(reply.search_state);
             return res.json(response_data);
         }
     });

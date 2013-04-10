@@ -16,7 +16,8 @@ var express = require("express"),
         js: []
     },
 
-    init;
+    init,
+    renderNoGuild;
 
 init = function (env) {
     "use strict";
@@ -60,6 +61,18 @@ init = function (env) {
 
 init(app.get("env"));
 
+renderNoGuild = function (res) {
+    "use strict";
+    res.render("index", {
+        cssfiles: external_files.css,
+        jsfiles: external_files.js,
+        body_class: "",
+        guild_data: false,
+        npc_list: npc_list,
+        search_state: false
+    });
+};
+
 app.get("/", function (req, res) {
     "use strict";
 
@@ -73,8 +86,15 @@ app.get("/", function (req, res) {
 
         db.hgetall("guild:" + req.session.guild_key, function (err, reply) {
             var guild_data,
-                search_state = reply.search_state,
+                search_state,
                 is_admin = req.session.is_admin;
+
+            if (!reply) {
+                // Guild has been deleted since last login.
+                return renderNoGuild(res);
+            }
+
+            search_state = reply.search_state;
 
             if (is_admin) {
                 guild_data = {
@@ -87,7 +107,6 @@ app.get("/", function (req, res) {
                     guildname: reply.guildname
                 };
             }
-
 
             res.render("index", {
                 cssfiles: external_files.css,
@@ -102,14 +121,7 @@ app.get("/", function (req, res) {
         });
     } else {
         // Not logged in
-        res.render("index", {
-            cssfiles: external_files.css,
-            jsfiles: external_files.js,
-            body_class: "",
-            guild_data: false,
-            npc_list: npc_list,
-            search_state: false
-        });
+        renderNoGuild(res);
     }
 });
 

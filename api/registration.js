@@ -62,9 +62,9 @@ exports.create = function (req, res) {
         });
         values.search_state = JSON.stringify(utils.createNewState());
 
-        db.hmset("guild:" + req.body.guildname, values);
+        db.hmset("guild:" + guild_key, values);
 
-        db.hgetall("guild:" + req.body.guildname, function (err, reply) {
+        db.hgetall("guild:" + guild_key, function (err, reply) {
             db.quit();
             if (reply) {
                 req.session.guild_key = guild_key;
