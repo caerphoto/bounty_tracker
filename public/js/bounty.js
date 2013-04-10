@@ -30,7 +30,7 @@ $(function () {
             "invalid": "The <em>%s</em> contains invalid characters."
         },
         field_names = {
-            "name": "guild name",
+            "guildname": "guild name",
             "admin_pw": "admin password",
             "admin_email": "admin email",
             "admin_pw_confirm": "admin password confirmation",
@@ -64,7 +64,7 @@ $(function () {
 
     fetchState = function (callback) {
         $.ajax({
-            url: "api/search_state/",
+            url: "api/search_state",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -131,7 +131,7 @@ $(function () {
         }
 
         $.ajax({
-            url: "api/search_state/",
+            url: "api/search_state",
             type: "POST",
             data: {
                 short_name: short_name,
@@ -156,9 +156,9 @@ $(function () {
     };
 
     beginAutoSync = function () {
-        //if ($body.hasClass("demo")) {
+        if ($body.hasClass("demo")) {
             return;
-        //}
+        }
 
         if (!idle_timer) {
             idle_time = 0;
@@ -190,7 +190,7 @@ $(function () {
         }
         window.location.hash = "";
 
-        $("#logged-in-guildname").text(GBT.guild_data.name);
+        $("#logged-in-guildname").text(GBT.guild_data.guildname);
         $("#options-member-pw").val(GBT.guild_data.member_pw);
         $("#options-admin-email").val(GBT.guild_data.admin_email);
 
@@ -212,7 +212,7 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
-                name: form.guildname.value,
+                guildname: form.guildname.value,
                 admin_email: form.admin_email.value,
                 admin_pw: form.admin_pw.value,
                 admin_pw_confirm: form.admin_pw_confirm.value,
@@ -296,7 +296,7 @@ $(function () {
         $button.addClass("working");
 
         $.ajax({
-            url: "api/logout/",
+            url: "api/logout",
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");

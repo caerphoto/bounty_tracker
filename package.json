@@ -5,7 +5,10 @@
   "private": true,
   "dependencies": {
     "express": "3.x",
-    "ejs": "*"
+    "ejs": "*",
+    "redis": "*",
+    "hiredis": "*",
+    "connect-redis": "*"
   }
 }
 

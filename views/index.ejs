@@ -37,7 +37,7 @@ hgroup {
     <header>
       <a href="#register-dialog" id="register-link">Register your guild</a>
 
-      <form id="login" action="api/login/" method="POST">
+      <form id="login" action="api/login" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
         <label for="login-password">Password:</label>
@@ -48,7 +48,7 @@ hgroup {
 
       <div id="logged-in">Logged in as a<span id="logged-in-admin">n admin
           of</span><span id="logged-in-member"> member of</span>
-        <span id="logged-in-guildname"><%= guild_data.name %></span> &middot;
+        <span id="logged-in-guildname"><%= guild_data.guildname %></span> &middot;
         <span id="logged-in-options"><a href="#options-dialog">options</a>
           &middot; </span>
         <button id="log-out">Log Out</button>
@@ -56,7 +56,7 @@ hgroup {
     </header>
 
     <section id="register-dialog" class="dialog">
-      <form id="register" action="api/register/" method="POST">
+      <form id="register" action="api/register" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
@@ -92,7 +92,7 @@ hgroup {
     </section>
 
     <section id="options-dialog" class="dialog">
-      <form id="options" action="api/update_info/" method="POST">
+      <form id="options" action="api/update_info" method="POST">
         <h2>Options</h2>
 
         <label for="options-member-pw">Member password:</label>
@@ -117,7 +117,7 @@ hgroup {
     </section>
 
     <section id="forgot-password-dialog" class="dialog">
-      <form id="reset-password" action="api/reset_password/" method="POST">
+      <form id="reset-password" action="api/reset_password" method="POST">
         <h2>Forgot Your Password?</h2>
         <p>Enter the admin email address in the box below then click the
         <em>Reset</em> button to reset the <em>admin password</em> to a new
@@ -165,15 +165,6 @@ hgroup {
       register your guild, then set up a password for other guild members to log
       in with. Other guild members, log in with the password an officer gives
       you.</p>
-
-      <h2><strong>Service Unavailable</strong></h2>
-      <p class="important info">Unfortunately, the popularity of this tool has 
-      exceeded the capacity of
-      the shared server on which it's hosted, so it's currently disabled until I can
-      find a dedicated host somewhere. I'm working on this as best I can, but real
-      life is currently priority so I don't know how long it'll take, sorry.</p>
-
-<p class="important info">If you'd like to try setting up the app on your own server, the source code is <a href="">available on GitHub</a> but be warned, the setup procedure is not very friendly and not very well documented. An alternative may be <a href="http://www.reddit.com/r/Guildwars2/comments/1baesm/we_like_guild_bounties_so_i_made_a_bounty_tracker/">this Reddit thread</a>, but I don't know what progress kcolttam has made.</a>
 
       <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s
@@ -235,9 +226,9 @@ hgroup {
 
     <script>
       var GBT = {
-        guild_data: <%= JSON.stringify(guild_data) %>,
-        npc_list: <%= JSON.stringify(npc_list) %>,
-        search_state: <%= JSON.stringify(search_state) %>
+        guild_data: <%- JSON.stringify(guild_data) %>,
+        npc_list: <%- JSON.stringify(npc_list) %>,
+        search_state: <%- search_state %>
       };
     </script>
 
