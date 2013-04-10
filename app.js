@@ -6,6 +6,7 @@ var express = require("express"),
 
     registration = require("./api/registration"),
     session = require("./api/session"),
+    search_state = require("./api/search_state"),
 
     RedisStore = require("connect-redis")(express),
     app = express(),
@@ -72,7 +73,7 @@ app.get("/", function (req, res) {
 
         db.hgetall("guild:" + req.session.guild_key, function (err, reply) {
             var guild_data,
-                search_state = reply.state,
+                search_state = reply.search_state,
                 is_admin = req.session.is_admin;
 
             if (is_admin) {
@@ -115,6 +116,8 @@ app.get("/", function (req, res) {
 app.post("/api/register", registration.create);
 app.post("/api/logout", session.destroy);
 app.post("/api/login", session.create);
+app.get("/api/search_state", search_state.fetch);
+app.post("/api/search_state", search_state.update);
 
 app.listen(3000);
 console.log("Listening on port 3000");

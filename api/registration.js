@@ -1,28 +1,11 @@
 /*jslint node: true, devel: true*/
-var utils = require("utils"),
-    redis = require("redis"),
-    createNewState;
-
-createNewState = function () {
-    "use strict";
-
-    var npc_list = require("npc_data").list,
-        new_state = {};
-
-    npc_list.forEach(function (npc) {
-        new_state[npc.short_name] = {
-            player: "",
-            found: false
-        };
-    });
-
-    return new_state;
-};
 
 exports.create = function (req, res) {
     "use strict";
 
-    var valid = val.validateParams(req.body),
+    var utils = require("utils"),
+        redis = require("redis"),
+        valid = utils.validateParams(req.body),
         required_fields = [
             "guildname",
             "admin_pw"
@@ -77,7 +60,7 @@ exports.create = function (req, res) {
         stored_fields.forEach(function (field) {
             values[field] = req.body[field];
         });
-        values.search_state = JSON.stringify(createNewState());
+        values.search_state = JSON.stringify(utils.createNewState());
 
         db.hmset("guild:" + req.body.guildname, values);
 
