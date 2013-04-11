@@ -41,10 +41,10 @@ running a `setup.php` script and everything is magically done for you.
 
 The general procedure for installing the app is as follows:
 
-0. Install Node, Git and Redis
-1. Download the app
-*. Install the app's dependencies
-*. Configure the web server to be a proxy for the app
+1. Install Node, Git and Redis
+2. Download the app
+3. Install the app's dependencies
+4. Configure the web server to be a proxy for the app
 
 The software in Step 0 is a pre-requisite. There's [a guide] on the Node GitHub
 wiki explaining how to install Node; likewise the Git website has [its own
