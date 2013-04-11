@@ -31,10 +31,10 @@ in one go.
 probably not be possible on a shared server. You'll need a dedicated or virtual
 server to install this app on.
 
-Although the app is currently undergoing a rewrite in Node, but I understand
-many people will be using shared servers where the only options are PHP and
-MySQL, so once the Node version is up and running, I'll get to work on making
-the installation of the PHP version much simpler. Ideally it'd just be a case of
+Although the app is currently undergoing a rewrite in Node, I understand many
+people will be using shared servers where the only options are PHP and MySQL, so
+once the Node version is up and running, I'll get to work on making the
+installation of the PHP version much simpler. Ideally it'd just be a case of
 running a `setup.php` script and everything is magically done for you.
 
 ### Outline
@@ -46,8 +46,9 @@ The general procedure for installing the app is as follows:
 *. Install the app's dependencies
 *. Configure the web server to be a proxy for the app
 
-The software in Step 0 is a pre-requisite. There's [a guide] on the Node GitHub wiki explaining
-how to install Node; likewise the Git website has [its own guide] on how to
+The software in Step 0 is a pre-requisite. There's [a guide] on the Node GitHub
+wiki explaining how to install Node; likewise the Git website has [its own
+guide] on how to
 install Git, and the Redis site [also has a guide].
 
 [a guide]:https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
