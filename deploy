@@ -2,28 +2,30 @@
 
 ./compile
 
-if [ $1 -eq 'staging' ]
+DEPLOY_PATH=/var/www/bounty_tracker
+REPO=git://github.com/caerphoto/bounty_tracker.git
+
+ENVIRONMENT=${1:-"staging"}
+REF=${2:-"node-rewrite"}
+USER=deploy
+
+if [ $ENVIRONMENT = 'production' ]
 then
-    SERVER=( 'caerphoto.com' )
+    SERVER=( 'caer.me' )
 else
     SERVER=( 'caerphoto-staging' )
 fi
 
-DEPLOY_PATH=/var/www/bounty_tracker
-REPO=git://github.com/caerphoto/bounty_tracker.git
-USER=deploy
-
-ENVIRONMENT=${1:-"production"}
-REF=${2:-"node-rewrite"}
-
 trap 'test -n "$SUCCESS" || echo "  error: aborted"' EXIT
 echo "* Deploying $ENVIRONMENT/$REF"
 
-ssh $USER@$SERVER "cd $DEPLOY_PATH && \
+ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
+                   forever stop app.js && \
                    git reset --hard && \
                    git checkout $REF && \
                    git pull && \
                    npm install && \
-                   /etc/init.d/bounty_tracker stop"
+                   ./compile && \
+                   NODE_ENV=production forever start app.js"
 
 SUCCESS=true
