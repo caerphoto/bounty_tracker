@@ -52,6 +52,13 @@ a:hover {
     color: #BAE1FF;
 }
 
+a.prominent {
+    display: block;
+    margin: 1em 0;
+    text-align: center;
+    font-size: 3em;
+}
+
 em {
     color: #000;
     font-weight: 700;
