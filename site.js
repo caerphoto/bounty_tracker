@@ -1,10 +1,11 @@
 /*jslint node: true, devel: true*/
 var renderNoGuild = function (res) {
     "use strict";
+    var utils = require("./lib/utils");
     res.render("index", {
         body_class: "",
         guild_data: false,
-        search_state: false
+        search_state: JSON.stringify(utils.createNewState())
     });
 };
 
