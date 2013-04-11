@@ -5,7 +5,7 @@ exports.update = function (req, res) {
         redis = require("redis"),
         db = redis.createClient(),
         bcrypt = require("bcrypt"),
-        utils = require("./lib/utils");
+        utils = require("../lib/utils");
 
     if (!key || !req.session.is_admin) {
         return res.send(403); // Forbidden

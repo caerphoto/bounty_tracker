@@ -9,9 +9,9 @@ else
     SERVER=( 'caerphoto-staging' )
 fi
 
-DEPLOY_PATH=/opt/www/bounty_tracker
+DEPLOY_PATH=/var/www/bounty_tracker
 REPO=git://github.com/caerphoto/bounty_tracker.git
-USER=root
+USER=deploy
 
 ENVIRONMENT=${1:-"production"}
 REF=${2:-"node-rewrite"}

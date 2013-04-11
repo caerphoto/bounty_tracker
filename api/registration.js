@@ -3,7 +3,7 @@
 exports.create = function (req, res) {
     "use strict";
 
-    var utils = require("./lib/utils"),
+    var utils = require("../lib/utils"),
         redis = require("redis"),
         bcrypt = require("bcrypt"),
         valid = utils.validateParams(req.body),

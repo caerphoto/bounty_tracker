@@ -29,7 +29,7 @@ exports.fetch = function (req, res) {
 exports.update = function (req, res) {
     "use strict";
     var redis = require("redis"),
-        utils = require("./lib/utils"),
+        utils = require("../lib/utils"),
         db = redis.createClient(),
         key = req.session.guild_key;
 

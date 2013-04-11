@@ -39,7 +39,7 @@ exports.reset = function (req, res) {
     "use strict";
 
     var redis = require("redis"),
-        utils = require("./lib/utils"),
+        utils = require("../lib/utils"),
         bcrypt = require("bcrypt"),
         db = redis.createClient(),
         key;
