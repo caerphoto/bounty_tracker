@@ -122,3 +122,9 @@ vouch for it.
 
 [this guide]: http://blog.argteam.com/coding/hardening-node-js-for-production-part-2-using-nginx-to-avoid-node-js-load/
 [this page]: http://thatextramile.be/blog/2012/01/hosting-a-node-js-site-through-apache
+
+## TODO
+
+* Create setup script for the PHP version of the app.
+* Change PHP version to use MySQL, since it's more commonly used than Postgres.
+* Improve guild member name entry, to allow for multiple names per NPC.
