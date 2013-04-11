@@ -72,6 +72,9 @@ exports.reset = function (req, res) {
 
 
                 sendEmail(guildname, admin_email, new_password, function (err) {
+                    if (err) {
+                        console.log("Mailer error:", err);
+                    }
                     res.send(err ? 500 : 204);
                 });
             });
