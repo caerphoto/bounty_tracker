@@ -23,7 +23,7 @@ $(function () {
         base_doc_title = document.title,
 
         error_messages = {
-            "exists": "A guild with that name already exists.",
+            "exists": "A guild with that name has already been registered.",
             "missing": "The <em>%s</em> field cannot be left blank.",
             "length": "The <em>%s</em> field cannot be longer than <em>%d</em> characters.",
             "mismatch": "The <em>%s</em> does not match.",
