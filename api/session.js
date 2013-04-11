@@ -12,7 +12,7 @@ exports.destroy = function (req, res) {
 exports.create = function (req, res) {
     "use strict";
     var redis = require("redis"),
-        utils = require("utils"),
+        utils = require("./lib/utils"),
         bcrypt = require("bcrypt"),
         db = redis.createClient(),
         guild_key;

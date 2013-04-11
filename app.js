@@ -9,7 +9,7 @@ var express = require("express"),
     guild_info = require("./api/guild_info"),
     password = require("./api/password"),
 
-    npc_list = require("npc_data").list,
+    npc_list = require("./lib/npc_data").list,
 
     RedisStore = require("connect-redis")(express),
     app = express(),
