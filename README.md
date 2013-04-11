@@ -46,10 +46,9 @@ The general procedure for installing the app is as follows:
 3. Install the app's dependencies
 4. Configure the web server to be a proxy for the app
 
-The software in Step 0 is a pre-requisite. There's [a guide] on the Node GitHub
+The software in Step 1 is a pre-requisite. There's [a guide] on the Node GitHub
 wiki explaining how to install Node; likewise the Git website has [its own
-guide] on how to
-install Git, and the Redis site [also has a guide].
+guide] on how to install Git, and the Redis site [also has a guide].
 
 [a guide]:https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 [its own guide]:http://git-scm.com/book/en/Getting-Started-Installing-Git
