@@ -1,7 +1,5 @@
 #!/bin/bash
 
-./compile
-
 DEPLOY_PATH=/var/www/bounty_tracker
 REPO=git://github.com/caerphoto/bounty_tracker.git
 
@@ -20,12 +18,13 @@ trap 'test -n "$SUCCESS" || echo "  error: aborted"' EXIT
 echo "* Deploying $ENVIRONMENT/$REF"
 
 ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
-                   forever stop app.js && \
-                   git reset --hard && \
-                   git checkout $REF && \
-                   git pull && \
-                   npm install && \
-                   ./compile && \
-                   NODE_ENV=production forever start app.js"
+    forever stop app.js && \
+    git reset --hard && \
+    git checkout $REF && \
+    git pull && \
+    npm install && \
+    ./compile && \
+    export NODE_ENV=production && \
+    forever --minUptime 5000 -a -l forever.log -o app.log -e error.log start app.js"
 
 SUCCESS=true
