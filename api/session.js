@@ -23,14 +23,17 @@ exports.create = function (req, res) {
 
     guild_key = utils.generateKey(req.body.guildname);
 
-    db.hgetall("guild:" + guild_key, function (err, reply) {
+    db.hgetall(guild_key, function (err, reply) {
         var response_data = {};
 
         db.quit();
+
         if (!reply) {
             return res.send(403);
         }
         bcrypt.compare(req.body.password, reply.admin_pw, function (err, match) {
+            var TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
+
             if (match) {
                 req.session.guild_key = guild_key;
                 req.session.is_admin = true;
@@ -48,6 +51,7 @@ exports.create = function (req, res) {
             // Doesn't match admin password, so maybe it matches member pw?
             if (req.body.password === reply.member_pw) {
                 req.session.guild_key = guild_key;
+                req.session.cookie.maxAge = TWO_WEEKS_IN_MS;
 
                 response_data.guild_data = {
                     guildname: reply.guildname

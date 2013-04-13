@@ -1,19 +1,17 @@
 /*jslint node: true, devel: true*/
 exports.update = function (req, res) {
     "use strict";
-    var key = req.session.guild_key,
+    var guild_key = req.session.guild_key,
         redis = require("redis"),
         db = redis.createClient(),
         bcrypt = require("bcrypt"),
         utils = require("../lib/utils");
 
-    if (!key || !req.session.is_admin) {
+    if (!guild_key || !req.session.is_admin) {
         return res.send(403); // Forbidden
     }
 
-    key = "guild:" + key;
-
-    db.exists(key, function (err, exists) {
+    db.exists(guild_key, function (err, exists) {
         var new_data = {};
 
         if (!exists) {
@@ -41,8 +39,8 @@ exports.update = function (req, res) {
             new_data.admin_pw = bcrypt.hashSync(req.body.admin_pw, 8);
         }
 
-        db.hmset(key, new_data);
-        db.hgetall(key, function (err, guild_data) {
+        db.hmset(guild_key, new_data);
+        db.hgetall(guild_key, function (err, guild_data) {
             var response_data;
 
             db.quit();

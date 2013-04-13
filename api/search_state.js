@@ -10,7 +10,7 @@ exports.fetch = function (req, res) {
         return res.send(403);
     }
 
-    db.hgetall("guild:" + req.session.guild_key, function (err, reply) {
+    db.hgetall(req.session.guild_key, function (err, reply) {
         db.quit();
 
         if (!reply) {
@@ -31,21 +31,19 @@ exports.update = function (req, res) {
     var redis = require("redis"),
         utils = require("../lib/utils"),
         db = redis.createClient(),
-        key = req.session.guild_key;
+        guild_key = req.session.guild_key;
 
     // Not logged in.
-    if (!key) {
+    if (!guild_key) {
         return res.send(403);
     }
-
-    key = "guild:" + key;
 
     // Update requests must contain the following parameters:
     // short_name: the code for the NPC whose state is being updated
     // player: the name of the player searching for the NPC
     // found: a string either "true" or "false", indicating the NPC's found state
 
-    db.hgetall(key, function (err, reply) {
+    db.hgetall(guild_key, function (err, reply) {
         var state;
 
         if (!reply) {
@@ -68,8 +66,8 @@ exports.update = function (req, res) {
 
         state = JSON.stringify(state);
 
-        db.hset(key, "search_state", state);
-        db.hget(key, "search_state", function (err, new_state) {
+        db.hset(guild_key, "search_state", state);
+        db.hget(guild_key, "search_state", function (err, new_state) {
             db.quit();
 
             if (!new_state) {

@@ -60,9 +60,8 @@ hgroup {
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
-        <p class="info">The guild name is not case-sensitive. Valid
-          characters are <em>letters</em>, <em>numbers</em> and
-          <em>spaces</em>.</p>
+        <p class="info">The guild name is not case-sensitive, and can be up to
+        <em>70</em> characters in length.</p>
 
         <label for="register-admin-email">Admin email:</label>
         <input id="register-admin-email" name="admin_email" type="text">
@@ -83,6 +82,13 @@ hgroup {
         <p class="info">This is what regular guild members will use to log
         in.  It is <em>not encrypted</em>, since you&rsquo;ll be sharing it with
         lots of (hopefully trustworthy) people anyway.</p>
+
+        <div class="checkbox-wrapper">
+          <input id="register-temporary" name="temporary" type="checkbox">
+          <label for="register-temporary">Temporary registration</label>
+        </div>
+        <p class="info">Check this box to have the Tracker only remember your
+        guild for one day.</p>
 
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>

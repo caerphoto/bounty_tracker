@@ -35,8 +35,6 @@ exports.create = function (req, res) {
         return res.json(400, valid);
     }
 
-    // Create a key for the guild by converting to lower case and replacing
-    // spaces with underscores.
     guild_key = utils.generateKey(req.body.guildname);
 
     db = redis.createClient();
@@ -44,10 +42,10 @@ exports.create = function (req, res) {
         console.log("Redis Error:", err);
     });
 
-    db.exists("guild:" + guild_key, function (err, reply) {
+    db.exists(guild_key, function (err, exists) {
         var values = {};
 
-        if (reply) {
+        if (exists) {
             // Guild already exists.
             return res.json(400, ["guildname", "exists"]);
         }
@@ -61,16 +59,25 @@ exports.create = function (req, res) {
         });
         values.search_state = JSON.stringify(utils.createNewState());
         bcrypt.hash(req.body.admin_pw, 8, function (err, hash) {
+            var ONE_DAY_IN_S = 24 * 60 * 60;
+
             values.admin_pw = hash;
 
-            db.hmset("guild:" + guild_key, values);
-            db.hgetall("guild:" + guild_key, function (err, reply) {
-                var new_guild;
+            db.hmset(guild_key, values);
+            if (req.body.temporary) {
+                db.expire(guild_key, ONE_DAY_IN_S);
+            }
+
+            db.hgetall(guild_key, function (err, reply) {
+                var new_guild,
+                    TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
 
                 db.quit();
                 if (reply) {
                     req.session.guild_key = guild_key;
                     req.session.is_admin = true;
+                    req.session.cookie.maxAge = TWO_WEEKS_IN_MS;
+
                     new_guild = {
                         admin_email: reply.admin_email,
                         member_pw: reply.member_pw,

@@ -42,7 +42,7 @@ exports.reset = function (req, res) {
         utils = require("../lib/utils"),
         bcrypt = require("bcrypt"),
         db = redis.createClient(),
-        key;
+        guild_key;
 
     if (!req.body.guildname || !req.body.admin_email) {
         return res.send(400); // Bad request
@@ -50,14 +50,14 @@ exports.reset = function (req, res) {
 
     req.body.admin_email = req.body.admin_email.toLowerCase();
 
-    key = "guild:" + utils.generateKey(req.body.guildname);
+    guild_key = utils.generateKey(req.body.guildname);
 
-    db.exists(key, function (err, exists) {
+    db.exists(guild_key, function (err, exists) {
         if (!exists) {
             db.quit();
             return res.send(404);
         }
-        db.hmget(key, "guildname", "admin_email", function (err, reply) {
+        db.hmget(guild_key, "guildname", "admin_email", function (err, reply) {
             var new_password = randomPassword(20),
                 guildname = reply[0],
                 admin_email = reply[1];
@@ -67,7 +67,7 @@ exports.reset = function (req, res) {
             }
 
             bcrypt.hash(new_password, 8, function (err, hash) {
-                db.hset(key, "admin_pw", hash);
+                db.hset(guild_key, "admin_pw", hash);
                 db.quit();
 
 

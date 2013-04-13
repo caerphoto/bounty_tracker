@@ -22,13 +22,14 @@ exports.index = function (req, res, data) {
             console.log("Redis Error:", err);
         });
 
-        db.hgetall("guild:" + req.session.guild_key, function (err, reply) {
+        db.hgetall(req.session.guild_key, function (err, reply) {
             var guild_data,
                 search_state,
                 is_admin = req.session.is_admin;
 
             if (!reply) {
-                // Guild has been deleted since last login.
+                // Guild registration has expored or been deleted since last
+                // login.
                 return renderNoGuild(res);
             }
 

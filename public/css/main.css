@@ -151,18 +151,31 @@ footer,
 header,
 footer {
     font-size: 0.8em;
-    position: relative;
+    overflow: hidden;
+}
+
+header label {
+    margin-top: 1px;
 }
 
 footer p {
     margin: 0;
 }
 
+#register-link {
+    display: block;
+    float: left;
+    margin-top: 1px;
+}
+
+body.logged-in #register-link {
+    display: none;
+}
+
 header form,
 #logged-in {
-    position: absolute;
-    right: 6.25em;
-    top: 1em;
+    float: right;
+    height: 1.8em;
 }
 
 #forgot-password {
@@ -334,6 +347,22 @@ input[type="email"]:focus {
     box-sizing: border-box;
     padding: 0.5em 1em;
     width: 15em;
+}
+
+
+.checkbox-wrapper {
+    clear: both;
+    float: left;
+}
+
+.checkbox-wrapper label {
+    display: inline-block;
+}
+
+.checkbox-wrapper input {
+    width: auto;
+    display: inline-block;
+    margin-right: 0.5em;
 }
 
 .button-bar {
