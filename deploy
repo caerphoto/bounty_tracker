@@ -5,14 +5,13 @@ REPO=git://github.com/caerphoto/bounty_tracker.git
 
 ENVIRONMENT=${1:-"staging"}
 REF=${2:-"node-rewrite"}
+USER=deploy
 
 if [ $ENVIRONMENT = 'production' ]
 then
     SERVER=( 'caer.me' )
-    USER=root
 else
     SERVER=( 'caerphoto-staging' )
-    USER=deploy
 fi
 
 trap 'test -n "$SUCCESS" || echo "  error: aborted"' EXIT
