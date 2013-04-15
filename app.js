@@ -76,5 +76,6 @@ app.post("/api/search_state", search_state.update);
 app.post("/api/guild_info", guild_info.update);
 app.post("/api/reset_password", password.reset);
 
-app.listen(3000);
+// Only listen on localhost, so only traffic passed from nginx reaches the app.
+app.listen(3000, "127.0.0.1");
 console.log("Listening on port 3000");
