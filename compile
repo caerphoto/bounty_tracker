@@ -5,7 +5,7 @@
 
 echo "Combining and minifying CSS files..."
 cat `cat cssfiles` > temp.css
-node minify_css.js < temp.css > public/css/bounty.min.css
+cleancss < temp.css > public/css/bounty.min.css
 rm temp.css
 
 echo "Combining and minifying JavaScript files..."
