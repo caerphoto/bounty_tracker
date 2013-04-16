@@ -194,6 +194,9 @@ $(function () {
         $("#options-member-pw").val(GBT.guild_data.member_pw);
         $("#options-admin-email").val(GBT.guild_data.admin_email);
 
+        $("#login-guildname").blur();
+        $("#login-password").blur();
+
         if (GBT.search_state) {
             applyState();
         }

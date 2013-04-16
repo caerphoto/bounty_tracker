@@ -152,6 +152,7 @@ header,
 footer {
     font-size: 0.8em;
     overflow: hidden;
+    position: relative;
 }
 
 header label {
@@ -160,6 +161,10 @@ header label {
 
 footer p {
     margin: 0;
+}
+
+.compact {
+    display: none;
 }
 
 #register-link {
@@ -303,7 +308,14 @@ input[type="email"]:focus {
 
     z-index: 2;
     background: rgba(192,192,192, 0.6);
+
+    display: none;
 }
+
+.dialog:target {
+    display: block;
+}
+
 
 .dialog > form,
 .dialog > div {
@@ -349,7 +361,6 @@ input[type="email"]:focus {
     width: 15em;
 }
 
-
 .checkbox-wrapper {
     clear: both;
     float: left;
@@ -381,14 +392,6 @@ input + .button-bar {
     margin-left: 0.5em;
     min-width: 5em;
     text-align: center;
-}
-
-.dialog {
-    display: none;
-}
-
-.dialog:target {
-    display: block;
 }
 
 #reset-password > input {
@@ -440,6 +443,11 @@ td:last-child, th:last-child {
     width: 15em;
 }
 
+.npc-name .compact {
+    /* gets displayed via media queries when window is below a certain width */
+    display: none;
+}
+
 .npc-row .npc-location {
     width: 11em;
 }
@@ -458,7 +466,8 @@ body.demo .npc-row.found:nth-child(even) {
     background: #8e8;
 }
 
-.npc-row.found td {
+body.logged-in .npc-row.found td,
+body.demo .npc-row.found td {
     text-shadow: 0 1px 0 rgba(192,239,192, 0.7);
 }
 
@@ -490,4 +499,117 @@ button.reset {
 
 body.admin.logged-in button.reset {
     display: inline-block;
+}
+
+@media screen and (max-width: 55em) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 50em) {
+    header,
+    footer,
+    #main {
+        padding: 1em 2em;
+    }
+
+    header form input[type="text"],
+    header form input[type="password"] {
+        width: 8em;
+    }
+
+    .non-essential {
+        display: none;
+    }
+
+    .npc-row > .npc-name {
+        width: 12em;
+    }
+
+    .npc-row > .npc-location {
+        width: 10em;
+    }
+}
+@media screen and (max-width: 38em) {
+    .not-small,
+    .npc-name > .full {
+        display: none !important;
+    }
+
+    .dialog > form {
+        box-sizing: border-box;
+        padding: 1em;
+        width: 100%;
+    }
+
+    .dialog h2 {
+        font-size: 1.3em;
+    }
+
+    .npc-row > .npc-name {
+        width: 6em;
+    }
+
+    .npc-name > .compact {
+        display: inline;
+    }
+}
+@media screen and (max-width: 32em) {
+    header,
+    footer,
+    #main {
+        padding: 1em 0.5em;
+    }
+
+    header {
+        font-size: 1em;
+    }
+
+    header > form {
+        height: auto;
+        float: none;
+    }
+
+    header > form > label {
+        display: inline-block;
+        width: 6em;
+
+    }
+
+    header > form > input[type="submit"] {
+        position: absolute;
+        top: 1.75em;
+        right: 1em;
+    }
+
+    #error {
+        width: auto;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        line-height: 1.1;
+        margin-bottom: 0.5em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    .not-compact {
+        display: none !important;
+    }
+
+    .compact {
+        display: inline;
+    }
+
+    .npc-location {
+        display: none;
+    }
+
+    .npc-row > .npc-name {
+        width: auto;
+    }
 }

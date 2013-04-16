@@ -23,34 +23,36 @@ hgroup {
 }
 </style>
 <![endif]-->
-
-
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0">
 <% cssfiles.forEach(function (filename) { %>
-    <link rel="stylesheet" href="<%= filename %>">
-<% }); %>
+    <link rel="stylesheet" href="<%= filename %>"> <% }); %>
 
     <link rel="shortcut icon" href="/media/favicon.ico">
-
     <title>Guild Bounty Tracker</title>
   </head>
   <body class="<%= body_class %>">
     <header>
-      <a href="#register-dialog" id="register-link">Register your guild</a>
+      <a href="#register-dialog" id="register-link" class="not-small">Register
+        <span class="non-essential">your </span>guild</a>
 
       <form id="login" action="api/login" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
+        <br class="compact">
         <label for="login-password">Password:</label>
         <input type="password" id="login-password" name="password">
-        <a href="#forgot-password-dialog" id="forgot-password">forgot?</a>
+        <a href="#forgot-password-dialog" id="forgot-password"
+          class="not-compact">forgot?</a>
+        <br class="compact">
         <input type="submit" value="Log In">
       </form>
 
-      <div id="logged-in">Logged in as a<span id="logged-in-admin">n admin
-          of</span><span id="logged-in-member"> member of</span>
+      <div id="logged-in">
+        <span class="not-compact">Logged in as a<span id="logged-in-admin">n admin
+            of</span><span id="logged-in-member"> member of</span></span>
         <span id="logged-in-guildname"><%= guild_data.guildname %></span> &middot;
-        <span id="logged-in-options"><a href="#options-dialog">options</a>
-          &middot; </span>
+        <span id="logged-in-options" class="not-compact"><a
+            href="#options-dialog">options</a> &middot; </span>
         <button id="log-out">Log Out</button>
       </div>
     </header>
@@ -175,7 +177,8 @@ hgroup {
       in with. Other guild members, log in with the password an officer gives
       you.</p>
 
-      <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
+      <p class="info not-compact">Each NPC&rsquo;s name links to the relevant
+      section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s
         guide</a> in a new window, wherein you can find a picture of the NPC and
       a map of their route.</p>
@@ -184,8 +187,9 @@ hgroup {
       registering/logging in, try the demo:<button id="demo-toggle">Toggle
         Demo</button></p>
 
-      <p class="instructions info">Enter your name in one of the boxes below.
-      When you've found the relevant NPC, click the <em>Found!</em> button.</p>
+      <p class="instructions info not-compact">Enter your name in one of the
+      boxes below.  When you've found the relevant NPC, click the
+      <em>Found!</em> button.</p>
 
       <h2 id="found-display">Found so far: <span id="found-count">0</span></h2>
 
@@ -202,7 +206,10 @@ hgroup {
   <tbody>
   {{#NPCs}}
     <tr class="npc-row" id="npc-{{short_name}}">
-      <td class="npc-name"><a href="{{url}}" target="_blank">{{{name}}}</a></td>
+      <td class="npc-name">
+        <a class="full" href="{{url}}" target="_blank">{{{name}}}</a>
+        <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
+      </td>
       <td class="npc-location">{{{location}}}</td>
       <td class="player-name"><input type="text" required="required"></td>
       <td>
