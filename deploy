@@ -23,7 +23,6 @@ ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
     git pull && \
     npm install && \
     ./compile && \
-    export NODE_ENV=production && \
-    forever restart --minUptime 5000 -a -l forever.log -o app.log -e error.log app.js"
+    NODE_ENV=$ENVIRONMENT forever restart --minUptime 5000 -a -l forever.log -o app.log -e error.log app.js"
 
 SUCCESS=true

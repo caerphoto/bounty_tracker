@@ -24,39 +24,44 @@ exports.create = function (req, res) {
     guild_key = utils.generateKey(req.body.guildname);
 
     db.hgetall(guild_key, function (err, reply) {
-        var response_data = {};
-
         db.quit();
 
         if (!reply) {
             return res.send(403);
         }
         bcrypt.compare(req.body.password, reply.admin_pw, function (err, match) {
-            var TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
+            var TWO_WEEKS_IN_MS = 1209600000, // in milliseconds
+                response_data = {};
+
+            // Common actions for admin or member login
+            if (match || req.body.password === reply.member_pw) {
+                req.session.guild_key = guild_key;
+                req.session.cookie.maxAge = TWO_WEEKS_IN_MS;
+
+                response_data.search_state = JSON.parse(reply.search_state);
+
+                // Log latest login
+                db = redis.createClient();
+                db.set("login:" + guild_key, Date.now());
+                db.quit();
+            }
 
             if (match) {
-                req.session.guild_key = guild_key;
                 req.session.is_admin = true;
-
                 response_data.is_admin = true;
                 response_data.guild_data = {
                     guildname: reply.guildname,
                     admin_email: reply.admin_email,
                     member_pw: reply.member_pw
                 };
-                response_data.search_state = JSON.parse(reply.search_state);
                 return res.json(response_data);
             }
 
             // Doesn't match admin password, so maybe it matches member pw?
             if (req.body.password === reply.member_pw) {
-                req.session.guild_key = guild_key;
-                req.session.cookie.maxAge = TWO_WEEKS_IN_MS;
-
                 response_data.guild_data = {
                     guildname: reply.guildname
                 };
-                response_data.search_state = JSON.parse(reply.search_state);
                 return res.json(response_data);
             }
 
