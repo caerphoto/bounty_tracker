@@ -1,11 +1,9 @@
-/*jslint node: true, devel: true*/
 exports.update = function (req, res) {
     "use strict";
     var guild_key = req.session.guild_key,
         redis = require("redis"),
         db = redis.createClient(),
-        bcrypt = require("bcrypt"),
-        utils = require("../lib/utils");
+        bcrypt = require("bcrypt");
 
     if (!guild_key || !req.session.is_admin) {
         return res.send(403); // Forbidden
@@ -35,7 +33,9 @@ exports.update = function (req, res) {
                 return res.json(400, ["admin_pw_confirm", "mismatch"]);
             }
 
-            // Use sync version because trying to make this async hurts my head
+            // Use sync version because trying to make this async hurts my head.
+            // May need to change this if it becomes the target of a DDoS
+            // attack.
             new_data.admin_pw = bcrypt.hashSync(req.body.admin_pw, 8);
         }
 

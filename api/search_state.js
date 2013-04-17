@@ -1,5 +1,3 @@
-/*jslint node: true, devel: true*/
-
 exports.fetch = function (req, res) {
     "use strict";
     var redis = require("redis"),

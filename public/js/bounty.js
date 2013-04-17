@@ -1,4 +1,5 @@
-/*global GBT, soundManager */
+/*jshint jquery: true, browser: true*/
+/*global GBT, Mustache, soundManager*/
 $(function () {
     "use strict";
 
@@ -49,8 +50,7 @@ $(function () {
 
     initTable = function () {
         // One-time setup stuff.
-        var npc_row_template = $("#npc-row-template").html(),
-            html;
+        var npc_row_template = $("#npc-row-template").html();
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: GBT.npc_list }));
 
@@ -78,7 +78,7 @@ $(function () {
                     callback(true);
                 }
             },
-            error: function (xhr) {
+            error: function () {
                 if (typeof callback === "function") {
                     callback(false);
                 }
@@ -331,7 +331,7 @@ $(function () {
                 admin_email: form.admin_email.value
             },
             dataType: "json",
-            success: function (response) {
+            success: function () {
                 window.location.hash = "";
                 window.alert("Your password has been reset. Please check your email.");
             },
@@ -445,7 +445,7 @@ $(function () {
         postState($row.attr("id").slice(4),
             $row.find(".player-name input").val(),
             found,
-            function (success, error_message) {
+            function () {
                 $buttons.removeClass("working");
             }
         );

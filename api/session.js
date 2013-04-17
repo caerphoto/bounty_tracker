@@ -1,5 +1,3 @@
-/*jslint node: true, devel: true*/
-
 exports.destroy = function (req, res) {
     // Log out
     "use strict";

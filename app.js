@@ -1,4 +1,3 @@
-/*jslint node: true, devel: true*/
 var express = require("express"),
     ejs = require("ejs"),
 
@@ -17,8 +16,6 @@ var express = require("express"),
     init;
 
 init = function (env) {
-    "use strict";
-
     var fs = require("fs"),
         f,
         jsfiles = [], cssfiles = [];

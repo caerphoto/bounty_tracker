@@ -1,4 +1,3 @@
-/*jslint node: true, devel: true*/
 var renderNoGuild = function (res) {
     "use strict";
     var utils = require("./lib/utils");
@@ -9,7 +8,7 @@ var renderNoGuild = function (res) {
     });
 };
 
-exports.index = function (req, res, data) {
+exports.index = function (req, res) {
     "use strict";
 
     var redis = require("redis"),

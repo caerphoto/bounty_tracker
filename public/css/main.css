@@ -10,7 +10,7 @@ body {
     margin: 0 auto;
     padding: 0;
 
-    font: 16px/1.6 "PT Sans", "Arial", sans-serif;
+    font: 16px/1.6 "pt-sans", "PT Sans", "Candara", sans-serif;
 }
 
 h1, h2, h3, th {
@@ -415,7 +415,7 @@ th {
 }
 
 .npc-row td, .npc-row th {
-    padding: 0.3em 0.5em;
+    padding: 0.2em 0.5em;
 }
 
 td:first-child, th:first-child {
@@ -560,6 +560,8 @@ body.admin.logged-in button.reset {
     footer,
     #main {
         padding: 1em 0.5em;
+        border-left-width: 1px;
+        border-right-width: 1px;
     }
 
     header {
