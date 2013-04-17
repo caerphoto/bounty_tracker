@@ -3,3 +3,5 @@ test.php
 .htaccess_dev
 node_modules/
 deploy
+.jshintrc
+dump.rdb

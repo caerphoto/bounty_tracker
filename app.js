@@ -1,5 +1,4 @@
 var express = require("express"),
-    ejs = require("ejs"),
 
     site = require("./site"),
     registration = require("./api/registration"),

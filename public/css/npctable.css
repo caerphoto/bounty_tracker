@@ -1,0 +1,88 @@
+/* NPC table stuff */
+
+.npc-row button {
+    width: 5em;
+}
+
+.npc-row button, .npc-row input {
+    visibility: hidden;
+}
+
+#npc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    background: #fff;
+}
+
+tr:nth-child(even) {
+    background: #f4f4f4;
+}
+
+th {
+    text-align: left;
+}
+
+.npc-row td, .npc-row th {
+    padding: 0.2em 0.5em;
+}
+
+td:first-child, th:first-child {
+    padding-left: 1em;
+}
+
+td:last-child, th:last-child {
+    padding-right: 1em;
+}
+
+.npc-row th {
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+}
+
+.npc-row span {
+    display: inline-block;
+}
+
+.npc-row input {
+    width: 100%;
+}
+
+.npc-row .npc-name {
+    width: 15em;
+}
+
+.npc-name .compact {
+    /* gets displayed via media queries when window is below a certain width */
+    display: none;
+}
+
+.npc-row .npc-location {
+    width: 11em;
+}
+
+.npc-row .lost {
+    display: none;
+}
+
+.npc-row.found .found {
+    display: none;
+}
+
+.npc-row.found .lost {
+    display: inline-block;
+}
+
+.npc-row.found input:invalid {
+    background: #fcc;
+    border-color: #b99;
+}
+
+#list-controls {
+    display: none;
+}
+
+button.reset {
+    display: none;
+}
+
