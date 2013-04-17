@@ -59,7 +59,7 @@ $(function () {
     errorDialog = function (view) {
         $error.html(Mustache.render(error_template, view));
         window.location.hash = "error-dialog";
-        $error.find("a.button").focus();
+        $error.find("a.button").get(0).focus();
     };
 
     fetchState = function (callback) {
@@ -194,17 +194,19 @@ $(function () {
         $("#options-member-pw").val(GBT.guild_data.member_pw);
         $("#options-admin-email").val(GBT.guild_data.admin_email);
 
-        $("#login-guildname").blur();
-        $("#login-password").blur();
+        $("#login-guildname").get(0).blur();
+        $("#login-password").get(0).blur();
 
         if (GBT.search_state) {
             applyState();
         }
 
-        beginAutoSync();
+        setTimeout(function () {
+            beginAutoSync();
+        }, sync_interval);
     };
 
-    $("#register").submit(function () {
+    $("#register").on("submit", function () {
         // Override form submit handling to use ajax instead.
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
@@ -250,7 +252,7 @@ $(function () {
         return false; // prevent default handling of form submission
     });
 
-    $("#login").submit(function () {
+    $("#login").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
 
@@ -293,7 +295,7 @@ $(function () {
         return false;
     });
 
-    $("#log-out").click(function () {
+    $("#log-out").on("click", function () {
         var $button = $(this);
 
         $button.addClass("working");
@@ -317,7 +319,7 @@ $(function () {
         });
     });
 
-    $("#reset-password").submit(function () {
+    $("#reset-password").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
 
@@ -363,7 +365,7 @@ $(function () {
         return false;
     });
 
-    $("#options").submit(function () {
+    $("#options").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]'),
             data = {};
@@ -427,10 +429,10 @@ $(function () {
         }
 
         $input = $(hash + " > form > input").first();
-        $input.focus();
+        $input.get(0).focus();
     });
 
-    $("#demo-toggle").click(function () {
+    $("#demo-toggle").on("click", function () {
         $body.toggleClass("demo");
         if (!$body.hasClass("demo")) {
             document.title = base_doc_title;
@@ -477,7 +479,7 @@ $(function () {
         updateRow($row, $row.hasClass("found"));
     });
 
-    $("#toggle-autosync").change(function () {
+    $("#toggle-autosync").on("change", function () {
         $manual_refresh.toggleClass("disabled", this.checked);
         if (this.checked) {
             beginAutoSync();
@@ -486,11 +488,11 @@ $(function () {
         }
     });
 
-    $manual_refresh.click(function () {
+    $manual_refresh.on("click", function () {
         fetchState();
     });
 
-    $("#reset").click(function () {
+    $("#reset").on("click", function () {
         var $button = $(this);
         $button.addClass("working");
 
