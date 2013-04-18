@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.2 r9819"
    sodipodi:docname="favicon.svg"
-   inkscape:export-filename="/Users/andrewfarrell/code/caerphoto.com/guild_bounty/favicon.png"
+   inkscape:export-filename="/Users/andrewfarrell/code/guild_bounty/src/favicon.png"
    inkscape:export-xdpi="4.5"
    inkscape:export-ydpi="4.5">
   <defs
@@ -204,7 +204,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
