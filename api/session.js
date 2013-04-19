@@ -39,10 +39,7 @@ exports.create = function (req, res) {
                 response_data.search_state = JSON.parse(reply.search_state);
 
                 // Track login stuff for analysis.
-                db = redis.createClient();
-                db.set("login:" + guild_key, Date.now());
-                db.incr("login:count:" + guild_key);
-                db.quit();
+                utils.recordLogin(guild_key);
             }
 
             if (match) {
