@@ -1,0 +1,61 @@
+/* Base styles for overall look. */
+
+html {
+    background-color: #f4f4f4;
+    /*background-image: url("/media/subtle_white_feathers.jpg");*/
+}
+
+body {
+    color: #333;
+
+    max-width: 55em;
+    margin: 0 auto;
+    padding: 0;
+
+    font: 16px/1.6 "Source Sans Pro", "source-sans-pro", "Candara", sans-serif;
+}
+
+h1, h2, h3, th {
+    font-family: "Palatino", "Palatino Linotype", "Book Antiqua", serif;
+}
+
+h1, h2, h3 {
+    color: #000;
+    text-shadow:
+        0 -1px 0 rgba(0,0,0,0.75),
+        0 1px 0 rgba(255,255,255,1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2em;
+    margin: 0.3em 0;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+a {
+    color: #b00;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+em {
+    color: #000;
+    font-weight: 700;
+}
+
+strong {
+    font-weight: 700;
+    color: #d00;
+}
+

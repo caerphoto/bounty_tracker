@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DEPLOY_PATH=/var/www/bounty_tracker
+REPO=git://github.com/caerphoto/bounty_tracker.git
+
+ENVIRONMENT=${1:-"staging"}
+REF=${2:-"node-rewrite"}
+USER=deploy
+
+if [ $ENVIRONMENT = 'production' ]
+then
+    SERVER=( 'caer.me' )
+else
+    SERVER=( 'caerphoto-staging' )
+fi
+
+trap 'test -n "$SUCCESS" || echo "  error: aborted"' EXIT
+echo "* Deploying $ENVIRONMENT/$REF"
+
+ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
+    git reset --hard && \
+    git checkout $REF && \
+    git pull && \
+    npm install && \
+    ./compile && \
+    NODE_ENV=$ENVIRONMENT forever restart --minUptime 5000 -a -l forever.log -o app.log -e error.log app.js"
+
+SUCCESS=true

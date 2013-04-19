@@ -1,4 +1,5 @@
-/*global GBT, soundManager */
+/*jshint jquery: true, browser: true*/
+/*global GBT, Mustache, soundManager*/
 $(function () {
     "use strict";
 
@@ -23,14 +24,14 @@ $(function () {
         base_doc_title = document.title,
 
         error_messages = {
-            "exists": "A guild with that name already exists.",
+            "exists": "A guild with that name has already been registered.",
             "missing": "The <em>%s</em> field cannot be left blank.",
             "length": "The <em>%s</em> field cannot be longer than <em>%d</em> characters.",
             "mismatch": "The <em>%s</em> does not match.",
             "invalid": "The <em>%s</em> contains invalid characters."
         },
         field_names = {
-            "name": "guild name",
+            "guildname": "guild name",
             "admin_pw": "admin password",
             "admin_email": "admin email",
             "admin_pw_confirm": "admin password confirmation",
@@ -49,8 +50,7 @@ $(function () {
 
     initTable = function () {
         // One-time setup stuff.
-        var npc_row_template = $("#npc-row-template").html(),
-            html;
+        var npc_row_template = $("#npc-row-template").html();
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: GBT.npc_list }));
 
@@ -59,12 +59,12 @@ $(function () {
     errorDialog = function (view) {
         $error.html(Mustache.render(error_template, view));
         window.location.hash = "error-dialog";
-        $error.find("a.button").focus();
+        $error.find("a.button").get(0).focus();
     };
 
     fetchState = function (callback) {
         $.ajax({
-            url: "api/search_state/",
+            url: "api/search_state",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -78,7 +78,7 @@ $(function () {
                     callback(true);
                 }
             },
-            error: function (xhr) {
+            error: function () {
                 if (typeof callback === "function") {
                     callback(false);
                 }
@@ -131,7 +131,7 @@ $(function () {
         }
 
         $.ajax({
-            url: "api/search_state/",
+            url: "api/search_state",
             type: "POST",
             data: {
                 short_name: short_name,
@@ -156,9 +156,9 @@ $(function () {
     };
 
     beginAutoSync = function () {
-        //if ($body.hasClass("demo")) {
+        if ($body.hasClass("demo")) {
             return;
-        //}
+        }
 
         if (!idle_timer) {
             idle_time = 0;
@@ -190,18 +190,23 @@ $(function () {
         }
         window.location.hash = "";
 
-        $("#logged-in-guildname").text(GBT.guild_data.name);
+        $("#logged-in-guildname").text(GBT.guild_data.guildname);
         $("#options-member-pw").val(GBT.guild_data.member_pw);
         $("#options-admin-email").val(GBT.guild_data.admin_email);
+
+        $("#login-guildname").get(0).blur();
+        $("#login-password").get(0).blur();
 
         if (GBT.search_state) {
             applyState();
         }
 
-        beginAutoSync();
+        setTimeout(function () {
+            beginAutoSync();
+        }, sync_interval);
     };
 
-    $("#register").submit(function () {
+    $("#register").on("submit", function () {
         // Override form submit handling to use ajax instead.
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
@@ -212,7 +217,7 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
-                name: form.guildname.value,
+                guildname: form.guildname.value,
                 admin_email: form.admin_email.value,
                 admin_pw: form.admin_pw.value,
                 admin_pw_confirm: form.admin_pw_confirm.value,
@@ -247,7 +252,7 @@ $(function () {
         return false; // prevent default handling of form submission
     });
 
-    $("#login").submit(function () {
+    $("#login").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
 
@@ -290,13 +295,13 @@ $(function () {
         return false;
     });
 
-    $("#log-out").click(function () {
+    $("#log-out").on("click", function () {
         var $button = $(this);
 
         $button.addClass("working");
 
         $.ajax({
-            url: "api/logout/",
+            url: "api/logout",
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");
@@ -314,7 +319,7 @@ $(function () {
         });
     });
 
-    $("#reset-password").submit(function () {
+    $("#reset-password").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]');
 
@@ -324,23 +329,28 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
+                guildname: form.guildname.value,
                 admin_email: form.admin_email.value
             },
             dataType: "json",
-            success: function (response) {
+            success: function () {
                 window.location.hash = "";
                 window.alert("Your password has been reset. Please check your email.");
             },
             error: function (xhr) {
                 var view = {
-                    "message": "No guild found with an admin email address of <em>%s</em>.",
                     code: xhr.status,
                     prev_location: "#forgot-password-dialog"
+                },
+                messages = {
+                    "400": "Neither field can be left blank.",
+                    "403": "Incorrect email address.",
+                    "404": "No guild found called <em>%s</em>."
                 };
 
-                view.message = view.message.replace("%s", form.admin_email.value);
-
-                if (xhr.status === 404) {
+                if (messages[xhr.status.toString()]) {
+                    view.message = messages[xhr.status.toString()].
+                        replace("%s", form.guildname.value);
                     errorDialog(view);
                 } else {
                     // Should not happen, so use basic browser alert.
@@ -355,7 +365,7 @@ $(function () {
         return false;
     });
 
-    $("#options").submit(function () {
+    $("#options").on("submit", function () {
         var form = this,
             $submit_button = $(form).find('input[type="submit"]'),
             data = {};
@@ -419,10 +429,10 @@ $(function () {
         }
 
         $input = $(hash + " > form > input").first();
-        $input.focus();
+        $input.get(0).focus();
     });
 
-    $("#demo-toggle").click(function () {
+    $("#demo-toggle").on("click", function () {
         $body.toggleClass("demo");
         if (!$body.hasClass("demo")) {
             document.title = base_doc_title;
@@ -437,7 +447,7 @@ $(function () {
         postState($row.attr("id").slice(4),
             $row.find(".player-name input").val(),
             found,
-            function (success, error_message) {
+            function () {
                 $buttons.removeClass("working");
             }
         );
@@ -469,7 +479,7 @@ $(function () {
         updateRow($row, $row.hasClass("found"));
     });
 
-    $("#toggle-autosync").change(function () {
+    $("#toggle-autosync").on("change", function () {
         $manual_refresh.toggleClass("disabled", this.checked);
         if (this.checked) {
             beginAutoSync();
@@ -478,11 +488,11 @@ $(function () {
         }
     });
 
-    $manual_refresh.click(function () {
+    $manual_refresh.on("click", function () {
         fetchState();
     });
 
-    $("#reset").click(function () {
+    $("#reset").on("click", function () {
         var $button = $(this);
         $button.addClass("working");
 
@@ -508,12 +518,12 @@ $(function () {
     };
 
     soundManager.setup({
-        url: "lib/soundmanager2.swf",
+        url: "/media/soundmanager2.swf",
         onready: function () {
             // SM2 is ready to play audio!
             soundManager.createSound({
                 id: "all_found",
-                url: "media/all_found.mp3"
+                url: "/media/all_found.mp3"
             });
         }
     });

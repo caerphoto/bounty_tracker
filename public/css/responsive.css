@@ -1,0 +1,112 @@
+@media screen and (max-width: 55em) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 50em) {
+    header,
+    footer,
+    #main {
+        padding: 1em 2em;
+    }
+
+    header form input[type="text"],
+    header form input[type="password"] {
+        width: 8em;
+    }
+
+    .non-essential {
+        display: none;
+    }
+
+    .npc-row > .npc-name {
+        width: 12em;
+    }
+
+    .npc-row > .npc-location {
+        width: 10em;
+    }
+}
+@media screen and (max-width: 38em) {
+    .not-small,
+    .npc-name > .full {
+        display: none !important;
+    }
+
+    .dialog > form {
+        box-sizing: border-box;
+        padding: 1em;
+        width: 100%;
+    }
+
+    .dialog h2 {
+        font-size: 1.3em;
+    }
+
+    .npc-row > .npc-name {
+        width: 6em;
+    }
+
+    .npc-name > .compact {
+        display: inline;
+    }
+}
+@media screen and (max-width: 32em) {
+    header,
+    footer,
+    #main {
+        padding: 1em 0.5em;
+    }
+
+    header {
+        font-size: 1em;
+    }
+
+    header > form {
+        height: auto;
+        float: none;
+    }
+
+    header > form > label {
+        display: inline-block;
+        width: 6em;
+
+    }
+
+    header > form > input[type="submit"] {
+        position: absolute;
+        top: 1.75em;
+        right: 1em;
+    }
+
+    #error {
+        width: auto;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        line-height: 1.1;
+        margin-bottom: 0.5em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    .not-compact {
+        display: none !important;
+    }
+
+    .compact {
+        display: inline;
+    }
+
+    .npc-location {
+        display: none;
+    }
+
+    .npc-row > .npc-name {
+        width: auto;
+    }
+}

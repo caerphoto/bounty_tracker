@@ -1,0 +1,120 @@
+/* Dialog and text-related input styles. */
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    display: inline-block;
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 0.15em 0.5em;
+    line-height: 1;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: #8e1413;
+    box-shadow: 0 0 7px 1px rgba(64,0,0,0.2);
+}
+
+.dialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    z-index: 2;
+    background: rgba(192,192,192, 0.6);
+
+    display: none;
+}
+
+.dialog:target {
+    display: block;
+}
+
+
+.dialog > form,
+.dialog > div {
+    width: 35em;
+    padding: 1em 3em 0;
+    margin: 3em auto;
+}
+
+#error {
+    width: 20em;
+    border-color: #800;
+}
+
+#options {
+    width: 15em;
+}
+
+.error-code {
+    font-size: 0.8em;
+    color: #777;
+}
+
+.dialog .info {
+    font-size: 0.777em;
+    float: right;
+    width: 24em;
+}
+
+.dialog .info,
+.dialog input[type="text"],
+.dialog input[type="email"],
+.dialog input[type="password"] {
+    margin-bottom: 1em;
+}
+
+.dialog label {
+    display: block;
+    clear: both;
+}
+
+.dialog > form > input {
+    box-sizing: border-box;
+    padding: 0.5em 1em;
+    width: 15em;
+}
+
+.checkbox-wrapper {
+    clear: both;
+    float: left;
+}
+
+.checkbox-wrapper label {
+    display: inline-block;
+}
+
+.checkbox-wrapper input {
+    width: auto;
+    display: inline-block;
+    margin-right: 0.5em;
+}
+
+.button-bar {
+    text-align: right;
+    clear: both;
+    margin: 1em 0 1.5em;
+}
+
+input + .button-bar {
+    margin-top: 0;
+}
+
+.button-bar button,
+.button-bar input[type="submit"],
+.button-bar a.button {
+    margin-left: 0.5em;
+    min-width: 5em;
+    text-align: center;
+}
+
+#reset-password > input {
+    width: 20em;
+}

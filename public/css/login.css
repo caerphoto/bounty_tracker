@@ -1,0 +1,66 @@
+/* Styles to handle things that change when a user is logged in.
+ * This should come after the default styles, so it overrides them. */
+
+body.logged-in #register-link {
+    display: none;
+}
+
+body.logged-in #logged-in {
+    display: inline;
+}
+
+body.admin #logged-in-admin,
+body.admin #logged-in-options {
+    display: inline;
+}
+
+body.admin #logged-in-member {
+    display: none;
+}
+
+body.logged-in .intro {
+    display: none;
+}
+
+body.logged-in #found-display,
+body.demo #found-display,
+body.logged-in .instructions,
+body.demo .instructions {
+    display: block;
+}
+
+body.logged-in .npc-row button,
+body.logged-in .npc-row input,
+body.demo .npc-row button,
+body.demo .npc-row input {
+    visibility: visible;
+}
+
+body.logged-in .npc-row.found,
+body.demo .npc-row.found {
+    background: #8f8;
+}
+
+body.logged-in .npc-row.found:nth-child(even),
+body.demo .npc-row.found:nth-child(even) {
+    background: #8e8;
+}
+
+body.logged-in .npc-row.found td,
+body.demo .npc-row.found td {
+    text-shadow: 0 1px 0 rgba(192,239,192, 0.7);
+}
+
+body.logged-in #list-controls,
+body.demo #list-controls {
+    display: block;
+}
+
+body.logged-in header form {
+    display: none;
+}
+
+body.admin.logged-in button.reset {
+    display: inline-block;
+}
+

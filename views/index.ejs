@@ -23,56 +23,47 @@ hgroup {
 }
 </style>
 <![endif]-->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<% cssfiles.forEach(function (filename) { %>
+    <link rel="stylesheet" href="<%= filename %>"> <% }); %>
 
-
-<?php
-  if (file_exists('cssfiles')) {
-    $file = file('cssfiles');
-
-    foreach ($file as $i => $line) {
-      $line = trim(preg_replace('/\s+/', ' ', $line));
-      echo '<link rel="stylesheet" href="' . $line . '">' . "\n";
-    }
-    unset($file);
-  } else {
-    echo '<link rel="stylesheet" href="bounty.min.css">';
-  }
-?>
-
-    <link rel="shortcut icon" href="media/favicon.ico">
-
+    <link rel="shortcut icon" href="/media/favicon.ico">
     <title>Guild Bounty Tracker</title>
   </head>
-  <body class="<?php echo $body_class; ?>">
+  <body class="<%= body_class %>">
     <header>
-      <a href="#register-dialog" id="register-link">Register your guild</a>
+      <a href="#register-dialog" id="register-link" class="not-small">Register
+        <span class="non-essential">your </span>guild</a>
 
-      <form id="login" action="api/login/" method="POST">
+      <form id="login" action="api/login" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
+        <br class="compact">
         <label for="login-password">Password:</label>
         <input type="password" id="login-password" name="password">
-        <a href="#forgot-password-dialog" id="forgot-password">forgot?</a>
+        <a href="#forgot-password-dialog" id="forgot-password"
+          class="not-compact">forgot?</a>
+        <br class="compact">
         <input type="submit" value="Log In">
       </form>
 
-      <div id="logged-in">Logged in as a<span id="logged-in-admin">n admin
-          of</span><span id="logged-in-member"> member of</span>
-        <span id="logged-in-guildname"><?php echo $guild_data["name"];?></span> &middot;
-        <span id="logged-in-options"><a href="#options-dialog">options</a>
-          &middot; </span>
+      <div id="logged-in">
+        <span class="not-compact">Logged in as a<span id="logged-in-admin">n admin
+            of</span><span id="logged-in-member"> member of</span></span>
+        <span id="logged-in-guildname"><%= guild_data.guildname %></span> &middot;
+        <span id="logged-in-options" class="not-compact"><a
+            href="#options-dialog">options</a> &middot; </span>
         <button id="log-out">Log Out</button>
       </div>
     </header>
 
     <section id="register-dialog" class="dialog">
-      <form id="register" action="api/register/" method="POST">
+      <form id="register" action="api/register" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
         <input id="register-guildname" name="guildname" type="text">
-        <p class="info">The guild name is not case-sensitive. Valid
-          characters are <em>letters</em>, <em>numbers</em> and
-          <em>spaces</em>.</p>
+        <p class="info">The guild name is not case-sensitive, and can be up to
+        <em>70</em> characters in length.</p>
 
         <label for="register-admin-email">Admin email:</label>
         <input id="register-admin-email" name="admin_email" type="text">
@@ -94,6 +85,13 @@ hgroup {
         in.  It is <em>not encrypted</em>, since you&rsquo;ll be sharing it with
         lots of (hopefully trustworthy) people anyway.</p>
 
+        <div class="checkbox-wrapper">
+          <input id="register-temporary" name="temporary" type="checkbox">
+          <label for="register-temporary">Temporary registration</label>
+        </div>
+        <p class="info">Check this box to have the Tracker only remember your
+        guild for one day.</p>
+
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>
           <input type="submit" value="Register Guild">
@@ -102,16 +100,16 @@ hgroup {
     </section>
 
     <section id="options-dialog" class="dialog">
-      <form id="options" action="api/update_info/" method="POST">
+      <form id="options" action="api/guild_info" method="POST">
         <h2>Options</h2>
 
         <label for="options-member-pw">Member password:</label>
-        <input type="text" id="options-member-pw" name="member_pw" value="<?php
-        echo $guild_data["member_pw"];?>">
+        <input type="text" id="options-member-pw" name="member_pw"
+        value="<%= guild_data.member_pw %>">
 
         <label for="options-admin-email">Admin email:</label>
-        <input type="email" id="options-admin-email" name="admin_email" value="<?php
-        echo $guild_data["admin_email"];?>">
+        <input type="email" id="options-admin-email" name="admin_email"
+        value="<%= guild_data.admin_email %>">
 
         <label for="options-admin-pw">Change admin password:</label>
         <input type="password" id="options-admin-pw" name="admin_pw">
@@ -127,11 +125,14 @@ hgroup {
     </section>
 
     <section id="forgot-password-dialog" class="dialog">
-      <form id="reset-password" action="api/reset_password/" method="POST">
+      <form id="reset-password" action="api/reset_password" method="POST">
         <h2>Forgot Your Password?</h2>
-        <p>Enter the admin email address in the box below then click the
-        <em>Reset</em> button to reset the <em>admin password</em> to a new
-        random one. An email will be sent containing the new password.</p>
+        <p>Enter the guild name and admin email address in the boxes below then
+        click the <em>Reset</em> button to reset the <em>admin password</em> to
+        a new random one. An email will be sent containing the new password.</p>
+
+        <label for="forgot-password-guildname">Guild name:</label>
+        <input id="forgot-password-guildname" type="text" name="guildname">
 
         <label for="forgot-password-admin-email">Admin email:</label>
         <input id="forgot-password-admin-email" type="email" name="admin_email">
@@ -176,16 +177,8 @@ hgroup {
       in with. Other guild members, log in with the password an officer gives
       you.</p>
 
-      <h2><strong>Service Unavailable</strong></h2>
-      <p class="important info">Unfortunately, the popularity of this tool has 
-      exceeded the capacity of
-      the shared server on which it's hosted, so it's currently disabled until I can
-      find a dedicated host somewhere. I'm working on this as best I can, but real
-      life is currently priority so I don't know how long it'll take, sorry.</p>
-
-<p class="important info">If you'd like to try setting up the app on your own server, the source code is <a href="">available on GitHub</a> but be warned, the setup procedure is not very friendly and not very well documented. An alternative may be <a href="http://www.reddit.com/r/Guildwars2/comments/1baesm/we_like_guild_bounties_so_i_made_a_bounty_tracker/">this Reddit thread</a>, but I don't know what progress kcolttam has made.</a>
-
-      <p class="info">Each NPC&rsquo;s name links to the relevant section of <a
+      <p class="info not-compact">Each NPC&rsquo;s name links to the relevant
+      section of <a
         href="http://dulfy.net/2013/02/27/gw2-guild-bounty-guide/">Dulfy&rsquo;s
         guide</a> in a new window, wherein you can find a picture of the NPC and
       a map of their route.</p>
@@ -194,8 +187,9 @@ hgroup {
       registering/logging in, try the demo:<button id="demo-toggle">Toggle
         Demo</button></p>
 
-      <p class="instructions info">Enter your name in one of the boxes below.
-      When you've found the relevant NPC, click the <em>Found!</em> button.</p>
+      <p class="instructions info not-compact">Enter your name in one of the
+      boxes below.  When you've found the relevant NPC, click the
+      <em>Found!</em> button.</p>
 
       <h2 id="found-display">Found so far: <span id="found-count">0</span></h2>
 
@@ -212,7 +206,10 @@ hgroup {
   <tbody>
   {{#NPCs}}
     <tr class="npc-row" id="npc-{{short_name}}">
-      <td class="npc-name"><a href="{{url}}" target="_blank">{{{name}}}</a></td>
+      <td class="npc-name">
+        <a class="full" href="{{url}}" target="_blank">{{{name}}}</a>
+        <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
+      </td>
       <td class="npc-location">{{{location}}}</td>
       <td class="player-name"><input type="text" required="required"></td>
       <td>
@@ -239,33 +236,25 @@ hgroup {
     </section>
 
     <footer>
-      <p>By <a href="//caerphoto.com/">Andy Farrell</a> &middot; source
+      <p>By <a href="//caer.me/">Andy Farrell</a> &middot; source
         available <a href="https://github.com/caerphoto/bounty_tracker">on GitHub</a></p>
     </footer>
 
     <script>
       var GBT = {
-        guild_data: <?php echo json_encode($guild_data); ?>,
-        npc_list: <?php echo json_encode($npc_list); ?>,
-        search_state: <?php echo $search_state; ?>
+        guild_data: <%- JSON.stringify(guild_data) %>,
+        npc_list: <%- JSON.stringify(npc_list) %>,
+        search_state: <%- search_state %>
       };
     </script>
 
-<?php
-  if (file_exists('jsfiles')) {
-    $file = file('jsfiles');
+<% jsfiles.forEach(function (filename) { %>
+    <script src="<%= filename %>"></script>
+<% }); %>
 
-    foreach ($file as $i => $line) {
-      $line = trim(preg_replace('/\s+/', ' ', $line));
-      echo '<script src="' . $line . '"></script>' . "\n";
-    }
-    unset($file);
-  } else {
-    echo '<script src="bounty.min.js"></script>';
-  }
-?>
     <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </body>
 </html>
+
 

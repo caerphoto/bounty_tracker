@@ -1,0 +1,98 @@
+
+
+header,
+#main,
+footer,
+.dialog > form,
+.dialog > div {
+    background: #fff;
+    border-color: #000;
+    border-style: solid;
+    border-width: 1px 0;
+    box-shadow: 0 3px 8px rgba(0,0,0, 0.1);
+    padding: 1em 5em;
+}
+
+header,
+#main,
+footer {
+    margin: 1em 0;
+}
+
+header,
+footer {
+    font-size: 0.8em;
+    overflow: hidden;
+    position: relative;
+}
+
+header label {
+    margin-top: 1px;
+}
+
+footer p {
+    margin: 0;
+}
+
+.compact {
+    display: none;
+}
+
+#register-link {
+    display: block;
+    float: left;
+    margin-top: 1px;
+}
+
+header form,
+#logged-in {
+    float: right;
+    height: 1.8em;
+}
+
+#forgot-password {
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
+#logged-in {
+    display: none;
+}
+
+/* Default is to display normal member login status, but if the document body
+ * has the "admin" class, show admin-y login stuff instead. */
+
+#logged-in-guildname {
+    font-weight: 700;
+}
+
+#logged-in-admin,
+#logged-in-options {
+    display: none;
+}
+
+.important.info {
+    background: #fed;
+    padding: 1em;
+    margin: 0 -1em;
+}
+
+.important + .important {
+    margin-bottom: 1em;
+}
+
+.instructions,
+#found-display {
+    display: none;
+}
+
+input:invalid {
+    box-shadow: none;
+}
+
+
+#found-count {
+    padding-left: 1em;
+    font-weight: bold;
+    color: #ac1817;
+}

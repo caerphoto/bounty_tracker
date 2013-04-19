@@ -1,4 +1,7 @@
 private.php
 test.php
 .htaccess_dev
-node_modules
+node_modules/
+deploy
+.jshintrc
+dump.rdb

@@ -1,11 +1,16 @@
+#!/bin/bash
+
+# It is generally not necessary to run this script manually, as it is called by
+# the 'deploy' script.
+
 echo "Combining and minifying CSS files..."
 cat `cat cssfiles` > temp.css
-node minify_css.js < temp.css > bounty.min.css
+cleancss < temp.css > public/css/bounty.min.css
 rm temp.css
 
 echo "Combining and minifying JavaScript files..."
 cat `cat jsfiles` > temp.js
-jsmin < temp.js > bounty.min.js
+jsmin < temp.js > public/js/bounty.min.js
 rm temp.js
 
 echo "Done!"
