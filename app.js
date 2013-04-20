@@ -67,13 +67,15 @@ app.get("/", site.index);
 app.post("/api/register", registration.create);
 app.post("/api/logout", session.destroy);
 app.post("/api/login", session.create);
-app.get("/api/search_state", search_state.fetch);
-app.post("/api/search_state", search_state.update);
 app.post("/api/guild_info", guild_info.update);
 app.post("/api/reset_password", password.reset);
+app.get("/api/search_state", search_state.fetch);
 
-// Only listen on localhost, so only traffic passed from nginx reaches the app.
+app.post("/api/search_state", search_state.update);
+
 if (app.get("env") === "production") {
+    // Only listen on localhost, so only traffic passed from nginx reaches the
+    // app.
     app.listen(3000, "127.0.0.1");
 } else {
     app.listen(3000);

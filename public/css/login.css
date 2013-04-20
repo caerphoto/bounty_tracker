@@ -29,11 +29,33 @@ body.demo .instructions {
     display: block;
 }
 
-body.logged-in .npc-row button,
-body.logged-in .npc-row input,
-body.demo .npc-row button,
-body.demo .npc-row input {
-    visibility: visible;
+body.logged-in .npc-row .player-names,
+body.demo .npc-row .player-names,
+body.logged-in .npc-row .npc-controls,
+body.demo .npc-row .npc-controls {
+    display: table-cell;
+}
+
+body.logged-in .for-members,
+body.logged-in.admin .for-admins {
+    display: block;
+}
+
+body.logged-in .for-admins,
+body.admin .for-members {
+    display: none;
+}
+
+body.logged-in .npc-row .add-player {
+    display: none;
+}
+
+body.admin .npc-row .player-target {
+    display: none;
+}
+
+body.admin .npc-row .add-player {
+    display: inline-block;
 }
 
 body.logged-in .npc-row.found,

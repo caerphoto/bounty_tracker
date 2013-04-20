@@ -4,12 +4,13 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
     display: inline-block;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     background: #fff;
     padding: 0.15em 0.5em;
     line-height: 1;
     border-radius: 3px;
     box-sizing: border-box;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.1) inset;
 }
 
 input[type="text"]:focus,
@@ -101,6 +102,7 @@ input[type="email"]:focus {
     text-align: right;
     clear: both;
     margin: 1em 0 1.5em;
+    position: relative;
 }
 
 input + .button-bar {

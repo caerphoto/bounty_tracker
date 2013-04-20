@@ -41,23 +41,24 @@ exports.update = function (req, res) {
     // player: the name of the player searching for the NPC
     // found: a string either "true" or "false", indicating the NPC's found state
 
-    db.hgetall(guild_key, function (err, reply) {
+    db.hgetall(guild_key, function (err, guild_data) {
         var state;
 
-        if (!reply) {
+        if (!guild_data) {
             return res.send(500);
         }
 
         if (req.body.short_name === "__ALL__") {
             state = utils.createNewState();
         } else {
-            if (!reply.search_state) {
+            if (!guild_data.search_state) {
                 state = utils.createNewState();
             } else {
-                state = JSON.parse(reply.search_state);
+                state = JSON.parse(guild_data.search_state);
             }
+
             state[req.body.short_name] = {
-                player: req.body.player,
+                player: JSON.parse(req.body.players),
                 found: req.body.found === "true"
             };
         }

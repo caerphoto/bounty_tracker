@@ -9,6 +9,8 @@ $(function () {
         $error = $("#error"),
         error_template = $("#error-template").html(),
 
+        player_list_template = $("#player-list-template").html(),
+
         min_sync_interval = 5000, // miniumum time in ms between sync requests
         sync_interval = min_sync_interval,
         sync_timer, // handle returned by setTimeout()
@@ -89,20 +91,45 @@ $(function () {
 
     applyState = function () {
         var count = 0,
-            state = GBT.search_state;
+            state = GBT.search_state,
+            is_admin = GBT.is_admin;
 
         $.each(state, function (short_name, status) {
             var $row = $("#npc-" + short_name),
-                $input;
+                $list;
+
             if (status.found) {
                 count += 1;
             }
+
             $row.toggleClass("found", status.found);
 
-            // Only apply input box updates if they don't have focus
-            $input = $row.find(".player-name input");
-            if (!$input.is(":focus")) {
-                $input.val(status.player);
+            if (is_admin) {
+                // Only apply input box updates if they don't have focus
+                $list = $row.find(".player-names .names-editor");
+                if (!$list.is(":focus")) {
+                    // Backwards-compatibility with old-style status that could
+                    // only store a string.
+                    if (status.player.charAt) {
+                        $list.val(status.player);
+                    } else {
+                        $list.val(status.player.join(", "));
+                    }
+                }
+            } else {
+                $list = $row.find(".player-names .player-list");
+
+                if (!status.player) {
+                    $list.html("");
+                    return;
+                }
+
+                if (status.player.charAt) {
+                    status.player = status.player.split(",");
+                }
+                $list.html(Mustache.render(player_list_template, {
+                    players: status.player
+                }));
             }
         });
 
@@ -119,11 +146,11 @@ $(function () {
         document.title = "(" + count + ") " + base_doc_title;
     };
 
-    postState = function (short_name, player, found, callback) {
+    postState = function (short_name, players, found, callback) {
         if ($body.hasClass("demo")) {
             // Don't send updates to the server, since they'll get rejected
             // anyway.
-            GBT.search_state[short_name].player = player;
+            GBT.search_state[short_name].players = players;
             GBT.search_state[short_name].found = found;
             applyState();
             callback(true);
@@ -135,7 +162,7 @@ $(function () {
             type: "POST",
             data: {
                 short_name: short_name,
-                player: player || "",
+                players: JSON.stringify(players || []),
                 found: !!found
             },
             dataType: "json",
@@ -182,10 +209,10 @@ $(function () {
         });
     };
 
-    logIn = function (is_admin) {
+    logIn = function () {
         $body.removeClass("demo");
         $body.addClass("logged-in");
-        if (is_admin) {
+        if (GBT.is_admin) {
             $body.addClass("admin");
         }
         window.location.hash = "";
@@ -268,8 +295,9 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 GBT.guild_data = response.guild_data;
+                GBT.is_admin = response.is_admin;
                 GBT.search_state = response.search_state;
-                logIn(response.is_admin);
+                logIn();
                 form.password.value = "";
             },
             error: function (xhr) {
@@ -444,8 +472,9 @@ $(function () {
 
         $buttons.addClass("working");
 
-        postState($row.attr("id").slice(4),
-            $row.find(".player-name input").val(),
+        postState(
+            $row.attr("id").slice(4), // short_name
+            $row.find(".player-names .names-editor").val().split(","),
             found,
             function () {
                 $buttons.removeClass("working");
@@ -454,13 +483,11 @@ $(function () {
     };
 
     // Toggle NPC 'found' status on either button click.
-    $npc_table.on("click", "button", function () {
+    $npc_table.on("click", ".npc-controls button", function () {
         var $button = $(this);
         updateRow($button.closest(".npc-row"), $button.hasClass("found"));
-    }).on("keydown", ".player-name input", function () {
-        // Delay posting update for a bit to avoid spamming server for every
-        // single keypress. Also only update if text has changed (so not on
-        // presses of arrow keys etc.).
+
+    }).on("keydown", ".player-names .names-editor", function () {
         var input = this,
             $row = $(this).closest(".npc-row");
 
@@ -468,12 +495,16 @@ $(function () {
             clearTimeout(row_timer);
         }
 
+        // Delay posting update for a bit to avoid spamming server for every
+        // single keypress. Also only update if text has changed (so not on
+        // presses of arrow keys etc.).
         if (prev_text && this.value !== prev_text) {
             row_timer = setTimeout(function () {
                 updateRow($row, $row.hasClass("found"));
-            }, 300);
+            }, 500);
         }
         prev_text = input.value;
+
     }).on("blur", ".player-name input", function () {
         var $row = $(this).closest(".npc-row");
         updateRow($row, $row.hasClass("found"));
@@ -537,5 +568,10 @@ $(function () {
     if (GBT.guild_data) {
         beginAutoSync();
     }
+
+    // FOR TESTING ONLY. REMOVE IN PRODUCTION!!!111
+    $("#found-display").on("click", function () {
+        $body.toggleClass("admin");
+    });
 
 });

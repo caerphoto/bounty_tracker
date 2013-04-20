@@ -5,7 +5,7 @@ a.button {
     display: inline-block;
     position: relative;
     text-decoration: none;
-    border: 1px solid #ccc;
+    border: 1px solid #aaa;
     padding: 0 0.5em;
     font-size: 100%;
     border-radius: 3px;
@@ -16,16 +16,18 @@ a.button {
     background-image:
         linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 100%);
     cursor: pointer;
-    box-shadow: 0 1px 2px 1px rgba(0,0,0,0.3);
 }
 
 /* 'special' buttons */
-button.found, input[type="submit"] {
-    font-weight: 300;
+button.found,
+button.action,
+input[type="submit"] {
+    /*font-weight: 300;*/
     background-color: #ac1817;
     color: #fff;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
-    border-color: #af1b1a;
+    text-shadow:
+        0 -1px 0 rgba(0,0,0,0.3);
+    border-color: #511;
 }
 
 button.disabled,
@@ -39,11 +41,12 @@ button:hover,
 input[type="submit"]:hover,
 a.button:hover {
     background-image: none;
-    border-color: #888;
-    border-bottom-color: #333;
+    background-color: #f2f2f2;
+    border-color: #666;
 }
 
 button.found:hover,
+button.action:hover,
 input[type="submit"]:hover {
     background-color: #8e1413;
     border-color: #300;
@@ -66,13 +69,19 @@ a.button:active {
     outline: none;
 }
 
-button.working,
-input[type="submit"].working {
-    background-image: url("/media/working.gif");
+
+input[type="submit"].working,
+button.working {
+    background-image: url("/media/working_grey.gif");
     background-position: center;
     background-repeat: no-repeat;
     color: transparent;
     text-shadow: none;
+}
+
+button.action.working,
+input[type="submit"].working {
+    background-image: url("/media/working_red.gif");
 }
 
 #demo-toggle {
@@ -82,3 +91,10 @@ input[type="submit"].working {
     margin: 1em auto;
 }
 
+#stop-hunting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: 1em;
+    padding-right: 1em;
+}

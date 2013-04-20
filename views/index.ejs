@@ -144,6 +144,21 @@ hgroup {
       </form>
     </section>
 
+    <section id="member-name-dialog" class="dialog">
+      <form id="member-hunting" action="api/hunting" method="POST">
+        <h2>Enter your name</h2>
+        <p>Type your name in the box below, then click <em>OK</em> to assign
+        yourself to <span id="member-hunting-npc"></span>.</p>
+
+        <input type="text" id="member-hunting-name" name="member_name">
+
+        <div class="button-bar">
+          <a href="#" class="button">Cancel</a>
+          <input type="submit" value="OK">
+        </div>
+      </form>
+    </section>
+
     <script type="text/mustache" id="error-template">
       <h2>Error</h2>
       <p>{{{message}}}</p>
@@ -187,11 +202,22 @@ hgroup {
       registering/logging in, try the demo:<button id="demo-toggle">Toggle
         Demo</button></p>
 
-      <p class="instructions info not-compact">Enter your name in one of the
-      boxes below.  When you've found the relevant NPC, click the
-      <em>Found!</em> button.</p>
+      <div class="instructions info not-compact">
+        <p class="for-admins">Use the text boxes to edit which players are
+        assigned to which NPCs. Separate player names with <em>commas</em>.</p>
+
+        <p class="for-members">Enter your name in the box below. Then, select
+        which NPC you're hunting using the radio button ( <input type="radio"
+        class="player-target"> ) in the <em>Player(s)</em> column, the click
+        <em>Found!</em> when you’ve found the target.</p>
+      </div>
 
       <h2 id="found-display">Found so far: <span id="found-count">0</span></h2>
+
+      <script id="player-list-template" type="text/mustache">
+{{#players}}<li><button class="remove-player for-admins">&minus;</button>
+<span class="player-name">{{.}}</span></li>{{/players}}
+      </script>
 
       <script id="npc-row-template" type="text/mustache">
 <table id="npc-table">
@@ -199,7 +225,7 @@ hgroup {
     <tr class="npc-row">
       <th class="npc-name">NPC</th>
       <th class="npc-location">Location</th>
-      <th class="player-name" colspan="2">Player</th>
+      <th class="player-names" colspan="2">Player(s)</th>
     </tr>
   </thead>
 
@@ -211,9 +237,13 @@ hgroup {
         <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
       </td>
       <td class="npc-location">{{{location}}}</td>
-      <td class="player-name"><input type="text" required="required"></td>
-      <td>
-        <button class="found">Found!</button>
+      <td class="player-names">
+        <button class="action add-player">+</button>
+        <input type="radio" name="searching" class="player-target">
+        <ul class="player-list"></ul>
+      </td>
+      <td class="npc-controls">
+        <button class="action found">Found!</button>
         <button class="lost">Lost :(</button>
       </td>
     </tr>
@@ -225,11 +255,12 @@ hgroup {
       <div id="npcs"></div>
 
       <div class="button-bar" id="list-controls">
+        <button id="stop-hunting" class="for-members action" title="Click to unassign yourself from all targets.">Stop Hunting</button>
+
         <input id="toggle-autosync" type="checkbox" checked>
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
         <button id="manual-refresh" class="disabled">Refresh</button>
-
         <button id="reset" class="reset">Reset</button>
       </div>
 
@@ -242,6 +273,7 @@ hgroup {
 
     <script>
       var GBT = {
+        is_admin: <%- !!is_admin %>,
         guild_data: <%- JSON.stringify(guild_data) %>,
         npc_list: <%- JSON.stringify(npc_list) %>,
         search_state: <%- search_state %>
@@ -252,8 +284,10 @@ hgroup {
     <script src="<%= filename %>"></script>
 <% }); %>
 
+<!--
     <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    -->
   </body>
 </html>
 
