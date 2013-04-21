@@ -562,6 +562,7 @@ $(function () {
     });
 
     initTable();
+
     if (GBT.guild_data && GBT.search_state) {
         applyState(GBT.search_state);
     }

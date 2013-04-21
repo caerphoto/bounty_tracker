@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require("express"),
 
     site = require("./site"),
@@ -28,6 +30,12 @@ init = function (env) {
         store: new RedisStore(),
         secret: "just testing"
     }));
+
+    // Handle errors, rather than just exiting.
+    app.use(function (err, req, res, next) {
+        console.error(err.stack);
+        next(err);
+    });
 
     // Load individual files if in dev environment, otherwise load single
     // minified files.
@@ -63,15 +71,18 @@ init = function (env) {
 
 init(app.get("env"));
 
-app.get("/", site.index);
 app.post("/api/register", registration.create);
 app.post("/api/logout", session.destroy);
 app.post("/api/login", session.create);
 app.post("/api/guild_info", guild_info.update);
 app.post("/api/reset_password", password.reset);
+
+app.post("/api/assign_player", search_state.assignPlayer);
+app.post("/api/remove_player", search_state.removePlayer);
+app.post("/api/set_npc_state", search_state.setNPCState);
 app.get("/api/search_state", search_state.fetch);
 
-app.post("/api/search_state", search_state.update);
+app.get("/", site.index);
 
 if (app.get("env") === "production") {
     // Only listen on localhost, so only traffic passed from nginx reaches the

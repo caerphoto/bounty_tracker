@@ -1,5 +1,8 @@
+"use strict";
+
 exports.fetch = function (req, res) {
-    "use strict";
+    // Simplest method: return entire state as JSON if different, otherwise send
+    // an HTTP 204 ("No content") response to indicate that nothing has changed.
     var redis = require("redis"),
         db = redis.createClient();
 
@@ -24,8 +27,40 @@ exports.fetch = function (req, res) {
     });
 };
 
+exports.assignPlayer = function (req, res) {
+    // Adds a player name to an NPC's list of assigned players.
+    var npc = req.body.npc,
+        guild_key = req.session.guild_key;
+
+    // Not logged in.
+    if (!guild_key) {
+        return res.send(403);
+    }
+};
+
+exports.removePlayer = function (req, res) {
+    // Removes a player name from an NPC's list of assigned players.
+    // If the player is not in the list, returns HTTP 404.
+    var npc = req.body.npc,
+        guild_key = req.session.guild_key;
+
+    if (!guild_key) {
+        return res.send(403);
+    }
+};
+
+exports.setNPCState = function (req, res) {
+    // Sets the 'found' state of an NPC to either true or false.
+    var npc = req.body.npc,
+        state = req.body.state,
+        guild_key = req.session.guild_key;
+
+    if (!guild_key) {
+        return res.send(403);
+    }
+};
+
 exports.update = function (req, res) {
-    "use strict";
     var redis = require("redis"),
         utils = require("../lib/utils"),
         db = redis.createClient(),
