@@ -1,5 +1,3 @@
-
-
 header,
 #main,
 footer,
@@ -55,20 +53,11 @@ header form,
     margin: 0 0.5em;
 }
 
-#logged-in {
-    display: none;
-}
-
 /* Default is to display normal member login status, but if the document body
  * has the "admin" class, show admin-y login stuff instead. */
 
 #logged-in-guildname {
     font-weight: 700;
-}
-
-#logged-in-admin,
-#logged-in-options {
-    display: none;
 }
 
 .important.info {
@@ -79,11 +68,6 @@ header form,
 
 .important + .important {
     margin-bottom: 1em;
-}
-
-.instructions,
-#found-display {
-    display: none;
 }
 
 input:invalid {

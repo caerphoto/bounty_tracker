@@ -32,10 +32,10 @@ hgroup {
   </head>
   <body class="<%= body_class %>">
     <header>
-      <a href="#register-dialog" id="register-link" class="not-small">Register
-        <span class="non-essential">your </span>guild</a>
+      <a href="#register-dialog" id="register-link" class="not-small
+        logged-out">Register <span class="non-essential">your </span>guild</a>
 
-      <form id="login" action="api/login" method="POST">
+      <form id="login" class="logged-out" action="api/login" method="POST">
         <label for="login-guildname">Guild name:</label>
         <input type="text" id="login-guildname" name="guildname">
         <br class="compact">
@@ -47,17 +47,17 @@ hgroup {
         <input type="submit" value="Log In">
       </form>
 
-      <div id="logged-in">
-        <span class="not-compact">Logged in as a<span id="logged-in-admin">n admin
-            of</span><span id="logged-in-member"> member of</span></span>
+      <div id="logged-in" class="logged-in">
+        <span class="not-compact">Logged in as a<span class="for-admins">n admin
+            of</span><span class="for-members"> member of</span></span>
         <span id="logged-in-guildname"><%= guild_data.guildname %></span> &middot;
-        <span id="logged-in-options" class="not-compact"><a
+        <span class="for-admins not-compact"><a
             href="#options-dialog">options</a> &middot; </span>
         <button id="log-out">Log Out</button>
       </div>
     </header>
 
-    <section id="register-dialog" class="dialog">
+    <section id="register-dialog" class="dialog logged-out">
       <form id="register" action="api/register" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
@@ -97,9 +97,9 @@ hgroup {
           <input type="submit" value="Register Guild">
         </div>
       </form>
-    </section>
+    </section> <% // #register-dialog %>
 
-    <section id="options-dialog" class="dialog">
+    <section id="options-dialog" class="dialog logged-in for-admins">
       <form id="options" action="api/guild_info" method="POST">
         <h2>Options</h2>
 
@@ -124,7 +124,7 @@ hgroup {
       </form>
     </section>
 
-    <section id="forgot-password-dialog" class="dialog">
+    <section id="forgot-password-dialog" class="dialog logged-out">
       <form id="reset-password" action="api/reset_password" method="POST">
         <h2>Forgot Your Password?</h2>
         <p>Enter the guild name and admin email address in the boxes below then
@@ -144,11 +144,12 @@ hgroup {
       </form>
     </section>
 
-    <section id="member-name-dialog" class="dialog">
+    <section id="member-name-dialog" class="dialog logged-in">
       <form id="member-hunting" action="api/hunting" method="POST">
         <h2>Enter your name</h2>
         <p>Type your name in the box below, then click <em>OK</em> to assign
-        yourself to <span id="member-hunting-npc"></span>.</p>
+        <span class="for-members">yourself</span><span class="for-admins">that
+          player</span> to <em id="member-hunting-npc"></em>.</p>
 
         <input type="text" id="member-hunting-name" name="member_name">
 
@@ -175,9 +176,9 @@ hgroup {
 
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
-      <p class="intro info">This tool is to assist guilds with the <em>Guild
-        Bounty</em> mission in Guild Wars 2, by allowing everyone to keep track
-      of who has found which bounty NPC.</p>
+      <p class="intro info logged-out">This tool is to assist guilds with the
+      <em>Guild Bounty</em> mission in Guild Wars 2, by allowing everyone to
+      keep track of who has found which bounty NPC.</p>
 
 <!--[if lt IE 9]>
       <p class="intro info"><strong>NOTE:</strong> you appear to be using an
@@ -187,10 +188,10 @@ hgroup {
       unless you return with a modern browser.</p>
 <![endif]-->
 
-      <p class="intro info">If you&rsquo;re a guild leader/officer, you can
-      register your guild, then set up a password for other guild members to log
-      in with. Other guild members, log in with the password an officer gives
-      you.</p>
+      <p class="intro info logged-out">If you&rsquo;re a guild leader/officer,
+      you can register your guild, then set up a password for other guild
+      members to log in with. Other guild members, log in with the password an
+      officer gives you.</p>
 
       <p class="info not-compact">Each NPC&rsquo;s name links to the relevant
       section of <a
@@ -198,21 +199,14 @@ hgroup {
         guide</a> in a new window, wherein you can find a picture of the NPC and
       a map of their route.</p>
 
-      <p class="intro info">To see what the tracker looks like without
-      registering/logging in, try the demo:<button id="demo-toggle">Toggle
-        Demo</button></p>
+      <p class="instructions info not-compact logged-in">
+      Click a <a href="#" class="action button assign-player">+</a> button in
+      the table to assign <span class="for-admins">a player</span><span
+        class="for-members">yourself</span> to the corresponding NPC.
+      </p>
 
-      <div class="instructions info not-compact">
-        <p class="for-admins">Use the text boxes to edit which players are
-        assigned to which NPCs. Separate player names with <em>commas</em>.</p>
-
-        <p class="for-members">Enter your name in the box below. Then, select
-        which NPC you're hunting using the radio button ( <input type="radio"
-        class="player-target"> ) in the <em>Player(s)</em> column, the click
-        <em>Found!</em> when you’ve found the target.</p>
-      </div>
-
-      <h2 id="found-display">Found so far: <span id="found-count">0</span></h2>
+      <h2 id="found-display" class="logged-in">Found so far:
+        <span id="found-count">0</span></h2>
 
       <script id="player-list-template" type="text/mustache">
 {{#players}}<li><button class="remove-player for-admins">&minus;</button>
@@ -225,7 +219,7 @@ hgroup {
     <tr class="npc-row">
       <th class="npc-name">NPC</th>
       <th class="npc-location">Location</th>
-      <th class="player-names" colspan="2">Player(s)</th>
+      <th class="player-names logged-in" colspan="2">Player(s)</th>
     </tr>
   </thead>
 
@@ -237,12 +231,11 @@ hgroup {
         <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
       </td>
       <td class="npc-location">{{{location}}}</td>
-      <td class="player-names">
-        <button class="action add-player">+</button>
-        <input type="radio" name="searching" class="player-target">
+      <td class="player-names logged-in">
+        <a class="action button assign-player" href="#member-name-dialog">+</a>
         <ul class="player-list"></ul>
       </td>
-      <td class="npc-controls">
+      <td class="npc-controls logged-in">
         <button class="action found">Found!</button>
         <button class="lost">Lost :(</button>
       </td>
@@ -254,14 +247,14 @@ hgroup {
 
       <div id="npcs"></div>
 
-      <div class="button-bar" id="list-controls">
-        <button id="stop-hunting" class="for-members action" title="Click to unassign yourself from all targets.">Stop Hunting</button>
+      <div class="button-bar logged-in" id="list-controls">
+        <button id="stop-hunting" class="action for-members" title="Click to unassign yourself from all targets.">Stop Hunting</button>
 
         <input id="toggle-autosync" type="checkbox" checked>
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
         <button id="manual-refresh" class="disabled">Refresh</button>
-        <button id="reset" class="reset">Reset</button>
+        <button id="reset" class="reset for-admins">Reset</button>
       </div>
 
     </section>

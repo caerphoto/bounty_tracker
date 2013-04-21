@@ -1,88 +1,28 @@
 /* Styles to handle things that change when a user is logged in.
  * This should come after the default styles, so it overrides them. */
 
-body.logged-in #register-link {
-    display: none;
+/* Things that should appear/disappear once logged in. */
+
+body.logged-out .logged-in,
+body.logged-in  .logged-out {
+    display: none !important;
 }
 
-body.logged-in #logged-in {
-    display: inline;
-}
-
-body.admin #logged-in-admin,
-body.admin #logged-in-options {
-    display: inline;
-}
-
-body.admin #logged-in-member {
-    display: none;
-}
-
-body.logged-in .intro {
-    display: none;
-}
-
-body.logged-in #found-display,
-body.demo #found-display,
-body.logged-in .instructions,
-body.demo .instructions {
-    display: block;
-}
-
-body.logged-in .npc-row .player-names,
-body.demo .npc-row .player-names,
-body.logged-in .npc-row .npc-controls,
-body.demo .npc-row .npc-controls {
-    display: table-cell;
-}
-
-body.logged-in .for-members,
-body.logged-in.admin .for-admins {
-    display: block;
-}
-
-body.logged-in .for-admins,
-body.admin .for-members {
-    display: none;
-}
-
-body.logged-in .npc-row .add-player {
-    display: none;
-}
-
-body.admin .npc-row .player-target {
-    display: none;
-}
-
-body.admin .npc-row .add-player {
-    display: inline-block;
-}
-
-body.logged-in .npc-row.found,
-body.demo .npc-row.found {
+body.logged-in .npc-row.found {
     background: #8f8;
 }
 
-body.logged-in .npc-row.found:nth-child(even),
-body.demo .npc-row.found:nth-child(even) {
+body.logged-in .npc-row.found:nth-child(even) {
     background: #8e8;
 }
 
-body.logged-in .npc-row.found td,
-body.demo .npc-row.found td {
+body.logged-in .npc-row.found td {
     text-shadow: 0 1px 0 rgba(192,239,192, 0.7);
 }
 
-body.logged-in #list-controls,
-body.demo #list-controls {
-    display: block;
-}
-
-body.logged-in header form {
-    display: none;
-}
-
-body.admin.logged-in button.reset {
-    display: inline-block;
+/* General-purpose admin/member switching style. Overrides everything else. */
+body.member .for-admins,
+body.admin  .for-members {
+    display: none !important;
 }
 

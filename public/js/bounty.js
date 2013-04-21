@@ -210,7 +210,7 @@ $(function () {
     };
 
     logIn = function () {
-        $body.removeClass("demo");
+        $body.removeClass("demo logged-out");
         $body.addClass("logged-in");
         if (GBT.is_admin) {
             $body.addClass("admin");
@@ -333,9 +333,11 @@ $(function () {
             type: "POST",
             success: function () {
                 $body.removeClass("admin logged-in");
+                $body.addClass("logged-out");
                 window.location.hash = "";
                 clearTimeout(sync_timer);
                 document.title = base_doc_title;
+                GBT.guild_data = false;
             },
             error: function (xhr) {
                 // I hope this never happens. It shouldn't, right?
@@ -572,6 +574,7 @@ $(function () {
     // FOR TESTING ONLY. REMOVE IN PRODUCTION!!!111
     $("#found-display").on("click", function () {
         $body.toggleClass("admin");
+        $body.toggleClass("member");
     });
 
 });

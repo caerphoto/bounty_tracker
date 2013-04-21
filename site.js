@@ -3,7 +3,7 @@ var renderNoGuild = function (res) {
     var utils = require("./lib/utils");
     res.render("index", {
         is_admin: false,
-        body_class: "",
+        body_class: "logged-out",
         guild_data: false,
         search_state: JSON.stringify(utils.createNewState())
     });
@@ -49,7 +49,7 @@ exports.index = function (req, res) {
 
             res.render("index", {
                 is_admin: is_admin,
-                body_class: "logged-in " + (is_admin ? "admin" : ""),
+                body_class: "logged-in " + (is_admin ? "admin" : "member"),
                 guild_data: guild_data,
                 search_state: search_state
             });

@@ -17,7 +17,6 @@ th {
 
 .npc-row td, .npc-row th {
     padding: 0.2em 0.5em;
-    height: 1.7em;
 }
 
 td:first-child, th:first-child {
@@ -50,7 +49,6 @@ td:last-child, th:last-child {
 }
 
 .npc-row .player-names {
-    display: none;
     overflow-x: hidden;
 }
 
@@ -68,33 +66,34 @@ td:last-child, th:last-child {
     position: relative;
 }
 
-.player-names button.add-player,
-.player-list button.remove-player {
+/* Specificity needed to override rules in buttons.css. */
+a.button.assign-player,
+.remove-player {
     padding: 0;
     margin: 0;
-    line-height: 0.8;
+    line-height: 1;
     width: 1em;
     height: 1.1em;
 }
 
-.player-list button.remove-player {
+a.button.assign-player {
+    margin-top: 0.5em;
+    display: inline-block;
+    margin-right: 0.5em;
+}
+
+p a.button.assign-player {
+    margin-right: 0;
+}
+
+.remove-player {
     position: absolute;
     left: 0.2em;
     top: 0.2em;
 }
 
-.player-names button.add-player {
-    margin-top: 0.5em;
-}
-
 body.admin .player-list .player-name {
     margin-left: 1.2em;
-}
-
-.npc-row .player-target,
-.npc-row .add-player {
-    display: inline-block;
-    margin-right: 0.5em;
 }
 
 .npc-name .compact {
@@ -102,26 +101,15 @@ body.admin .player-list .player-name {
     display: none;
 }
 
-.npc-row .player-names,
-.npc-row .npc-controls,
-#list-controls {
-    display: none;
-}
-
-.npc-row .lost,
-.npc-row .found,
+.npc-row       .lost,
+.npc-row       .found,
 .npc-row.found .found {
     display: none;
 }
 
-.npc-row.assigned .found,
-.npc-row.assigned.found .lost,
-body.admin .npc-row.found .lost,
-body.admin .npc-row .found {
+           .npc-row.assigned         .found,
+           .npc-row.assigned.found   .lost,
+body.admin .npc-row.found            .lost,
+body.admin .npc-row                  .found {
     display: inline-block;
 }
-
-button.reset {
-    display: none;
-}
-
