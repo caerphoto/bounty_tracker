@@ -10,10 +10,12 @@ a.button {
     border: 1px solid #aaa;
     border-radius: 3px;
 
+    font: inherit;
     font-size: 100%;
     text-decoration: none;
     text-align: center;
     text-shadow: 0 1px 0 rgba(255,255,255, 0.5);
+    line-height: 1.5;
 
     color: #555;
     background-color: #eee;

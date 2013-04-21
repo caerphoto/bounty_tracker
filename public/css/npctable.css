@@ -15,8 +15,16 @@ th {
     text-align: left;
 }
 
-.npc-row td, .npc-row th {
-    padding: 0.2em 0.5em;
+.npc-row th {
+    padding: 0 0.5em;
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+}
+
+.npc-row td {
+    vertical-align: middle;
+    padding: 0 0.5em;
+    height: 2em;
 }
 
 td:first-child, th:first-child {
@@ -25,11 +33,6 @@ td:first-child, th:first-child {
 
 td:last-child, th:last-child {
     padding-right: 1em;
-}
-
-.npc-row th {
-    font-weight: bold;
-    border-bottom: 1px solid #555;
 }
 
 .npc-row .npc-name {
@@ -49,20 +52,19 @@ td:last-child, th:last-child {
 }
 
 .npc-row .player-names {
-    overflow-x: hidden;
-}
-
-.npc-row .player-list {
-    display: inline-block;
-    padding: 0;
+    overflow-x: auto;
 }
 
 .player-list li {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
     padding: 0 0.3em;
     background: #dcc;
     border-left: 1px solid #a00;
     margin-right: 0.3em;
-    display: inline-block;
+    display: block;
+    height: 100%;
+    float: left;
     position: relative;
 }
 
@@ -77,13 +79,15 @@ a.button.assign-player,
 }
 
 a.button.assign-player {
-    margin-top: 0.5em;
-    display: inline-block;
+    float: left;
+    margin-top: 0.2em;
     margin-right: 0.5em;
 }
 
 p a.button.assign-player {
     margin-right: 0;
+    float: none;
+    display: inline-block;
 }
 
 .remove-player {
