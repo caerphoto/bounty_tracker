@@ -33,6 +33,10 @@ function removeFromList(player_name, list) {
     var found,
         index;
 
+    if (!player_name || !list) {
+        return false;
+    }
+
     player_name = player_name.toUpperCase();
 
     found = list.some(function (name, i) {
@@ -80,10 +84,6 @@ exports.assignPlayer = function (req, res) {
 
         npc_state = full_state[npc_short_name];
 
-        if (!npc_state.players) {
-            npc_state.players = [];
-        }
-
         // Tidy up a bit.
         if (npc_state.player) {
             delete npc_state.player;
@@ -93,6 +93,9 @@ exports.assignPlayer = function (req, res) {
         // to prevent a player from being assigned to more than one NPC.
         player_name = req.body.player_name.toUpperCase();
         utils.each(full_state, function (npc) {
+            if (!npc.players) {
+                npc.players = [];
+            }
             removeFromList(player_name, npc.players);
         });
 
