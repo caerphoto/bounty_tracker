@@ -112,26 +112,19 @@ $(function () {
 
             $list = $row.find(".player-names .player-list");
 
-            if (!status.player) {
-                $list.html("");
-                return;
-            }
-
             if (status.players) {
-                view.players = status.players;
-            } else {
-                // Backwards compatibility with old-style comma-separated plain
-                // text player lists.
-                view.players = [];
-                status.player.split(",").forEach(function (player) {
-                    view.players.push({
+                view.players = status.players.map(function (player) {
+                    return {
                         name: player,
                         this_player: player === GBT.this_player
-                    });
+                    };
                 });
+            } else {
+                view.players = [];
             }
 
             $list.html(Mustache.render(player_list_template, view));
+            $row.toggleClass("assigned", GBT.assignment === short_name);
         });
 
         if (count >= GBT.npc_list.length) {
@@ -201,6 +194,10 @@ $(function () {
             player_name = GBT.this_player;
         }
 
+        if (player_name && !GBT.this_player) {
+            GBT.this_player = player_name;
+        }
+
         $.ajax({
             url: "api/assign_player",
             type: "POST",
@@ -208,9 +205,18 @@ $(function () {
                 npc_short_name: npc_short_name,
                 player_name: player_name
             },
+            dataType: "json",
             success: function (full_state) {
                 GBT.search_state = full_state;
+                if (!GBT.is_admin) {
+                    GBT.assignment = npc_short_name;
+                }
+                $npc_table.addClass("assigned");
                 applyState();
+
+                if (typeof callback === "function") {
+                    callback(true);
+                }
             },
             error: function (xhr) {
                 // TODO: use proper dialog.
@@ -517,6 +523,33 @@ $(function () {
         return false;
     });
 
+    $("#assign-player").on("submit", function () {
+        var form = this,
+            $submit_button = $(form).find('input[type="submit"]'),
+            player_name,
+            npc_short_name;
+
+        player_name = form.player_name.value;
+
+        if (!form.player_name.value) {
+            return false;
+        }
+
+        $submit_button.addClass("working");
+
+        npc_short_name = form.npc_short_name.value;
+        GBT.this_player = player_name;
+        assignPlayer(player_name, npc_short_name, function (success, msg) {
+            $submit_button.removeClass("working");
+            window.location.hash = "";
+            if (!success) {
+                window.alert(msg);
+            }
+        });
+
+        return false;
+    });
+
     $(window).on("hashchange", function () {
         // Generic dialog input box focusser thing.
         var hash = window.location.hash,
@@ -540,19 +573,27 @@ $(function () {
         setNPCState(npc.short_name, $button.hasClass("found"), function () {
             $button.removeClass("working");
         });
-    }).on("click", ".assign-player", function () {
-        var button = this,
-            $row = $(button).closest(".npc-row"),
+    }).on("click", ".assign-player", function (evt) {
+        var $button = $(this),
+            $row = $button.closest(".npc-row"),
             npc = npc_lookup[$row.data("short_name")],
-            $dialog_npc_name = $("#member-hunting-npc");
+            $dialog_npc_name = $("#assign-player-npc");
 
-        // Prevent non-admins from following more than one NPC. This is
-        // validated server-side too.
-        if (!GBT.is_admin && GBT.assignment) {
+        // Don't bother showing Enter Name dialog if the player name is already
+        // known and player is a member.
+        if (!GBT.is_admin && GBT.assignment && GBT.this_player) {
+            evt.preventDefault();
+
+            $button.addClass("working");
+            assignPlayer(GBT.this_player, npc.short_name, function () {
+                $button.removeClass("working");
+            });
+
             return false;
         }
 
         $dialog_npc_name.html(npc.name);
+        document.getElementById("assign-player").npc_short_name.value = npc.short_name;
 
         //if (GBT.is_admin) {
 

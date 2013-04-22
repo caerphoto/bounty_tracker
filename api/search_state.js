@@ -42,7 +42,7 @@ exports.assignPlayer = function (req, res) {
     db = redis.createClient();
     db.hgetall(guild_key, function (err, guild_data) {
         var utils = require("../lib/utils"),
-            short_name = req.body.npc_short_name,
+            npc_short_name = req.body.npc_short_name,
             player_name,
             full_state,
             npc_state;
@@ -57,7 +57,7 @@ exports.assignPlayer = function (req, res) {
             full_state = JSON.parse(guild_data.search_state);
         }
 
-        npc_state = full_state[short_name];
+        npc_state = full_state[npc_short_name];
 
         if (!npc_state.players) {
             npc_state.players = [];
@@ -77,16 +77,31 @@ exports.assignPlayer = function (req, res) {
             });
 
             if (found) {
-                npc.players = npc.players.splice(index, 1);
+                npc.players.splice(index, 1);
             }
         });
 
         npc_state.players.push(req.body.player_name);
+        full_state = JSON.stringify(full_state);
 
-        console.dir(full_state);
+        db.hset(guild_key, "search_state", full_state, function () {
+            db.hget(guild_key, "search_state", function (err, new_state) {
+                db.quit();
+                if (!req.session.is_admin) {
+                    req.session.assignment = npc_short_name;
+                    req.session.this_player = req.body.player_name;
+                }
+
+                if (!new_state) {
+                    return res.send(500);
+                }
+                req.session.prev_state = new_state;
+                return res.send(new_state);
+            });
+        });
 
     }); // db.hgetall()
-};
+}; // exports.assignPlayer()
 
 exports.removePlayer = function (req, res) {
     // Removes a player name from an NPC's list of assigned players.
@@ -137,11 +152,11 @@ exports.setNPCState = function (req, res) {
                     return res.send(500);
                 }
                 req.session.prev_state = new_state;
-                return res.json(JSON.parse(new_state)[short_name].found);
+                return res.send(JSON.parse(new_state)[short_name].found);
             });
         });
     });
-};
+}; // exports.setNPCState()
 
 exports.resetState = function (req, res) {
     var guild_key = req.session.guild_key,
@@ -153,16 +168,16 @@ exports.resetState = function (req, res) {
     }
 
     db = redis.createClient();
-    db.hgetall(guild_key, function (err, guild_data) {
+    db.exists(guild_key, function (err, exists) {
         var utils = require("../lib/utils"),
             new_state = utils.createNewState();
 
-        if (!guild_data) {
+        if (!exists) {
             return res.send(500);
         }
 
         db.hset(guild_key, "search_state", new_state, function () {
-            return JSON.stringify(new_state);
+            return res.json(new_state);
         });
     }); // db.hgetall()
 };

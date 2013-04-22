@@ -59,13 +59,21 @@ td:last-child, th:last-child {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     padding: 0 0.3em;
-    background: #dcc;
-    border-left: 1px solid #a00;
+    background: #ddd;
+    color: #888;
+    border-left: 1px solid #888;
     margin-right: 0.3em;
     display: block;
     height: 100%;
     float: left;
     position: relative;
+    text-shadow: none;
+}
+
+.player-list li.this-player {
+    background-color: #dbb;
+    border-color: #a99;
+    color: #000;
 }
 
 /* Specificity needed to override rules in buttons.css. */
@@ -103,6 +111,10 @@ p a.button.assign-player {
 
 body.admin .player-list .player-name {
     margin-left: 1.2em;
+}
+
+#npc-table.assigned .assign-player {
+    display: none;
 }
 
 .npc-name .compact {

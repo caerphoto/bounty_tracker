@@ -53,6 +53,7 @@ exports.index = function (req, res) {
                 body_class: "logged-in " + (is_admin ? "admin" : "member"),
                 guild_data: guild_data,
                 this_player: req.session.this_player || "",
+                assignment: req.session.assignment || "",
                 search_state: search_state
             });
 

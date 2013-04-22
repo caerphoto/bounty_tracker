@@ -145,15 +145,16 @@ hgroup {
     </section>
 
     <section id="member-name-dialog" class="dialog logged-in">
-      <form id="member-hunting" action="api/hunting" method="POST">
+      <form id="assign-player" action="api/assign_player" method="POST">
         <h2>Enter <span class="for-members">Your</span><span
             class="for-admins">Player</span> Name</h2>
         <p>Type <span class="for-members">your</span><span class="for-admins">a
           player</span> name in the box below, then click <em>OK</em> to assign
         <span class="for-members">yourself</span><span class="for-admins">that
-          player</span> to <em id="member-hunting-npc"></em>.</p>
+          player</span> to <em id="assign-player-npc"></em>.</p>
 
-        <input type="text" id="member-hunting-name" name="member_name">
+        <input type="text" id="assign-player-name" name="player_name">
+        <input type="hidden" name="npc_short_name">
 
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>
@@ -212,7 +213,7 @@ hgroup {
 
       <script id="player-list-template" type="text/mustache">
         {{#players}}
-          {{#this_player}}<li class="this_player">{{/this_player}}
+          {{#this_player}}<li class="this-player">{{/this_player}}
           {{^this_player}}<li>{{/this_player}}
             <button class="remove-player for-admins">&minus;</button>
             <span class="player-name">{{name}}</span>
@@ -277,6 +278,7 @@ hgroup {
         guild_data: <%- JSON.stringify(guild_data) %>,
         npc_list: <%- JSON.stringify(npc_list) %>,
         search_state: <%- search_state %>,
+        assignment: "<%- assignment %>",
         this_player: "<%- this_player %>"
       };
     </script>
