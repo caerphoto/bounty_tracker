@@ -84,6 +84,11 @@ a.button.assign-player {
     margin-right: 0.5em;
 }
 
+#npc-table.assigned .assign-player {
+    display: none;
+}
+
+/* Button when not in the NPC table. */
 p a.button.assign-player {
     margin-right: 0;
     float: none;
@@ -105,15 +110,26 @@ body.admin .player-list .player-name {
     display: none;
 }
 
-.npc-row       .lost,
-.npc-row       .found,
-.npc-row.found .found {
+.npc-row .lost,
+.npc-row .found {
     display: none;
 }
 
-           .npc-row.assigned         .found,
-           .npc-row.assigned.found   .lost,
-body.admin .npc-row.found            .lost,
-body.admin .npc-row                  .found {
+.npc-row.assigned .found,
+.npc-row.assigned.found .lost {
+    display: inline-block;
+}
+
+.npc-row.assigned.found .found {
+    display: none;
+}
+
+body.admin .npc-row       .lost,
+body.admin .npc-row.found .found {
+    display: none;
+}
+
+body.admin .npc-row       .found,
+body.admin .npc-row.found .lost {
     display: inline-block;
 }

@@ -79,6 +79,7 @@ app.post("/api/reset_password", password.reset);
 
 app.post("/api/assign_player", search_state.assignPlayer);
 app.post("/api/remove_player", search_state.removePlayer);
+app.post("/api/reset_state", search_state.removePlayer);
 app.post("/api/set_npc_state", search_state.setNPCState);
 app.get("/api/search_state", search_state.fetch);
 

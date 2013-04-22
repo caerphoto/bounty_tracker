@@ -211,8 +211,13 @@ hgroup {
         <span id="found-count">0</span></h2>
 
       <script id="player-list-template" type="text/mustache">
-{{#players}}<li><button class="remove-player for-admins">&minus;</button>
-<span class="player-name">{{.}}</span></li>{{/players}}
+        {{#players}}
+          {{#this_player}}<li class="this_player">{{/this_player}}
+          {{^this_player}}<li>{{/this_player}}
+            <button class="remove-player for-admins">&minus;</button>
+            <span class="player-name">{{name}}</span>
+          </li>
+        {{/players}}
       </script>
 
       <script id="npc-row-template" type="text/mustache">
@@ -227,7 +232,7 @@ hgroup {
 
   <tbody>
   {{#NPCs}}
-    <tr class="npc-row" id="npc-{{short_name}}">
+    <tr class="npc-row" id="npc-{{short_name}}" data-short_name="{{short_name}}">
       <td class="npc-name">
         <a class="full" href="{{url}}" target="_blank">{{{name}}}</a>
         <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
@@ -252,7 +257,7 @@ hgroup {
       <div class="button-bar logged-in" id="list-controls">
         <button id="stop-hunting" class="action for-members" title="Click to unassign yourself from all targets.">Stop Hunting</button>
 
-        <input id="toggle-autosync" type="checkbox" checked>
+        <input id="toggle-autosync" type="checkbox" >
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
         <button id="manual-refresh" class="disabled">Refresh</button>
@@ -271,7 +276,8 @@ hgroup {
         is_admin: <%- !!is_admin %>,
         guild_data: <%- JSON.stringify(guild_data) %>,
         npc_list: <%- JSON.stringify(npc_list) %>,
-        search_state: <%- search_state %>
+        search_state: <%- search_state %>,
+        this_player: "<%- this_player %>"
       };
     </script>
 

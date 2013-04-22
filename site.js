@@ -5,6 +5,7 @@ var renderNoGuild = function (res) {
         is_admin: false,
         body_class: "logged-out",
         guild_data: false,
+        this_player: "",
         search_state: JSON.stringify(utils.createNewState())
     });
 };
@@ -51,6 +52,7 @@ exports.index = function (req, res) {
                 is_admin: is_admin,
                 body_class: "logged-in " + (is_admin ? "admin" : "member"),
                 guild_data: guild_data,
+                this_player: req.session.this_player || "",
                 search_state: search_state
             });
 

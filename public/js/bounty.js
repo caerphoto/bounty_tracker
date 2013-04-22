@@ -18,12 +18,11 @@ $(function () {
         idle_time,
         idle_timer,
 
-        prev_text,
-        row_timer, // for slightly delaying sync on keyboard input
-
         has_played_sound = false,
 
         base_doc_title = document.title,
+
+        npc_lookup = {},
 
         error_messages = {
             "exists": "A guild with that name has already been registered.",
@@ -43,11 +42,13 @@ $(function () {
         initTable,
         errorDialog,
         fetchState,
-        postState,
         applyState,
+        setNPCState,
+        assignPlayer,
+        //removePlayer,
+        resetState,
         beginAutoSync,
         logIn,
-        updateRow,
         incrementIdleTime;
 
     initTable = function () {
@@ -56,6 +57,9 @@ $(function () {
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: GBT.npc_list }));
 
+        GBT.npc_list.forEach(function (npc) {
+            npc_lookup[npc.short_name] = npc;
+        });
     };
 
     errorDialog = function (view) {
@@ -90,13 +94,15 @@ $(function () {
     };
 
     applyState = function () {
+        // Sets the whole NPC table's state according to the state object stored
+        // in GBT.seach_state.
         var count = 0,
-            state = GBT.search_state,
-            is_admin = GBT.is_admin;
+            state = GBT.search_state;
 
         $.each(state, function (short_name, status) {
             var $row = $("#npc-" + short_name),
-                $list;
+                $list,
+                view = {};
 
             if (status.found) {
                 count += 1;
@@ -104,33 +110,28 @@ $(function () {
 
             $row.toggleClass("found", status.found);
 
-            if (is_admin) {
-                // Only apply input box updates if they don't have focus
-                $list = $row.find(".player-names .names-editor");
-                if (!$list.is(":focus")) {
-                    // Backwards-compatibility with old-style status that could
-                    // only store a string.
-                    if (status.player.charAt) {
-                        $list.val(status.player);
-                    } else {
-                        $list.val(status.player.join(", "));
-                    }
-                }
-            } else {
-                $list = $row.find(".player-names .player-list");
+            $list = $row.find(".player-names .player-list");
 
-                if (!status.player) {
-                    $list.html("");
-                    return;
-                }
-
-                if (status.player.charAt) {
-                    status.player = status.player.split(",");
-                }
-                $list.html(Mustache.render(player_list_template, {
-                    players: status.player
-                }));
+            if (!status.player) {
+                $list.html("");
+                return;
             }
+
+            if (status.players) {
+                view.players = status.players;
+            } else {
+                // Backwards compatibility with old-style comma-separated plain
+                // text player lists.
+                view.players = [];
+                status.player.split(",").forEach(function (player) {
+                    view.players.push({
+                        name: player,
+                        this_player: player === GBT.this_player
+                    });
+                });
+            }
+
+            $list.html(Mustache.render(player_list_template, view));
         });
 
         if (count >= GBT.npc_list.length) {
@@ -146,28 +147,22 @@ $(function () {
         document.title = "(" + count + ") " + base_doc_title;
     };
 
-    postState = function (short_name, players, found, callback) {
-        if ($body.hasClass("demo")) {
-            // Don't send updates to the server, since they'll get rejected
-            // anyway.
-            GBT.search_state[short_name].players = players;
-            GBT.search_state[short_name].found = found;
-            applyState();
-            callback(true);
-            return;
-        }
-
+    setNPCState = function (short_name, found, callback) {
+        // Sends the given NPC found state to the server.
         $.ajax({
-            url: "api/search_state",
+            url: "api/set_npc_state",
             type: "POST",
             data: {
                 short_name: short_name,
-                players: JSON.stringify(players || []),
                 found: !!found
             },
             dataType: "json",
             success: function (response) {
-                GBT.search_state = response;
+                // Expects response to be either true or false, which should
+                // match the 'found' parameter passed to setNPCState().
+                GBT.search_state[short_name].found = response;
+
+                // TODO: this is a bit heavy-handed.
                 applyState();
 
                 if (typeof callback === "function") {
@@ -175,6 +170,81 @@ $(function () {
                 }
             },
             error: function (xhr) {
+                if (typeof callback === "function") {
+                    callback(false, xhr.responseText);
+                }
+            }
+        });
+    };
+
+    assignPlayer = function (player_name, npc_short_name, callback) {
+        // Assign the current player to the given NPC. If the user is not an
+        // admin, GBT.this_player must be set to a player name before calling
+        // this function.
+        var is_cb = typeof callback === "function";
+
+        if (!player_name && GBT.is_admin) {
+            if (is_cb) {
+                callback(false, "No player name given.");
+            }
+            return false;
+        }
+
+        if (!player_name && !GBT.this_player && !GBT.is_admin) {
+            if (is_cb) {
+                callback(false, "Logged-in player name not set.");
+            }
+            return false;
+        }
+
+        if (!player_name) {
+            player_name = GBT.this_player;
+        }
+
+        $.ajax({
+            url: "api/assign_player",
+            type: "POST",
+            data: {
+                npc_short_name: npc_short_name,
+                player_name: player_name
+            },
+            success: function (full_state) {
+                GBT.search_state = full_state;
+                applyState();
+            },
+            error: function (xhr) {
+                // TODO: use proper dialog.
+                alert(xhr.responseText);
+                if (typeof callback === "function") {
+                    callback(false, xhr.responseText);
+                }
+            }
+        });
+    };
+
+
+    resetState = function (callback) {
+        // Resets the state of all NPCs on the table.
+        if (!GBT.is_admin) {
+            if (typeof callback === "function") {
+                callback(false, "Not authorised: not an admin.");
+            }
+            return;
+        }
+
+        $.ajax({
+            url: "api/reset",
+            type: "POST",
+            success: function (clean_state) {
+                GBT.search_state = clean_state;
+                applyState();
+                if (typeof callback === "function") {
+                    callback(true);
+                }
+            },
+            error: function (xhr) {
+                // TODO: use proper dialog.
+                alert(xhr.responseText);
                 if (typeof callback === "function") {
                     callback(false, xhr.responseText);
                 }
@@ -212,9 +282,7 @@ $(function () {
     logIn = function () {
         $body.removeClass("demo logged-out");
         $body.addClass("logged-in");
-        if (GBT.is_admin) {
-            $body.addClass("admin");
-        }
+        $body.addClass(GBT.is_admin ? "admin" : "member");
         window.location.hash = "";
 
         $("#logged-in-guildname").text(GBT.guild_data.guildname);
@@ -297,8 +365,8 @@ $(function () {
                 GBT.guild_data = response.guild_data;
                 GBT.is_admin = response.is_admin;
                 GBT.search_state = response.search_state;
-                logIn();
                 form.password.value = "";
+                logIn();
             },
             error: function (xhr) {
                 var view = {
@@ -462,54 +530,38 @@ $(function () {
         $input.get(0).focus();
     });
 
-    $("#demo-toggle").on("click", function () {
-        $body.toggleClass("demo");
-        if (!$body.hasClass("demo")) {
-            document.title = base_doc_title;
-        }
-    });
-
-    updateRow = function ($row, found) {
-        var $buttons = $row.find("button");
-
-        $buttons.addClass("working");
-
-        postState(
-            $row.attr("id").slice(4), // short_name
-            $row.find(".player-names .names-editor").val().split(","),
-            found,
-            function () {
-                $buttons.removeClass("working");
-            }
-        );
-    };
-
     // Toggle NPC 'found' status on either button click.
     $npc_table.on("click", ".npc-controls button", function () {
-        var $button = $(this);
-        updateRow($button.closest(".npc-row"), $button.hasClass("found"));
+        var $button = $(this),
+            $row = $button.closest(".npc-row"),
+            npc = npc_lookup[$row.data("short_name")];
 
-    }).on("keydown", ".player-names .names-editor", function () {
-        var input = this,
-            $row = $(this).closest(".npc-row");
+        $button.addClass("working");
+        setNPCState(npc.short_name, $button.hasClass("found"), function () {
+            $button.removeClass("working");
+        });
+    }).on("click", ".assign-player", function () {
+        var button = this,
+            $row = $(button).closest(".npc-row"),
+            npc = npc_lookup[$row.data("short_name")],
+            $dialog_npc_name = $("#member-hunting-npc");
 
-        if (row_timer) {
-            clearTimeout(row_timer);
+        // Prevent non-admins from following more than one NPC. This is
+        // validated server-side too.
+        if (!GBT.is_admin && GBT.assignment) {
+            return false;
         }
 
-        // Delay posting update for a bit to avoid spamming server for every
-        // single keypress. Also only update if text has changed (so not on
-        // presses of arrow keys etc.).
-        if (prev_text && this.value !== prev_text) {
-            row_timer = setTimeout(function () {
-                updateRow($row, $row.hasClass("found"));
-            }, 500);
-        }
-        prev_text = input.value;
+        $dialog_npc_name.html(npc.name);
 
-    }).on("blur", ".player-name input", function () {
-        var $row = $(this).closest(".npc-row");
-        updateRow($row, $row.hasClass("found"));
+        //if (GBT.is_admin) {
+
+        //} else {
+        //}
+    }).on("click", ".remove-player", function () {
+        if (!GBT.is_admin) {
+            return false;
+        }
     });
 
     $("#toggle-autosync").on("change", function () {
@@ -529,10 +581,8 @@ $(function () {
         var $button = $(this);
         $button.addClass("working");
 
-        postState("__ALL__", "", false, function () {
+        resetState(function () {
             $button.removeClass("working");
-            $(".npc-row").removeClass("found");
-            $npc_table.find("input").val("");
         });
     });
 
