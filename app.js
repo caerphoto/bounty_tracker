@@ -58,8 +58,22 @@ init = function (env) {
             }
         });
     } else {
-        cssfiles = ["/css/bounty.min.css"];
-        jsfiles = ["/js/bounty.min.js"];
+        f = /bounty\.min-[0-9]+\.[cjs]{2,3}/;
+
+        // Fetch latest filename of minified JS and CSS files.
+        cssfiles = fs.readdirSync("public/css/").filter(function (fn) {
+            return f.test(fn);
+        })
+        .map(function (fn) {
+            return "/css/" + fn;
+        });
+
+        jsfiles = fs.readdirSync("public/js/").filter(function (fn) {
+            return f.test(fn);
+        })
+        .map(function (fn) {
+            return "/js/" + fn;
+        });
     }
 
     app.locals({

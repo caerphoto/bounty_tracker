@@ -3,14 +3,19 @@
 # It is generally not necessary to run this script manually, as it is called by
 # the 'deploy' script.
 
+DATE=$(date +"%Y%m%d%H%M")
+echo "Removing previous files..."
+rm public/css/bounty.min*
+rm public/js/bounty.min*
+
 echo "Combining and minifying CSS files..."
 cat `cat cssfiles` > temp.css
-cleancss < temp.css > public/css/bounty.min.css
+cleancss < temp.css > public/css/bounty.min-$DATE.css
 rm temp.css
 
 echo "Combining and minifying JavaScript files..."
 cat `cat jsfiles` > temp.js
-jsmin < temp.js > public/js/bounty.min.js
+jsmin < temp.js > public/js/bounty.min-$DATE.js
 rm temp.js
 
 echo "Done!"
