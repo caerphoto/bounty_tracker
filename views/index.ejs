@@ -215,7 +215,7 @@ hgroup {
         {{#players}}
           {{#this_player}}<li class="this-player">{{/this_player}}
           {{^this_player}}<li>{{/this_player}}
-            <button class="remove-player for-admins">&minus;</button>
+            <button class="remove-player for-admins" data-player_name="{{name}}">&minus;</button>
             <span class="player-name">{{name}}</span>
           </li>
         {{/players}}
@@ -261,7 +261,7 @@ hgroup {
         <input id="toggle-autosync" type="checkbox" >
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
-        <button id="manual-refresh" class="disabled">Refresh</button>
+        <button id="manual-refresh" class="">Refresh</button>
         <button id="reset" class="reset for-admins">Reset</button>
       </div>
 

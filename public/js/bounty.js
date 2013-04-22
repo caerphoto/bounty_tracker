@@ -40,12 +40,13 @@ $(function () {
         },
 
         initTable,
+        isInList,
         errorDialog,
         fetchState,
         applyState,
         setNPCState,
         assignPlayer,
-        //removePlayer,
+        removePlayer,
         resetState,
         beginAutoSync,
         logIn,
@@ -59,6 +60,15 @@ $(function () {
 
         GBT.npc_list.forEach(function (npc) {
             npc_lookup[npc.short_name] = npc;
+        });
+    };
+
+    isInList = function (name, list) {
+        // Performs a case-insensitive search for name in list, and returns true
+        // if it's found.
+        name = name.toUpperCase();
+        return list.some(function (n) {
+            return n.toUpperCase() === name;
         });
     };
 
@@ -97,26 +107,41 @@ $(function () {
         // Sets the whole NPC table's state according to the state object stored
         // in GBT.seach_state.
         var count = 0,
-            state = GBT.search_state;
+            state = GBT.search_state,
+            this_player_u = "";
 
-        $.each(state, function (short_name, status) {
+        console.log(GBT.this_player, GBT.assignment);
+        // Detect when an admin has removed/changed a member's assignment.
+        if (GBT.this_player) {
+            this_player_u = GBT.this_player.toUpperCase();
+            GBT.assignment = "";
+            $.each(state, function (short_name, npc) {
+                if (isInList(this_player_u, npc.players)) {
+                    GBT.assignment = short_name;
+                }
+            });
+
+            $body.toggleClass("assigned", !!GBT.assignment);
+        }
+
+        $.each(state, function (short_name, npc) {
             var $row = $("#npc-" + short_name),
                 $list,
                 view = {};
 
-            if (status.found) {
+            if (npc.found) {
                 count += 1;
             }
 
-            $row.toggleClass("found", status.found);
+            $row.toggleClass("found", npc.found);
 
             $list = $row.find(".player-names .player-list");
 
-            if (status.players) {
-                view.players = status.players.map(function (player) {
+            if (npc.players) {
+                view.players = npc.players.map(function (player) {
                     return {
                         name: player,
-                        this_player: player === GBT.this_player
+                        this_player: player.toUpperCase() === this_player_u
                     };
                 });
             } else {
@@ -224,6 +249,31 @@ $(function () {
         });
     };
 
+    removePlayer = function (player_name, npc_short_name, callback) {
+        $.ajax({
+            url: "api/remove_player",
+            type: "POST",
+            data: {
+                npc_short_name: npc_short_name,
+                player_name: player_name
+            },
+            dataType: "json",
+            success: function (full_state) {
+                GBT.search_state = full_state;
+                applyState();
+
+                if (typeof callback === "function") {
+                    callback(true);
+                }
+            },
+            error: function (xhr) {
+                // TODO: use proper dialog.
+                if (typeof callback === "function") {
+                    callback(false, xhr.responseText);
+                }
+            }
+        });
+    };
 
     resetState = function (callback) {
         // Resets the state of all NPCs on the table.
@@ -235,7 +285,7 @@ $(function () {
         }
 
         $.ajax({
-            url: "api/reset",
+            url: "api/reset_state",
             type: "POST",
             success: function (clean_state) {
                 GBT.search_state = clean_state;
@@ -584,7 +634,7 @@ $(function () {
 
         // Don't bother showing Enter Name dialog if the player name is already
         // known and player is a member.
-        if (!GBT.is_admin && GBT.assignment && GBT.this_player) {
+        if (!GBT.is_admin && GBT.this_player) {
             evt.preventDefault();
 
             $button.addClass("working");
@@ -601,9 +651,35 @@ $(function () {
         form.player_name.value = "";
 
     }).on("click", ".remove-player", function () {
+        var $button = $(this);
+
         if (!GBT.is_admin) {
             return false;
         }
+
+        console.log("Removing", $button.data("player_name"), "from",
+            $button.closest(".npc-row").data("short_name"));
+        removePlayer($button.data("player_name"),
+            $button.closest(".npc-row").data("short_name"),
+            function (success, msg) {
+            if (!success) {
+                window.alert("Unable to reove player:\n\n" + msg);
+            }
+        });
+    });
+
+    $("#stop-hunting").on("click", function () {
+        var $button = $(this);
+
+        $button.addClass("working");
+        removePlayer(GBT.this_player, GBT.assignment, function (success, msg) {
+            $button.removeClass("working");
+            if (success) {
+                applyState();
+            } else {
+                window.alert(msg);
+            }
+        });
     });
 
     $("#toggle-autosync").on("change", function () {

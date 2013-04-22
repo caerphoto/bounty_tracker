@@ -64,23 +64,30 @@ td:last-child, th:last-child {
 }
 
 .player-list li {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    padding: 0 0.3em;
-    background: #ddd;
-    color: #888;
-    border-left: 1px solid #888;
-    margin-right: 0.3em;
     display: block;
-    height: 100%;
     float: left;
     position: relative;
+
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0 0.3em;
+    border-width: 1px;
+    margin-right: 0.3em;
+
+    border-style: solid;
+    border-color: #bbb #999 #999 #bbb;
+    box-shadow: 1px 1px 1px rgba(0,0,0, 0.1);
+
+    border-radius: 0 4px 4px 0;
+
+    background: #ddd;
+    color: #888;
     text-shadow: none;
 }
 
 .player-list li.this-player {
     background-color: #dbb;
-    border-color: #a99;
+    border-color: #b88;
     color: #000;
 }
 
@@ -93,8 +100,12 @@ body.admin .player-list .player-name {
     margin-left: 1.2em;
 }
 
-#npc-table.assigned .assign-player {
+#stop-hunting {
     display: none;
+}
+
+body.assigned #stop-hunting {
+    display: block;
 }
 
 .npc-name .compact {
