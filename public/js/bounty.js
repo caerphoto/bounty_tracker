@@ -73,6 +73,10 @@ $(function () {
     };
 
     errorDialog = function (view) {
+        // View object should have the following properties:
+        // message: the error message to display,
+        // code: an HTTP response code,
+        // prev_location: a location hash to return to.
         $error.html(Mustache.render(error_template, view));
         window.location.hash = "error-dialog";
         $error.find("a.button").get(0).focus();
@@ -110,7 +114,6 @@ $(function () {
             state = GBT.search_state,
             this_player_u = "";
 
-        console.log(GBT.this_player, GBT.assignment);
         // Detect when an admin has removed/changed a member's assignment.
         if (GBT.this_player) {
             this_player_u = GBT.this_player.toUpperCase();
@@ -250,6 +253,13 @@ $(function () {
     };
 
     removePlayer = function (player_name, npc_short_name, callback) {
+        if (!player_name || !npc_short_name) {
+            if (typeof callback === "function") {
+                callback(false);
+            }
+            return false;
+        }
+
         $.ajax({
             url: "api/remove_player",
             type: "POST",
@@ -332,6 +342,13 @@ $(function () {
     };
 
     logIn = function (login_data) {
+        GBT.guild_data = login_data.guild_data;
+        GBT.is_admin = login_data.is_admin;
+        GBT.search_state = login_data.search_state;
+
+        GBT.assignment = "";
+        GBT.this_player = "";
+
         $body.removeClass("demo logged-out");
         $body.addClass("logged-in");
         $body.toggleClass("member", !GBT.is_admin);
@@ -344,13 +361,6 @@ $(function () {
 
         $("#login-guildname").get(0).blur();
         $("#login-password").get(0).blur();
-
-        GBT.guild_data = login_data.guild_data;
-        GBT.is_admin = login_data.is_admin;
-        GBT.search_state = login_data.search_state;
-
-        GBT.assignment = "";
-        GBT.this_player = "";
 
         if (GBT.search_state) {
             applyState();
@@ -452,23 +462,38 @@ $(function () {
 
         $button.addClass("working");
 
-        $.ajax({
-            url: "api/logout",
-            type: "POST",
-            success: function () {
-                $body.removeClass("admin logged-in");
-                $body.addClass("logged-out");
-                window.location.hash = "";
-                clearTimeout(sync_timer);
-                document.title = base_doc_title;
-                GBT.guild_data = false;
-            },
-            error: function (xhr) {
-                // I hope this never happens. It shouldn't, right?
-                window.alert(xhr.statusCode());
-            },
-            complete: function () {
-                $button.removeClass("working");
+        removePlayer(GBT.this_player, GBT.assignment, function (success) {
+            $.ajax({
+                url: "api/logout",
+                type: "POST",
+                success: function () {
+                    $body.removeClass("admin logged-in");
+                    $body.addClass("logged-out");
+                    window.location.hash = "";
+                    clearTimeout(sync_timer);
+                    document.title = base_doc_title;
+                    GBT.guild_data = false;
+                },
+                error: function () {
+                    // Something has gone terribly wrong if this happens.
+                    errorDialog({
+                        message: "Unable to log you out. Please try again in a few minutes.",
+                        code: "unknown",
+                        prev_location: ""
+                    });
+                },
+                complete: function () {
+                    $button.removeClass("working");
+                }
+            });
+
+            if (!success) {
+                errorDialog({
+                    message: "There was a problem unassigning you from <em>" +
+                        npc_lookup[GBT.assignment] + "</em>.",
+                    code: "unknown",
+                    prev_location: ""
+                });
             }
         });
     });
@@ -657,8 +682,6 @@ $(function () {
             return false;
         }
 
-        console.log("Removing", $button.data("player_name"), "from",
-            $button.closest(".npc-row").data("short_name"));
         removePlayer($button.data("player_name"),
             $button.closest(".npc-row").data("short_name"),
             function (success, msg) {

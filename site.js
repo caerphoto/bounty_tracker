@@ -6,6 +6,7 @@ var renderNoGuild = function (res) {
         body_class: "logged-out",
         guild_data: false,
         this_player: "",
+        assignment: "",
         search_state: JSON.stringify(utils.createNewState())
     });
 };

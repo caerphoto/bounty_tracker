@@ -205,7 +205,9 @@ hgroup {
       <p class="instructions info not-compact logged-in">
       Click a <a href="#" class="action button assign-player"></a> button in
       the table to assign <span class="for-admins">a player</span><span
-        class="for-members">yourself</span> to the corresponding NPC.
+        class="for-members">yourself</span> to the corresponding NPC. <span
+        class="for-members">If you need to change your name, log out and back in
+        again.</span>
       </p>
 
       <h2 id="found-display" class="logged-in">Found so far:
@@ -258,10 +260,10 @@ hgroup {
       <div class="button-bar logged-in" id="list-controls">
         <button id="stop-hunting" class="action for-members" title="Click to unassign yourself from all targets.">Stop Hunting</button>
 
-        <input id="toggle-autosync" type="checkbox" >
+        <input id="toggle-autosync" type="checkbox" checked>
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
-        <button id="manual-refresh" class="">Refresh</button>
+        <button id="manual-refresh" class="disabled">Refresh</button>
         <button id="reset" class="reset for-admins">Reset</button>
       </div>
 
