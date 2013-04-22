@@ -4,7 +4,7 @@ DEPLOY_PATH=/var/www/bounty_tracker
 REPO=git://github.com/caerphoto/bounty_tracker.git
 
 ENVIRONMENT=${1:-"staging"}
-REF=${2:-"node-rewrite"}
+REF=${2:-"master"}
 USER=deploy
 
 if [ $ENVIRONMENT = 'production' ]
@@ -19,6 +19,7 @@ echo "* Deploying $ENVIRONMENT/$REF"
 
 ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
     git reset --hard && \
+    git fetch && \
     git checkout $REF && \
     git pull && \
     npm install && \

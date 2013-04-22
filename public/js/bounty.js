@@ -763,10 +763,4 @@ $(function () {
         beginAutoSync();
     }
 
-    // FOR TESTING ONLY. REMOVE IN PRODUCTION!!!111
-    $("#found-display").on("click", function () {
-        $body.toggleClass("admin");
-        $body.toggleClass("member");
-    });
-
 });
