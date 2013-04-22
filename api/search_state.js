@@ -131,6 +131,10 @@ exports.removePlayer = function (req, res) {
         return res.send(403);
     }
 
+    if (!player_name || !npc_short_name) {
+        return res.send(400);
+    }
+
     db = redis.createClient();
     db.hget(guild_key, "search_state", function (err, state) {
         if (err || !state) {

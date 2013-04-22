@@ -11,7 +11,7 @@ $(function () {
 
         player_list_template = $("#player-list-template").html(),
 
-        min_sync_interval = 5000, // miniumum time in ms between sync requests
+        min_sync_interval = 3000, // miniumum time in ms between sync requests
         sync_interval = min_sync_interval,
         sync_timer, // handle returned by setTimeout()
 
@@ -253,7 +253,7 @@ $(function () {
     };
 
     removePlayer = function (player_name, npc_short_name, callback) {
-        if (!player_name || !npc_short_name) {
+        if (!GBT.is_admin && (!player_name || !npc_short_name)) {
             if (typeof callback === "function") {
                 callback(false);
             }
@@ -335,7 +335,7 @@ $(function () {
                 sync_interval = sync_interval * 2;
             }
 
-            if (document.getElementById("toggle-autosync").checked) {
+            if (document.getElementById("toggle-autosync").checked && GBT.guild_data) {
                 sync_timer = setTimeout(beginAutoSync, sync_interval);
             }
         });
@@ -349,7 +349,7 @@ $(function () {
         GBT.assignment = "";
         GBT.this_player = "";
 
-        $body.removeClass("demo logged-out");
+        $body.removeClass("logged-out");
         $body.addClass("logged-in");
         $body.toggleClass("member", !GBT.is_admin);
         $body.toggleClass("admin", !!GBT.is_admin);
@@ -458,11 +458,12 @@ $(function () {
     });
 
     $("#log-out").on("click", function () {
-        var $button = $(this);
+        var $button = $(this),
+            doLogout;
 
         $button.addClass("working");
 
-        removePlayer(GBT.this_player, GBT.assignment, function (success) {
+        doLogout = function () {
             $.ajax({
                 url: "api/logout",
                 type: "POST",
@@ -486,7 +487,14 @@ $(function () {
                     $button.removeClass("working");
                 }
             });
+        };
 
+        if (GBT.is_admin || !GBT.this_player || !GBT.assignment) {
+            doLogout();
+            return;
+        }
+
+        removePlayer(GBT.this_player, GBT.assignment, function (success) {
             if (!success) {
                 errorDialog({
                     message: "There was a problem unassigning you from <em>" +
@@ -495,7 +503,9 @@ $(function () {
                     prev_location: ""
                 });
             }
+            doLogout();
         });
+
     });
 
     $("#reset-password").on("submit", function () {
@@ -637,7 +647,9 @@ $(function () {
         }
 
         $input = $(hash + " > form > input").first();
-        $input.get(0).focus();
+        if ($input.length) {
+            $input.get(0).focus();
+        }
     });
 
     // Toggle NPC 'found' status on either button click.
