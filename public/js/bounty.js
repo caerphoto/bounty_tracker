@@ -119,6 +119,9 @@ $(function () {
             this_player_u = GBT.this_player.toUpperCase();
             GBT.assignment = "";
             $.each(state, function (short_name, npc) {
+                if (!npc.players) {
+                    npc.players = [];
+                }
                 if (isInList(this_player_u, npc.players)) {
                     GBT.assignment = short_name;
                 }
@@ -148,7 +151,7 @@ $(function () {
                     };
                 });
             } else {
-                view.players = [];
+                view.players = npc.players = [];
             }
 
             $list.html(Mustache.render(player_list_template, view));

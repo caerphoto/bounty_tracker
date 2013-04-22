@@ -84,6 +84,11 @@ exports.assignPlayer = function (req, res) {
             npc_state.players = [];
         }
 
+        // Tidy up a bit.
+        if (npc_state.player) {
+            delete npc_state.player;
+        }
+
         // Search for given player in other NPCs' players[] lists and remove it,
         // to prevent a player from being assigned to more than one NPC.
         player_name = req.body.player_name.toUpperCase();
@@ -136,15 +141,24 @@ exports.removePlayer = function (req, res) {
     }
 
     db = redis.createClient();
-    db.hget(guild_key, "search_state", function (err, state) {
-        if (err || !state) {
+    db.hget(guild_key, "search_state", function (err, npc_state) {
+        if (err || !npc_state) {
             return res.send(500);
         }
 
-        state = JSON.parse(state);
-        removeFromList(player_name, state[npc_short_name].players);
-        state = JSON.stringify(state);
-        db.hset(guild_key, "search_state", state, function () {
+        npc_state = JSON.parse(npc_state);
+        if (!npc_state.players) {
+            npc_state.players = [];
+        }
+        // Tidy up a bit.
+        if (npc_state.player) {
+            delete npc_state.player;
+        }
+
+        removeFromList(player_name, npc_state[npc_short_name].players);
+        npc_state = JSON.stringify(npc_state);
+
+        db.hset(guild_key, "search_state", npc_state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
                 db.quit();
 
