@@ -3,6 +3,8 @@ exports.destroy = function (req, res) {
     "use strict";
     delete req.session.guildname;
     delete req.session.is_admin;
+    delete req.session.this_player;
+    delete req.session.assignment;
     req.session.destroy();
     res.send(200);
 };

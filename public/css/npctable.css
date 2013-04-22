@@ -7,8 +7,16 @@
     background: #fff;
 }
 
-tr:nth-child(even) {
+.npc-row:nth-child(even) {
     background: #f4f4f4;
+}
+
+body.logged-in .npc-row.found {
+    background: #ace7a6;
+}
+
+body.logged-in .npc-row.found:nth-child(even) {
+    background: #b8f7b2;
 }
 
 th {
@@ -76,39 +84,11 @@ td:last-child, th:last-child {
     color: #000;
 }
 
+body.admin .player-list li {
+    color: #000;
+}
+
 /* Specificity needed to override rules in buttons.css. */
-a.button.assign-player,
-.remove-player {
-    padding: 0;
-    margin: 0;
-    line-height: 1;
-    width: 1em;
-    height: 1.1em;
-}
-
-a.button.assign-player {
-    float: left;
-    margin-top: 0.2em;
-    margin-right: 0.5em;
-}
-
-#npc-table.assigned .assign-player {
-    display: none;
-}
-
-/* Button when not in the NPC table. */
-p a.button.assign-player {
-    margin-right: 0;
-    float: none;
-    display: inline-block;
-}
-
-.remove-player {
-    position: absolute;
-    left: 0.2em;
-    top: 0.2em;
-}
-
 body.admin .player-list .player-name {
     margin-left: 1.2em;
 }

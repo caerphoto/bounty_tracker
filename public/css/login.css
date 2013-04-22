@@ -8,14 +8,6 @@ body.logged-in  .logged-out {
     display: none !important;
 }
 
-body.logged-in .npc-row.found {
-    background: #8f8;
-}
-
-body.logged-in .npc-row.found:nth-child(even) {
-    background: #8e8;
-}
-
 body.logged-in .npc-row.found td {
     text-shadow: 0 1px 0 rgba(192,239,192, 0.7);
 }

@@ -194,10 +194,6 @@ $(function () {
             player_name = GBT.this_player;
         }
 
-        if (player_name && !GBT.this_player) {
-            GBT.this_player = player_name;
-        }
-
         $.ajax({
             url: "api/assign_player",
             type: "POST",
@@ -285,10 +281,11 @@ $(function () {
         });
     };
 
-    logIn = function () {
+    logIn = function (login_data) {
         $body.removeClass("demo logged-out");
         $body.addClass("logged-in");
-        $body.addClass(GBT.is_admin ? "admin" : "member");
+        $body.toggleClass("member", !GBT.is_admin);
+        $body.toggleClass("admin", !!GBT.is_admin);
         window.location.hash = "";
 
         $("#logged-in-guildname").text(GBT.guild_data.guildname);
@@ -297,6 +294,13 @@ $(function () {
 
         $("#login-guildname").get(0).blur();
         $("#login-password").get(0).blur();
+
+        GBT.guild_data = login_data.guild_data;
+        GBT.is_admin = login_data.is_admin;
+        GBT.search_state = login_data.search_state;
+
+        GBT.assignment = "";
+        GBT.this_player = "";
 
         if (GBT.search_state) {
             applyState();
@@ -326,8 +330,7 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                GBT.guild_data = response.guild_data;
-                logIn(true);
+                logIn(response);
 
                 // TODO: change this to something less terrible
                 window.alert("Success!");
@@ -368,11 +371,8 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                GBT.guild_data = response.guild_data;
-                GBT.is_admin = response.is_admin;
-                GBT.search_state = response.search_state;
                 form.password.value = "";
-                logIn();
+                logIn(response);
             },
             error: function (xhr) {
                 var view = {
@@ -538,7 +538,9 @@ $(function () {
         $submit_button.addClass("working");
 
         npc_short_name = form.npc_short_name.value;
-        GBT.this_player = player_name;
+        if (!GBT.is_admin) {
+            GBT.this_player = player_name;
+        }
         assignPlayer(player_name, npc_short_name, function (success, msg) {
             $submit_button.removeClass("working");
             window.location.hash = "";
@@ -577,7 +579,8 @@ $(function () {
         var $button = $(this),
             $row = $button.closest(".npc-row"),
             npc = npc_lookup[$row.data("short_name")],
-            $dialog_npc_name = $("#assign-player-npc");
+            $dialog_npc_name = $("#assign-player-npc"),
+            form;
 
         // Don't bother showing Enter Name dialog if the player name is already
         // known and player is a member.
@@ -593,12 +596,10 @@ $(function () {
         }
 
         $dialog_npc_name.html(npc.name);
-        document.getElementById("assign-player").npc_short_name.value = npc.short_name;
+        form = document.getElementById("assign-player");
+        form.npc_short_name.value = npc.short_name;
+        form.player_name.value = "";
 
-        //if (GBT.is_admin) {
-
-        //} else {
-        //}
     }).on("click", ".remove-player", function () {
         if (!GBT.is_admin) {
             return false;

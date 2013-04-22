@@ -93,6 +93,42 @@ input[type="submit"].working {
     background-image: url("/media/working_red.gif");
 }
 
+a.button.assign-player,
+.remove-player {
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    width: 1em;
+    height: 1.1em;
+}
+
+a.button.assign-player {
+    float: left;
+    margin-top: 0.2em;
+    margin-right: 0.5em;
+}
+
+.assign-player:after {
+    content: "•";
+}
+
+body.admin .assign-player:after {
+    content: "+";
+}
+
+/* Button when not in the NPC table. */
+p a.button.assign-player {
+    margin-right: 0;
+    float: none;
+    display: inline-block;
+}
+
+.remove-player {
+    position: absolute;
+    left: 0.2em;
+    top: 0.2em;
+}
+
 #stop-hunting {
     position: absolute;
     top: 0;
