@@ -222,7 +222,7 @@ exports.resetState = function (req, res) {
         redis = require("redis"),
         db;
 
-    if (!guild_key || req.session.is_admin) {
+    if (!guild_key || !req.session.is_admin) {
         return res.send(403);
     }
 
