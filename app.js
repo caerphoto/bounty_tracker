@@ -8,6 +8,7 @@ var express = require("express"),
     search_state = require("./api/search_state"),
     guild_info = require("./api/guild_info"),
     password = require("./api/password"),
+    utils = require("./lib/utils"),
 
     npc_list = require("./lib/npc_data").list,
 
@@ -106,4 +107,4 @@ if (app.get("env") === "production") {
 } else {
     app.listen(3000);
 }
-console.log("Listening on port 3000");
+utils.log("Started app. Listening on port 3000.");
