@@ -300,6 +300,7 @@ $(function () {
         $.ajax({
             url: "api/reset_state",
             type: "POST",
+            dataType: "json",
             success: function (clean_state) {
                 GBT.search_state = clean_state;
                 applyState();

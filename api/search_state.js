@@ -247,7 +247,7 @@ exports.resetState = function (req, res) {
 
     db = redis.createClient();
     db.exists(guild_key, function (err, exists) {
-        var new_state = utils.createNewState();
+        var new_state = JSON.stringify(utils.createNewState());
 
         if (!exists) {
             return res.send(500);
@@ -260,7 +260,7 @@ exports.resetState = function (req, res) {
                 "RESET"
             ].join(" "));
 
-            return res.json(new_state);
+            return res.send(new_state);
         });
     }); // db.hgetall()
 };
