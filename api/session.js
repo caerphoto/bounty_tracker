@@ -51,11 +51,6 @@ exports.create = function (req, res) {
 
                 // Track login stuff for analysis.
                 utils.recordLogin(guild_key);
-                utils.log([
-                    guild_key,
-                    req.session.is_admin ? "(admin)" : "(member)",
-                    "LOG IN"
-                ].join(" "));
             }
 
             if (match) {
@@ -66,6 +61,11 @@ exports.create = function (req, res) {
                     admin_email: reply.admin_email,
                     member_pw: reply.member_pw
                 };
+                utils.log([
+                    guild_key,
+                    "(admin)",
+                    "LOG IN"
+                ].join(" "));
                 return res.json(response_data);
             }
 
@@ -74,6 +74,11 @@ exports.create = function (req, res) {
                 response_data.guild_data = {
                     guildname: reply.guildname
                 };
+                utils.log([
+                    guild_key,
+                    "(member)",
+                    "LOG IN"
+                ].join(" "));
                 return res.json(response_data);
             }
 
