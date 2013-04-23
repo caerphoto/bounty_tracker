@@ -76,10 +76,10 @@ exports.assignPlayer = function (req, res) {
             return res.send(500);
         }
 
-        if (!full_state) {
-            full_state = utils.createNewState();
-        } else {
+        try {
             full_state = JSON.parse(full_state);
+        } catch (e) {
+            full_state = utils.createNewState();
         }
 
         npc_state = full_state[npc_short_name];
@@ -139,24 +139,23 @@ exports.removePlayer = function (req, res) {
     }
 
     db = redis.createClient();
-    db.hget(guild_key, "search_state", function (err, npc_state) {
-        if (err || !npc_state) {
+    db.hget(guild_key, "search_state", function (err, state) {
+        var utils = require("../lib/utils");
+
+        if (err || !state) {
             return res.send(500);
         }
 
-        npc_state = JSON.parse(npc_state);
-        if (!npc_state.players) {
-            npc_state.players = [];
-        }
-        // Tidy up a bit.
-        if (npc_state.player) {
-            delete npc_state.player;
+        try {
+            state = JSON.parse(state);
+            removeFromList(player_name, state[npc_short_name].players);
+        } catch (e) {
+            state = utils.createNewState();
         }
 
-        removeFromList(player_name, npc_state[npc_short_name].players);
-        npc_state = JSON.stringify(npc_state);
+        state = JSON.stringify(state);
 
-        db.hset(guild_key, "search_state", npc_state, function () {
+        db.hset(guild_key, "search_state", state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
                 db.quit();
 
@@ -192,10 +191,10 @@ exports.setNPCState = function (req, res) {
             return res.send(500);
         }
 
-        if (!guild_data.search_state) {
-            state = utils.createNewState();
-        } else {
+        try {
             state = JSON.parse(guild_data.search_state);
+        } catch (e) {
+            state = utils.createNewState();
         }
 
         state[short_name].found = found;

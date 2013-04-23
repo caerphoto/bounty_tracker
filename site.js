@@ -1,5 +1,6 @@
-var renderNoGuild = function (res) {
-    "use strict";
+"use strict";
+
+function renderNoGuild(res) {
     var utils = require("./lib/utils");
     res.render("index", {
         is_admin: false,
@@ -9,12 +10,11 @@ var renderNoGuild = function (res) {
         assignment: "",
         search_state: JSON.stringify(utils.createNewState())
     });
-};
+}
 
 exports.index = function (req, res) {
-    "use strict";
-
     var redis = require("redis"),
+        utils = require("./lib/utils"),
         db;
 
     if (req.session.guild_key) {
@@ -36,6 +36,12 @@ exports.index = function (req, res) {
             }
 
             search_state = reply.search_state;
+
+            try {
+                JSON.parse(search_state);
+            } catch (e) {
+                search_state = JSON.stringify(utils.createNewState());
+            }
 
             if (is_admin) {
                 guild_data = {

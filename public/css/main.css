@@ -53,9 +53,6 @@ header form,
     margin: 0 0.5em;
 }
 
-/* Default is to display normal member login status, but if the document body
- * has the "admin" class, show admin-y login stuff instead. */
-
 #logged-in-guildname {
     font-weight: 700;
 }
@@ -80,3 +77,33 @@ input:invalid {
     font-weight: bold;
     color: #ac1817;
 }
+
+.icon {
+    display: inline-block;
+    text-decoration: none;
+    text-indent: -9999em;
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+}
+
+a.icon:hover {
+    box-shadow:
+        0 0 5px 2px rgba(128,0,0,0.3);
+}
+
+#twitter-icon {
+    background-image: url("/media/twitter_icon16.png");
+}
+
+@media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2) {
+
+    #twitter-icon {
+        background-image: url("/media/twitter_icon32.png");
+    }
+}
+
