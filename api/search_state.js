@@ -1,10 +1,11 @@
 "use strict";
+var redis = require("redis"),
+    utils = require("../lib/utils");
 
 exports.fetch = function (req, res) {
     // Simplest method: return entire state as JSON if different, otherwise send
     // an HTTP 204 ("No content") response to indicate that nothing has changed.
-    var redis = require("redis"),
-        db = redis.createClient();
+    var db = redis.createClient();
 
     // Not logged in.
     if (!req.session.guild_key) {
@@ -55,9 +56,7 @@ function removeFromList(player_name, list) {
 exports.assignPlayer = function (req, res) {
     // Adds a player name to an NPC's list of assigned players, whilst also
     // ensuring that player does not appear in any other NPC's list.
-    var //npc = req.body.npc,
-        guild_key = req.session.guild_key,
-        redis = require("redis"),
+    var guild_key = req.session.guild_key,
         db;
 
     // Not logged in.
@@ -67,8 +66,7 @@ exports.assignPlayer = function (req, res) {
 
     db = redis.createClient();
     db.hget(guild_key, "search_state", function (err, full_state) {
-        var utils = require("../lib/utils"),
-            npc_short_name = req.body.npc_short_name,
+        var npc_short_name = req.body.npc_short_name,
             player_name,
             npc_state;
 
@@ -109,6 +107,15 @@ exports.assignPlayer = function (req, res) {
                     return res.send(500);
                 }
 
+                utils.log([
+                    guild_key,
+                    req.session.is_admin ? "(admin)" : "(member)",
+                    "ASSIGNED",
+                    req.body.player_name,
+                    "TO",
+                    npc_short_name
+                ].join(" "));
+
                 req.session.prev_state = new_state;
                 return res.send(new_state);
             });
@@ -123,7 +130,6 @@ exports.removePlayer = function (req, res) {
     var npc_short_name = req.body.npc_short_name,
         player_name = req.body.player_name,
         guild_key = req.session.guild_key,
-        redis = require("redis"),
         db;
 
     if (!guild_key) {
@@ -140,8 +146,6 @@ exports.removePlayer = function (req, res) {
 
     db = redis.createClient();
     db.hget(guild_key, "search_state", function (err, state) {
-        var utils = require("../lib/utils");
-
         if (err || !state) {
             return res.send(500);
         }
@@ -163,6 +167,15 @@ exports.removePlayer = function (req, res) {
                     return res.send(500);
                 }
 
+                utils.log([
+                    guild_key,
+                    req.session.is_admin ? "(admin)" : "(member)",
+                    "REMOVED",
+                    player_name,
+                    "FROM",
+                    npc_short_name
+                ].join(" "));
+
                 req.session.prev_state = new_state;
                 return res.send(new_state);
             });
@@ -173,7 +186,6 @@ exports.removePlayer = function (req, res) {
 exports.setNPCState = function (req, res) {
     // Sets the 'found' state of an NPC to either true or false.
     var guild_key = req.session.guild_key,
-        redis = require("redis"),
         db;
 
     if (!guild_key) {
@@ -184,7 +196,6 @@ exports.setNPCState = function (req, res) {
     db.hgetall(guild_key, function (err, guild_data) {
         var short_name = req.body.short_name,
             found = req.body.found === "true",
-            utils = require("../lib/utils"),
             state;
 
         if (!guild_data) {
@@ -207,6 +218,16 @@ exports.setNPCState = function (req, res) {
                 if (!new_state) {
                     return res.send(500);
                 }
+
+                utils.log([
+                    guild_key,
+                    req.session.is_admin ? "(admin)" : "(member)",
+                    "SET",
+                    short_name,
+                    "TO",
+                    found
+                ].join(" "));
+
                 req.session.prev_state = new_state;
                 // No need to send the full state since we're only toggling a
                 // boolean.
@@ -218,7 +239,6 @@ exports.setNPCState = function (req, res) {
 
 exports.resetState = function (req, res) {
     var guild_key = req.session.guild_key,
-        redis = require("redis"),
         db;
 
     if (!guild_key || !req.session.is_admin) {
@@ -227,14 +247,19 @@ exports.resetState = function (req, res) {
 
     db = redis.createClient();
     db.exists(guild_key, function (err, exists) {
-        var utils = require("../lib/utils"),
-            new_state = utils.createNewState();
+        var new_state = utils.createNewState();
 
         if (!exists) {
             return res.send(500);
         }
 
         db.hset(guild_key, "search_state", new_state, function () {
+            utils.log([
+                guild_key,
+                req.session.is_admin ? "(admin)" : "(member)",
+                "RESET"
+            ].join(" "));
+
             return res.json(new_state);
         });
     }); // db.hgetall()
