@@ -3,7 +3,11 @@ var utils = require("../lib/utils");
 
 exports.destroy = function (req, res) {
     // Log out
-    utils.log(req.session.guild_key + " LOG OUT");
+    utils.log([
+        req.session.guild_key,
+        req.session.is_admin ? "(admin)" : "(member)",
+        "LOG OUT"
+    ].join(" "));
     delete req.session.guild_key;
     delete req.session.is_admin;
     delete req.session.this_player;
@@ -47,7 +51,11 @@ exports.create = function (req, res) {
 
                 // Track login stuff for analysis.
                 utils.recordLogin(guild_key);
-                utils.log(guild_key + " LOG IN");
+                utils.log([
+                    guild_key,
+                    req.session.is_admin ? "(admin)" : "(member)",
+                    "LOG IN"
+                ].join(" "));
             }
 
             if (match) {
