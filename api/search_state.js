@@ -18,7 +18,7 @@ exports.fetch = function (req, res) {
             return res.send(500);
         }
 
-        if (false && reply.search_state === req.session.prev_state) {
+        if (reply.search_state === req.session.prev_state) {
             return res.send(204); // No content
         } else {
             req.session.prev_state = reply.search_state;
