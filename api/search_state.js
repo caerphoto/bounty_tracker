@@ -84,11 +84,6 @@ exports.assignPlayer = function (req, res) {
 
         npc_state = full_state[npc_short_name];
 
-        // Tidy up a bit.
-        if (npc_state.player) {
-            delete npc_state.player;
-        }
-
         // Search for given player in other NPCs' players[] lists and remove it,
         // to prevent a player from being assigned to more than one NPC.
         player_name = req.body.player_name.toUpperCase();
