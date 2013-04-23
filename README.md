@@ -127,4 +127,3 @@ vouch for it.
 
 * Create setup script for the PHP version of the app.
 * Change PHP version to use MySQL, since it's more commonly used than Postgres.
-* Improve guild member name entry, to allow for multiple names per NPC.
