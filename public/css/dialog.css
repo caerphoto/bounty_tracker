@@ -55,7 +55,7 @@ input[type="email"]:focus {
 }
 
 #assign-player {
-    width: 25em;
+    max-width: 25em;
 }
 
 .error-code {
