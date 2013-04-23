@@ -15,7 +15,7 @@ else
 fi
 
 trap 'test -n "$SUCCESS" || echo "  error: aborted"' EXIT
-echo "* Deploying $ENVIRONMENT/$REF"
+echo "* Deploying $REF branch to $ENVIRONMENT"
 
 ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
     git reset --hard && \
