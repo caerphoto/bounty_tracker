@@ -44,6 +44,8 @@ exports.reset = function (req, res) {
         return res.send(400); // Bad request
     }
 
+    console.log("Checking guild exists");
+
     req.body.admin_email = req.body.admin_email.toLowerCase();
 
     guild_key = utils.generateKey(req.body.guildname);
@@ -53,6 +55,7 @@ exports.reset = function (req, res) {
             db.quit();
             return res.send(404);
         }
+        console.log("Getting guild name and email");
         db.hmget(guild_key, "guildname", "admin_email", function (err, reply) {
             var new_password = randomPassword(20),
                 guildname = reply[0],
@@ -62,8 +65,10 @@ exports.reset = function (req, res) {
                 return res.send(403);
             }
 
+            console.log("Hashing random password");
             bcrypt.hash(new_password, 8, function (err, hash) {
 
+                console.log("Sending mail");
 
                 sendEmail(guildname, admin_email, new_password, function (err) {
                     if (err) {
