@@ -395,7 +395,8 @@ $(function () {
                 admin_email: form.admin_email.value,
                 admin_pw: form.admin_pw.value,
                 admin_pw_confirm: form.admin_pw_confirm.value,
-                member_pw: form.member_pw.value
+                member_pw: form.member_pw.value,
+                temporary: form.temporary.checked ? "true" : ""
             },
             dataType: "json",
             success: function (response) {
