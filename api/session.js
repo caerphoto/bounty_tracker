@@ -3,11 +3,11 @@ var utils = require("../lib/utils");
 
 exports.destroy = function (req, res) {
     // Log out
-    utils.log([
-        req.session.guild_key,
-        req.session.is_admin ? "(admin)" : "(member)",
-        "LOG OUT"
-    ].join(" "));
+    utils.log(
+        "LOGOUT",
+        req.session.guild_key.slice(6),
+        req.session.is_admin ? "admin" : "member"
+    );
     delete req.session.guild_key;
     delete req.session.is_admin;
     delete req.session.this_player;
@@ -61,11 +61,11 @@ exports.create = function (req, res) {
                     admin_email: reply.admin_email,
                     member_pw: reply.member_pw
                 };
-                utils.log([
-                    guild_key,
-                    "(admin)",
-                    "LOG IN"
-                ].join(" "));
+                utils.log(
+                    "LOGIN",
+                    guild_key.slice(6),
+                    "admin"
+                );
                 return res.json(response_data);
             }
 
@@ -74,13 +74,15 @@ exports.create = function (req, res) {
                 response_data.guild_data = {
                     guildname: reply.guildname
                 };
-                utils.log([
-                    guild_key,
-                    "(member)",
-                    "LOG IN"
-                ].join(" "));
+                utils.log(
+                    "LOGIN",
+                    guild_key.slice(6),
+                    "member"
+                );
                 return res.json(response_data);
             }
+
+            utils.log("FAILED LOGIN", req.body.guildname, req.body.password);
 
             // Doesn't match anything.
             return res.send(403);

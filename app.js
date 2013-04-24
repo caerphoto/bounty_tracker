@@ -107,4 +107,4 @@ if (app.get("env") === "production") {
 } else {
     app.listen(3000);
 }
-utils.log("Started app. Listening on port 3000.");
+utils.log("LOAD APP", "port 3000");

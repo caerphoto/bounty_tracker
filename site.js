@@ -21,7 +21,7 @@ exports.index = function (req, res) {
         db = redis.createClient();
 
         db.on("error", function (err) {
-            console.log("Redis Error:", err);
+            utils.log("Redis Error", err);
         });
 
         db.hgetall(req.session.guild_key, function (err, reply) {

@@ -107,14 +107,13 @@ exports.assignPlayer = function (req, res) {
                     return res.send(500);
                 }
 
-                utils.log([
-                    guild_key,
-                    req.session.is_admin ? "(admin)" : "(member)",
-                    "ASSIGNED",
+                utils.log(
+                    "ASSIGN",
+                    guild_key.slice(6),
+                    req.session.is_admin ? "admin" : "member",
                     req.body.player_name,
-                    "TO",
                     npc_short_name
-                ].join(" "));
+                );
 
                 req.session.prev_state = new_state;
                 return res.send(new_state);
@@ -167,14 +166,13 @@ exports.removePlayer = function (req, res) {
                     return res.send(500);
                 }
 
-                utils.log([
-                    guild_key,
-                    req.session.is_admin ? "(admin)" : "(member)",
-                    "REMOVED",
+                utils.log(
+                    "REMOVE",
+                    guild_key.slice(6),
+                    req.session.is_admin ? "admin" : "member",
                     player_name,
-                    "FROM",
                     npc_short_name
-                ].join(" "));
+                );
 
                 req.session.prev_state = new_state;
                 return res.send(new_state);
@@ -219,14 +217,13 @@ exports.setNPCState = function (req, res) {
                     return res.send(500);
                 }
 
-                utils.log([
-                    guild_key,
-                    req.session.is_admin ? "(admin)" : "(member)",
+                utils.log(
                     "SET",
+                    guild_key.slice(6),
+                    req.session.is_admin ? "admin" : "member",
                     short_name,
-                    "TO",
                     found
-                ].join(" "));
+                );
 
                 req.session.prev_state = new_state;
 
@@ -261,11 +258,11 @@ exports.resetState = function (req, res) {
         }
 
         db.hset(guild_key, "search_state", new_state, function () {
-            utils.log([
-                guild_key,
-                req.session.is_admin ? "(admin)" : "(member)",
-                "RESET"
-            ].join(" "));
+            utils.log(
+                "RESET",
+                guild_key.slice(6),
+                req.session.is_admin ? "admin" : "member"
+            );
 
             return res.send(new_state);
         });
