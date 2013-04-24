@@ -25,6 +25,7 @@ function sendEmail(guildname, email, password, callback) {
         ].join("\r\n\r\n"),
         mailer = require("nodemailer").createTransport("sendmail");
 
+    console.log("Sending...");
     mailer.sendMail({
         from: "no-reply@caerphoto.com",
         to: email,
