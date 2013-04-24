@@ -23,7 +23,9 @@ function sendEmail(guildname, email, password, callback) {
             "For extra security (and because it's not very memorable), please change it the next time you log in.",
             "- Guild Bounty Tracker · http://caerphoto.com/guild_bounty/"
         ].join("\r\n\r\n"),
-        mailer = require("nodemailer").createTransport("sendmail");
+        mailer = require("nodemailer").createTransport("sendmail", {
+            path: "/usr/sbin/sendmail"
+        });
 
     try {
         mailer.sendMail({
