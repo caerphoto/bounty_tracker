@@ -72,7 +72,7 @@ exports.create = function (req, res) {
             utils.recordLogin(guild_key);
 
             db.hgetall(guild_key, function (err, reply) {
-                var new_guild,
+                var response,
                     TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
 
                 db.quit();
@@ -81,13 +81,28 @@ exports.create = function (req, res) {
                     req.session.is_admin = true;
                     req.session.cookie.maxAge = TWO_WEEKS_IN_MS;
 
-                    new_guild = {
-                        admin_email: reply.admin_email,
-                        member_pw: reply.member_pw,
-                        guildname: reply.guildname,
-                        search_state: reply.search_state
+                    response = {
+                        guild_data: {
+                            admin_email: reply.admin_email,
+                            member_pw: reply.member_pw,
+                            guildname: reply.guildname
+                        },
+                        is_admin: true
                     };
-                    res.json(200, { guild_data: new_guild });
+
+                    try {
+                        response.search_state = JSON.parse(reply.search_state);
+                    } catch (e) {
+                        response.search_state = utils.createNewState();
+                    }
+
+                    utils.log(
+                        "REGISTER",
+                        reply.guildname,
+                        reply.admin_email
+                    );
+
+                    res.json(200, response);
                 } else {
                     res.send(404);
                 }

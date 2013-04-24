@@ -1,10 +1,9 @@
-/*jslint node: true, devel: true*/
+"use strict";
 
 var randomPassword,
     sendEmail;
 
-randomPassword = function (length) {
-    "use strict";
+function randomPassword(length) {
     var chars = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789_",
         pass = [],
         i;
@@ -15,10 +14,9 @@ randomPassword = function (length) {
     }
 
     return pass.join("");
-};
+}
 
-sendEmail = function (guildname, email, password, callback) {
-    "use strict";
+function sendEmail(guildname, email, password, callback) {
     var msg = [
             "The admin password for the guild #" + guildname + "' has been reset to:",
             password,
@@ -33,11 +31,9 @@ sendEmail = function (guildname, email, password, callback) {
         subject: "[Guild Bounty Tracker] Password reset for " + guildname,
         text: msg
     }, callback);
-};
+}
 
 exports.reset = function (req, res) {
-    "use strict";
-
     var redis = require("redis"),
         utils = require("../lib/utils"),
         bcrypt = require("bcrypt"),
@@ -67,15 +63,22 @@ exports.reset = function (req, res) {
             }
 
             bcrypt.hash(new_password, 8, function (err, hash) {
-                db.hset(guild_key, "admin_pw", hash);
-                db.quit();
 
 
                 sendEmail(guildname, admin_email, new_password, function (err) {
                     if (err) {
                         console.log("Mailer error:", err);
+                        return res.send(500);
                     }
-                    res.send(err ? 500 : 204);
+
+                    db.hset(guild_key, "admin_pw", hash);
+                    db.quit();
+
+                    utils.log(
+                        "PASSWORD RESET",
+                        guild_key.slice(6)
+                    );
+                    res.send(204);
                 });
             });
         });

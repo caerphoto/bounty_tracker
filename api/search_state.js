@@ -110,7 +110,7 @@ exports.assignPlayer = function (req, res) {
                 utils.log(
                     "ASSIGN",
                     guild_key.slice(6),
-                    req.session.is_admin ? "admin" : "member",
+                    req.session.is_admin ? "a" : "m",
                     req.body.player_name,
                     npc_short_name
                 );
@@ -169,7 +169,7 @@ exports.removePlayer = function (req, res) {
                 utils.log(
                     "REMOVE",
                     guild_key.slice(6),
-                    req.session.is_admin ? "admin" : "member",
+                    req.session.is_admin ? "a" : "m",
                     player_name,
                     npc_short_name
                 );
@@ -218,9 +218,9 @@ exports.setNPCState = function (req, res) {
                 }
 
                 utils.log(
-                    "SET",
+                    "NPC STATE",
                     guild_key.slice(6),
-                    req.session.is_admin ? "admin" : "member",
+                    req.session.is_admin ? "a" : "m",
                     short_name,
                     found
                 );
@@ -261,7 +261,7 @@ exports.resetState = function (req, res) {
             utils.log(
                 "RESET",
                 guild_key.slice(6),
-                req.session.is_admin ? "admin" : "member"
+                req.session.is_admin ? "a" : "m"
             );
 
             return res.send(new_state);

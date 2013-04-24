@@ -6,7 +6,7 @@ exports.destroy = function (req, res) {
     utils.log(
         "LOGOUT",
         req.session.guild_key.slice(6),
-        req.session.is_admin ? "admin" : "member"
+        req.session.is_admin ? "a" : "m"
     );
     delete req.session.guild_key;
     delete req.session.is_admin;
@@ -64,7 +64,7 @@ exports.create = function (req, res) {
                 utils.log(
                     "LOGIN",
                     guild_key.slice(6),
-                    "admin"
+                    "a"
                 );
                 return res.json(response_data);
             }
@@ -77,7 +77,7 @@ exports.create = function (req, res) {
                 utils.log(
                     "LOGIN",
                     guild_key.slice(6),
-                    "member"
+                    "m"
                 );
                 return res.json(response_data);
             }

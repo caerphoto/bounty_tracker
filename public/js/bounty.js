@@ -225,6 +225,11 @@ $(function () {
             player_name = GBT.this_player;
         }
 
+        // No point assigning player to NPC if they're already assigned.
+        if (GBT.assignment && npc_short_name === GBT.assignment) {
+            return false;
+        }
+
         $.ajax({
             url: "api/assign_player",
             type: "POST",

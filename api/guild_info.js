@@ -2,8 +2,9 @@ exports.update = function (req, res) {
     "use strict";
     var guild_key = req.session.guild_key,
         redis = require("redis"),
-        db = redis.createClient(),
-        bcrypt = require("bcrypt");
+        bcrypt = require("bcrypt"),
+        utils = require("../lib/utils"),
+        db = redis.createClient();
 
     if (!guild_key || !req.session.is_admin) {
         return res.send(403); // Forbidden
@@ -52,6 +53,11 @@ exports.update = function (req, res) {
                 admin_email: guild_data.admin_email,
                 member_pw: guild_data.member_pw
             };
+
+            utils.log(
+                "UPDATE GUILD",
+                guild_data.guildname
+            );
 
             return res.json(response_data);
         });
