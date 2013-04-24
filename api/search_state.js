@@ -229,9 +229,16 @@ exports.setNPCState = function (req, res) {
                 ].join(" "));
 
                 req.session.prev_state = new_state;
+
+                try {
+                    new_state = JSON.parse(new_state);
+                } catch (e) {
+                    new_state = utils.createNewState();
+                }
+
                 // No need to send the full state since we're only toggling a
                 // boolean.
-                return res.send(JSON.parse(new_state)[short_name].found);
+                return res.send(new_state[short_name].found);
             });
         });
     });
