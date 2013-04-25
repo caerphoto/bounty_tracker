@@ -1,5 +1,11 @@
+# This is a list of the JavaScript files to include on the main page, and is
+# read once on app startup.
+# The files are included in the order they appear here, and when minified are
+# concatenated in the same order.
+
 public/js/lib/prefixfree.min.js
 public/js/lib/jquery.custom.min.js
 public/js/lib/mustache.js
 public/js/lib/soundmanager2-min.js
+
 public/js/bounty.js

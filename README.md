@@ -36,6 +36,9 @@ version much simpler. Ideally it'd just be a case of running a `setup.php`
 script and everything is magically done for you. This won't be a priority,
 though, so don't hold your breath – my main focus is the Node version.
 
+Anyway, the instructions below are what worked for me, and may be incomplete as
+I wrote them after I'd installed the app on my server.
+
 ### Outline
 
 The general procedure for getting the app up and running is:

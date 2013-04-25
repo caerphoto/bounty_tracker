@@ -25,7 +25,7 @@ hgroup {
 <![endif]-->
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0">
 <% cssfiles.forEach(function (filename) { %>
-    <link rel="stylesheet" href="<%= filename %>"> <% }); %>
+    <link rel="stylesheet" href="<%= filename %>"><% }); %>
 
     <link rel="shortcut icon" href="/media/favicon.ico">
     <title>Guild Bounty Tracker</title>
@@ -288,8 +288,7 @@ hgroup {
     </script>
 
 <% jsfiles.forEach(function (filename) { %>
-    <script src="<%= filename %>"></script>
-<% }); %>
+    <script src="<%= filename %>"></script><% }); %>
 
     <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>

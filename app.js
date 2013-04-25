@@ -20,7 +20,8 @@ var express = require("express"),
 init = function (env) {
     var fs = require("fs"),
         f,
-        jsfiles = [], cssfiles = [];
+        jsfiles = [], cssfiles = [],
+        is_comment = /^\s*#/;
 
     app.set("views", __dirname + "/views");
     app.set("view engine", "ejs");
@@ -45,7 +46,7 @@ init = function (env) {
         f = f.split("\n");
 
         f.forEach(function (filename) {
-            if (filename) {
+            if (filename && !is_comment.test(filename)) {
                 jsfiles.push(filename.replace("public", ""));
             }
         });
@@ -54,7 +55,7 @@ init = function (env) {
         f = f.split("\n");
 
         f.forEach(function (filename) {
-            if (filename) {
+            if (filename && !is_comment.test(filename)) {
                 cssfiles.push(filename.replace("public", ""));
             }
         });
