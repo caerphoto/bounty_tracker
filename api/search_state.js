@@ -217,13 +217,23 @@ exports.setNPCState = function (req, res) {
                     return res.send(500);
                 }
 
-                utils.log(
-                    "NPC STATE",
-                    guild_key.slice(6),
-                    req.session.is_admin ? "a" : "m",
-                    short_name,
-                    found
-                );
+                if (found) {
+                    utils.log(
+                        "FOUND",
+                        guild_key.slice(6),
+                        req.session.is_admin ? "a" : "m",
+                        req.session.this_player || "[admin]",
+                        short_name
+                    );
+                } else {
+                    utils.log(
+                        "LOST",
+                        guild_key.slice(6),
+                        req.session.is_admin ? "a" : "m",
+                        req.session.this_player || "[admin]",
+                        short_name
+                    );
+                }
 
                 req.session.prev_state = new_state;
 

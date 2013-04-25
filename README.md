@@ -10,9 +10,6 @@ The reference implementation is here:
 
 <http://bounty.caer.me/>
 
-Probably it's easiest if you use that, but if you'd rather run the app on your
-own private server or whatever, you're welcome to do that.
-
 The first step is to register your guild. This will create a guild account, with
 the Admin login being for you (and other officers, if you share the admin
 password with them), and the Member login being for regular members. Both logins
@@ -26,17 +23,18 @@ password, and change the Admin email address or password. Admins also have a
 Reset button they can use to clear all names and Found statuses from the table
 in one go.
 
-## Installation
+## Installing on your own server
 
-**NOTE:** Installing requires full access to the server, and as such will
-probably not be possible on a shared server. You'll need a dedicated or virtual
-server to install this app on.
+**NOTE:** The Bounty Tracker is a Node application, which probably means it
+can't be run on shared hosting as providers don't usually support installation
+of long-running software like Node (or Ruby/Rails or Python/Django).
 
-Although the app is currently undergoing a rewrite in Node, I understand many
-people will be using shared servers where the only options are PHP and MySQL, so
-once the Node version is up and running, I'll get to work on making the
-installation of the PHP version much simpler. Ideally it'd just be a case of
-running a `setup.php` script and everything is magically done for you.
+Although the app is written in Node, I understand many people will be using
+shared servers where the only options are PHP and MySQL, so once the Node
+version is up and running, I'll look into making the installation of the PHP
+version much simpler. Ideally it'd just be a case of running a `setup.php`
+script and everything is magically done for you. This won't be a priority,
+though, so don't hold your breath – my main focus is the Node version.
 
 ### Outline
 
@@ -52,9 +50,9 @@ The dependencies in step 1 are:
 1. [Git] – version control and source control
 2. [Node] – runs the actual application
 3. [Redis] – key/value-based data store
-4. [JSMin] – JavaScript minifier
-5. [Clean-CSS] – CSS minifier
-6. [Forever] – restarts the application server if it crashes
+4. *[JSMin] – JavaScript minifier*
+5. *[Clean-CSS] – CSS minifier*
+6. *[Forever] – restarts the application server if it crashes*
 
 Each item links to a page explaining how to install it. The guides I've chosen
 here are generally for Ubuntu, as that's what my staging and production servers
@@ -86,7 +84,7 @@ You can then start the server with `node app.js` and then visit
 `http://localhost:3000/` to see the app running.
 
 In production, `/var/www` is a common install location. You'll need to perform
-the following operations either as as another the required permissions; [this
+the following operations as a user with the required permissions; [this
 SuperUser post] explains how to set up a user group that has the necessary
 permissions, so you don't have to keep typing `sudo` (or worse, logging in as
 root).
@@ -127,3 +125,5 @@ vouch for it.
 
 * Create setup script for the PHP version of the app.
 * Change PHP version to use MySQL, since it's more commonly used than Postgres.
+* Maybe bring the PHP version up to par with the Node one in terms of features?
+  I really don't like working with PHP so this is far from guaranteed.
