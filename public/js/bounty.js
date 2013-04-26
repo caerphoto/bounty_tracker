@@ -19,6 +19,7 @@ $(function () {
         idle_timer,
 
         has_played_sound = false,
+        prev_hash, // stores the previous location hash
 
         base_doc_title = document.title,
 
@@ -647,10 +648,74 @@ $(function () {
         return false;
     });
 
+    $("#confirm-reset").on("submit", function () {
+        var $reset_button = $(this.elements[0]);
+
+        $reset_button.addClass("working");
+
+        resetState(function () {
+            window.location.hash = "";
+            $reset_button.removeClass("working");
+        });
+
+        return false;
+    });
+
+    $("#feedback-form").on("submit", function () {
+        var form = this,
+            $button = $(form.elements[1]);
+
+        $button.addClass("working");
+
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: {
+                message: form.message.value
+            },
+            complete: function () {
+                $button.removeClass("working");
+                window.location.hash = "";
+            },
+            success: function () {
+                form.message.value = "";
+
+                setTimeout(function () {
+                    window.alert("Thank you for your feedback :)");
+                }, 10);
+            },
+            error: function () {
+                setTimeout(function () {
+                    window.alert("There was a problem sending your feedback :(");
+                }, 10);
+            }
+        });
+
+        return false;
+    });
+
     $(window).on("hashchange", function () {
-        // Generic dialog input box focusser thing.
+        // Generic dialog shower/hider and input box focusser thing.
         var hash = window.location.hash,
             $input;
+
+        // Classes are added/removed rather than just using the :target selector
+        // in CSS because transitions are not supported to/from :target, and
+        // this way also means finer-grained control over when things happen.
+        // Bonus: it might work in IE8 too!
+        $(hash).removeClass("previous").addClass("current");
+        $(prev_hash).removeClass("current").addClass("previous");
+
+        // Removing the "previous" class means the dialog loses its "display:
+        // block" property, so delay this until the opacity transition is (or
+        // should have) finished.
+        (function (h) {
+            setTimeout(function () {
+                $(h).removeClass("previous");
+            }, 300); // same as animation length defined in CSS rule.
+        }(prev_hash));
+
+        prev_hash = hash;
 
         if (!hash || hash === "#") {
             return;
@@ -658,7 +723,14 @@ $(function () {
 
         $input = $(hash + " > form > input").first();
         if ($input.length) {
-            $input.get(0).focus();
+            setTimeout(function () {
+                $input.get(0).focus();
+            }, 0); // bump focus action to the end of the queue
+        } else {
+            $input = $(hash + " > form > textarea").first().get(0);
+            if ($input) {
+                $input.focus();
+            }
         }
     });
 
@@ -740,15 +812,6 @@ $(function () {
         fetchState();
     });
 
-    $("#reset").on("click", function () {
-        var $button = $(this);
-        $button.addClass("working");
-
-        resetState(function () {
-            $button.removeClass("working");
-        });
-    });
-
     // Idle timer: disable auto-sync if no activity for 3 hours.
     $body.on("mousemove keyup", function () {
         idle_time = 0;
@@ -785,4 +848,5 @@ $(function () {
         beginAutoSync();
     }
 
+    window.location.hash = "";
 });

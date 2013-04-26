@@ -42,11 +42,22 @@ p {
 
 a {
     color: #b00;
+    border-color: #b00;
     text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
+}
+
+a[href^="#"] {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+}
+
+a[href^="#"]:hover {
+    border-bottom-style: solid;
+    text-decoration: none;
 }
 
 em {

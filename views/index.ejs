@@ -177,6 +177,29 @@ hgroup {
       <div id="error"></div>
     </section>
 
+    <section id="confirm-reset-dialog" class="dialog">
+      <form id="confirm-reset" action="#">
+        <h2>Confirm</h2>
+        <p>Please confirm you want to <em>reset all NPC states</em>.
+        <div class="button-bar">
+          <a href="#" class="button">Cancel</a>
+          <input type="submit" value="OK">
+        </div>
+      </form>
+    </section>
+
+    <section id="feedback-dialog" class="dialog">
+      <form id="feedback-form" action="api/feedback" method="POST">
+        <h2>Leave Feedback</h2>
+        <p>What would you like to say?</p>
+        <textarea name="message"></textarea>
+        <div class="button-bar">
+          <a href="#" class="button">Cancel</a>
+          <input type="submit" value="Send">
+        </div>
+      </form>
+    </section>
+
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
       <p class="intro info logged-out">This tool is to assist guilds with the
@@ -264,17 +287,21 @@ hgroup {
         <label for="toggle-autosync" title="Will be turned off after 3 hours of inactivity.">Auto-sync</label>
 
         <button id="manual-refresh" class="disabled">Refresh</button>
-        <button id="reset" class="reset for-admins">Reset</button>
+        <a id="reset" href="#confirm-reset-dialog" class="reset button for-admins">Reset</a>
       </div>
 
     </section>
 
     <footer>
-      <p>By <a href="//caer.me/">Andy Farrell</a> &middot;
+      <p>
+      By <a href="//caer.me/">Andy Farrell</a> &middot;
       <a class="icon" id="twitter-icon" href="https://twitter.com/caerphoto"
         target="_blank">twitter</a> &middot;
       source available <a href="https://github.com/caerphoto/bounty_tracker">on
-        GitHub</a></p> </footer>
+        GitHub</a> &middot;
+      <a href="#feedback-dialog">leave feedback</a>
+      </p>
+    </footer>
 
     <script>
       var GBT = {

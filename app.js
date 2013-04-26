@@ -8,6 +8,8 @@ var express = require("express"),
     search_state = require("./api/search_state"),
     guild_info = require("./api/guild_info"),
     password = require("./api/password"),
+    feedback = require("./api/feedback"),
+
     utils = require("./lib/utils"),
 
     npc_list = require("./lib/npc_data").list,
@@ -98,6 +100,8 @@ app.post("/api/remove_player", search_state.removePlayer);
 app.post("/api/reset_state", search_state.resetState);
 app.post("/api/set_npc_state", search_state.setNPCState);
 app.get("/api/search_state", search_state.fetch);
+
+app.post("/api/feedback", feedback.log);
 
 app.get("/", site.index);
 

@@ -30,13 +30,20 @@ input[type="email"]:focus {
     z-index: 2;
     background: rgba(192,192,192, 0.6);
 
+    opacity: 0;
     display: none;
 }
 
-.dialog:target {
+.dialog.current {
     display: block;
+    opacity: 1;
 }
 
+.dialog.previous {
+    display: block;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
 
 .dialog > form,
 .dialog > div {
@@ -54,6 +61,8 @@ input[type="email"]:focus {
     width: 15em;
 }
 
+#confirm-reset,
+#feedback-form,
 #assign-player {
     max-width: 25em;
 }
@@ -123,4 +132,15 @@ input + .button-bar {
 
 #reset-password > input {
     width: 20em;
+}
+
+#feedback-form > textarea {
+    font: inherit;
+    line-height: 1.2;
+    display: block;
+    box-sizing: border-box;
+    padding: 0.5em;
+    width: 100%;
+    height: 8em;
+    margin-bottom: 1em;
 }
