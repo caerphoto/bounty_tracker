@@ -64,7 +64,7 @@ input[type="email"]:focus {
 #confirm-reset,
 #feedback-form,
 #assign-player {
-    max-width: 25em;
+    max-width: 26em;
 }
 
 .error-code {
