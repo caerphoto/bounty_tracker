@@ -29,14 +29,14 @@ function sendEmail(guildname, email, password, callback) {
 
     try {
         mailer.sendMail({
-            from: "no-reply@caerphoto.com",
+            from: "no-reply@caer.me",
             to: email,
             subject: "[Guild Bounty Tracker] Password reset for " + guildname,
             text: msg
         }, callback);
     } catch (e) {
         if (typeof callback === "function") {
-            callback(true);
+            callback("exception when calling mailer.sendMail()");
         }
     }
 }

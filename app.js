@@ -10,6 +10,7 @@ var express = require("express"),
     password = require("./api/password"),
     feedback = require("./api/feedback"),
 
+    secrets = require("./lib/secrets"),
     utils = require("./lib/utils"),
 
     npc_list = require("./lib/npc_data").list,
@@ -32,7 +33,7 @@ init = function (env) {
     app.use(express.cookieParser());
     app.use(express.session({
         store: new RedisStore(),
-        secret: "just testing"
+        secret: secrets.session_secret
     }));
 
     // Handle errors, rather than just exiting.

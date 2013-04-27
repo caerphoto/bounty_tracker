@@ -671,7 +671,8 @@ $(function () {
             url: form.action,
             type: form.method,
             data: {
-                message: form.message.value
+                message: form.message.value,
+                contact: form.contact.value
             },
             complete: function () {
                 $button.removeClass("working");
@@ -721,15 +722,17 @@ $(function () {
             return;
         }
 
-        $input = $(hash + " > form > input").first();
-        if ($input.length) {
+        $input = $(hash + " > form > textarea").first().get(0);
+        if ($input) {
             setTimeout(function () {
-                $input.get(0).focus();
-            }, 0); // bump focus action to the end of the queue
-        } else {
-            $input = $(hash + " > form > textarea").first().get(0);
-            if ($input) {
                 $input.focus();
+            }, 10); // bump focus action to the end of the queue
+        } else {
+            $input = $(hash + " > form > input").first().get(0);
+            if ($input) {
+                setTimeout(function () {
+                    $input.focus();
+                }, 10); // bump focus action to the end of the queue
             }
         }
     });

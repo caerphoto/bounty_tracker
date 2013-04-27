@@ -1,5 +1,6 @@
 /* Dialog and text-related input styles. */
 
+textarea,
 input[type="text"],
 input[type="password"],
 input[type="email"] {
@@ -13,9 +14,11 @@ input[type="email"] {
     box-shadow: 1px 1px 4px rgba(0,0,0,0.1) inset;
 }
 
+textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus {
+    outline: none;
     border-color: #8e1413;
     box-shadow: 0 0 7px 1px rgba(64,0,0,0.2);
 }

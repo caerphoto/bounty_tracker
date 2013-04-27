@@ -192,8 +192,11 @@ hgroup {
     <section id="feedback-dialog" class="dialog">
       <form id="feedback-form" action="api/feedback" method="POST">
         <h2>Leave Feedback</h2>
-        <p>What would you like to say?</p>
-        <textarea name="message"></textarea>
+        <label for="feedback-message">What would you like to say?</label>
+        <textarea id="feedback-message" name="message"></textarea>
+        <label for="feedback-contact">Contact details – leave blank to leave
+          anonymous feedback:</label>
+        <input type="text" name="contact" id="feedback-contact">
         <div class="button-bar">
           <a href="#" class="button">Cancel</a>
           <input type="submit" value="Send">
