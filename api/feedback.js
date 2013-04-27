@@ -35,7 +35,7 @@ exports.log = function (req, res) {
                 utils.log("feedback.log()", err);
                 return res.send(500);
             } else {
-                utils.log("FEEDBACK", msg.slice(0, 50));
+                utils.log("FEEDBACK", contact, msg.slice(0, 50));
                 return res.send(204);
             }
         });

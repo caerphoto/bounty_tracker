@@ -7,3 +7,4 @@ deploy
 dump.rdb
 public/css/bounty.min*
 public/js/bounty.min*
+lib/secrets.js
