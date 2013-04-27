@@ -28,7 +28,9 @@ exports.log = function (req, res) {
                 subject: "New Bounty Tracker feedback",
                 text: "New feedback from " + contact + ":\n\n" + msg
             }, function (mail_err) {
-                console.log("Feedback mail error:" + mail_err);
+                if (mail_err) {
+                    console.log("Feedback mail error:" + mail_err);
+                }
             });
 
             if (err) {
