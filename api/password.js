@@ -18,10 +18,10 @@ function randomPassword(length) {
 
 function sendEmail(guildname, email, password, callback) {
     var msg = [
-            "The admin password for the guild #" + guildname + "' has been reset to:",
+            "The admin password for the guild '" + guildname + "' has been reset to:",
             password,
             "For extra security (and because it's not very memorable), please change it the next time you log in.",
-            "- Guild Bounty Tracker · http://caerphoto.com/guild_bounty/"
+            "- Guild Bounty Tracker · http://bounty.caer.me/"
         ].join("\r\n\r\n"),
         mailer = require("nodemailer").createTransport("sendmail", {
             path: "/usr/sbin/sendmail"
