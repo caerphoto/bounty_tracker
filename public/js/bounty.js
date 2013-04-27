@@ -88,12 +88,13 @@ $(function () {
             url: "api/search_state",
             type: "GET",
             dataType: "json",
+            cache: false, // necessary voodoo to prevent IE cacheing response
             success: function (response) {
                 // Server may return HTTP 204, indicating success but that the
                 // state has not changed since the previous request.
                 if (response) {
                     GBT.search_state = response;
-                    applyState();
+                    applyState("fetchState > ajax.success()");
                 }
                 if (typeof callback === "function") {
                     callback(true);
@@ -140,7 +141,7 @@ $(function () {
                 count += 1;
             }
 
-            $row.toggleClass("found", npc.found);
+            $row.toggleClass("found", !!npc.found);
 
             $list = $row.find(".player-names .player-list");
 
@@ -188,7 +189,7 @@ $(function () {
                 GBT.search_state[short_name].found = response;
 
                 // TODO: this is a bit heavy-handed.
-                applyState();
+                applyState("setNPCState");
 
                 if (typeof callback === "function") {
                     callback(true);
@@ -245,7 +246,7 @@ $(function () {
                     GBT.assignment = npc_short_name;
                 }
                 $npc_table.addClass("assigned");
-                applyState();
+                applyState("assignPlayer > ajax.success()");
 
                 if (typeof callback === "function") {
                     callback(true);
@@ -279,7 +280,7 @@ $(function () {
             dataType: "json",
             success: function (full_state) {
                 GBT.search_state = full_state;
-                applyState();
+                applyState("removePlayer > ajax.success()");
 
                 if (typeof callback === "function") {
                     callback(true);
@@ -309,7 +310,7 @@ $(function () {
             dataType: "json",
             success: function (clean_state) {
                 GBT.search_state = clean_state;
-                applyState();
+                applyState("resetState > ajax.success()");
                 if (typeof callback === "function") {
                     callback(true);
                 }
@@ -373,7 +374,7 @@ $(function () {
         $("#login-password").get(0).blur();
 
         if (GBT.search_state) {
-            applyState();
+            applyState("logIn()");
         }
 
         setTimeout(function () {
@@ -795,7 +796,7 @@ $(function () {
         removePlayer(GBT.this_player, GBT.assignment, function (success, msg) {
             $button.removeClass("working");
             if (success) {
-                applyState();
+                applyState("removePlayer() callback");
             } else {
                 window.alert(msg);
             }
@@ -843,7 +844,7 @@ $(function () {
     initTable();
 
     if (GBT.guild_data && GBT.search_state) {
-        applyState(GBT.search_state);
+        applyState("init");
     }
 
     // Start sync if user appears to be logged in.

@@ -23,6 +23,7 @@ exports.fetch = function (req, res) {
             return res.send(204); // No content
         } else {
             req.session.prev_state = reply.search_state;
+            res.set("Content-Type", "application/json");
             return res.send(reply.search_state);
         }
     });
