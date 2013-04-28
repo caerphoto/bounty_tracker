@@ -82,7 +82,7 @@ exports.reset = function (req, res) {
                     db.quit();
 
                     utils.log(
-                        "PASSWORD RESET",
+                        "PASSWORD",
                         guild_key.slice(6)
                     );
                     res.send(204);

@@ -28,6 +28,7 @@ init = function (env) {
 
     app.set("views", __dirname + "/views");
     app.set("view engine", "ejs");
+    app.set("trust proxy", true);
     app.use(express.static(__dirname + '/public'));
     app.use(express.bodyParser());
     app.use(express.cookieParser());
@@ -113,4 +114,4 @@ if (app.get("env") === "production") {
 } else {
     app.listen(3000);
 }
-utils.log("LOAD APP", "port 3000");
+utils.log("STARTUP", "port 3000");

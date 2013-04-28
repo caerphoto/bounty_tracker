@@ -1,7 +1,16 @@
 "use strict";
+var utils = require("./lib/utils"),
+    redis = require("redis");
 
-function renderNoGuild(res) {
-    var utils = require("./lib/utils");
+function renderNoGuild(req, res) {
+    utils.log(
+        "LOAD",
+        "<no guild>",
+        "",
+        req.session.this_player || "<anonymous>",
+        req.ip
+    );
+
     res.render("index", {
         is_admin: false,
         body_class: "logged-out",
@@ -13,9 +22,7 @@ function renderNoGuild(res) {
 }
 
 exports.index = function (req, res) {
-    var redis = require("redis"),
-        utils = require("./lib/utils"),
-        db;
+    var db;
 
     if (req.session.guild_key) {
         db = redis.createClient();
@@ -32,7 +39,7 @@ exports.index = function (req, res) {
             if (!reply) {
                 // Guild registration has expored or been deleted since last
                 // login.
-                return renderNoGuild(res);
+                return renderNoGuild(req, res);
             }
 
             search_state = reply.search_state;
@@ -55,6 +62,14 @@ exports.index = function (req, res) {
                 };
             }
 
+            utils.log(
+                "LOAD",
+                reply.guildname,
+                is_admin ? "a" : "m",
+                req.session.this_player || "<anonymous>",
+                req.ip
+            );
+
             res.render("index", {
                 is_admin: is_admin,
                 body_class: "logged-in " + (is_admin ? "admin" : "member"),
@@ -68,6 +83,6 @@ exports.index = function (req, res) {
         });
     } else {
         // Not logged in
-        renderNoGuild(res);
+        renderNoGuild(req, res);
     }
 };

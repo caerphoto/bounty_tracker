@@ -15,7 +15,7 @@ body.logged-in .npc-row.found {
     background: #ace7a6;
 }
 
-body.logged-in .npc-row.found:nth-child(even) {
+body.logged-in .npc-row.found:nth-child(odd) {
     background: #b8f7b2;
 }
 

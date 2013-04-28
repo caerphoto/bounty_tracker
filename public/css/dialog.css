@@ -4,6 +4,7 @@ textarea,
 input[type="text"],
 input[type="password"],
 input[type="email"] {
+    -webkit-appearance: none; /* allow styling in WebKit on iOS */
     display: inline-block;
     border: 1px solid #ccc;
     background: #fff;
@@ -11,7 +12,7 @@ input[type="email"] {
     line-height: 1;
     border-radius: 3px;
     box-sizing: border-box;
-    box-shadow: 1px 1px 4px rgba(0,0,0,0.1) inset;
+    box-shadow: inset 1px 1px 4px rgba(0,0,0,0.1);
 }
 
 textarea:focus,
