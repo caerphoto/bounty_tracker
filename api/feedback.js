@@ -16,7 +16,7 @@ exports.log = function (req, res) {
 
     db = redis.createClient();
 
-    db.incr("feedback:id", function (err, next_id) {
+    db.incr("feedback-id", function (err, next_id) {
         var key = "feedback:" + next_id;
 
         db.set(key, [msg, contact].join("\t"), function (err) {

@@ -59,7 +59,7 @@ $(function () {
 
         $npc_table.html(Mustache.render(npc_row_template, { NPCs: GBT.npc_list }));
 
-        GBT.npc_list.forEach(function (npc) {
+        $.each(GBT.npc_list, function (_, npc) {
             npc_lookup[npc.short_name] = npc;
         });
     };
@@ -146,7 +146,7 @@ $(function () {
             $list = $row.find(".player-names .player-list");
 
             if (npc.players) {
-                view.players = npc.players.map(function (player) {
+                view.players = $.map(npc.players, function (player) {
                     return {
                         name: player,
                         this_player: player.toUpperCase() === this_player_u
