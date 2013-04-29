@@ -48,9 +48,6 @@ exports.create = function (req, res) {
                 } catch (e) {
                     response_data.search_state = utils.createNewState();
                 }
-
-                // Track login stuff for analysis.
-                utils.recordLogin(guild_key);
             }
 
             if (match) {
@@ -82,6 +79,7 @@ exports.create = function (req, res) {
                 return res.json(response_data);
             }
 
+            // Not sure about this - is it ok to log the attempted password?
             utils.log("FAILED LOGIN", req.body.guildname, req.body.password);
 
             // Doesn't match anything.

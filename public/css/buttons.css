@@ -8,7 +8,7 @@ a.button {
     box-sizing: border-box;
     padding: 0 0.5em;
     border: 1px solid #aaa;
-    border-radius: 3px;
+    border-radius: 0.2em;
 
     font: inherit;
     font-size: 100%;

@@ -2,15 +2,16 @@
     body {
         font-size: 0.9em;
     }
-}
 
-@media screen and (max-width: 50em) {
     header,
     footer,
     #main {
         padding: 1em 2em;
     }
 
+}
+
+@media screen and (max-width: 50em) {
     header form input[type="text"],
     header form input[type="password"] {
         width: 8em;
@@ -28,7 +29,10 @@
         width: 10em;
     }
 }
-@media screen and (max-width: 38em) {
+
+@media screen and (max-width: 38em),
+    (max-width: 76em) and (-webkit-min-device-pixel-ratio: 2) {
+
     .not-small,
     .npc-name > .full {
         display: none !important;
@@ -45,22 +49,34 @@
     }
 
     .npc-row > .npc-name {
-        width: 6em;
+        width: 5.5em;
     }
 
     .npc-name > .compact {
         display: inline;
     }
 }
-@media screen and (max-width: 32em) {
+
+@media screen and (max-width: 32em),
+    (max-width: 64em) and (-webkit-min-device-pixel-ratio: 2) {
+
+    body {
+        line-height: 1.4;
+    }
+
     header,
     footer,
     #main {
         padding: 1em 0.5em;
+        margin: 0.5em 0;
     }
 
     header {
         font-size: 1em;
+    }
+
+    footer {
+        font-size: 0.7em;
     }
 
     header > form {
@@ -105,56 +121,28 @@
     .npc-location {
         display: none;
     }
+}
 
-    .npc-row > .npc-name {
-        width: auto;
+@media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2) {
+
+    #twitter-icon {
+        background-image: url("/media/twitter_icon32.png");
     }
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-       only screen and (min-device-pixel-ratio: 1.5) {
 
-    button,
-    a.button,
-    input[type="submit"] {
-        padding: 0.2em 0.5em;
-    }
+@media
+    only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (   min--moz-device-pixel-ratio: 1.5),
+    only screen and (     -o-min-device-pixel-ratio: 1.5),
+    only screen and (        min-device-pixel-ratio: 1.5) {
 
-    button,
-    a.button {
-        border: none;
-        box-shadow:
-            inset 0 0 1px #000,
-            inset 1px 2px 0 #fff,
-            0 1px 1px -1px rgba(0,0,0,0.3);
-    }
-
-    button.found,
-    button.action,
-    a.button.action,
-    input[type="submit"] {
-        border: none;
-        box-shadow:
-            inset 0 0 1px #000,
-            inset 1px 1px 0 rgba(255,255,255, 0.4),
-            0 1px 1px -1px rgba(0,0,0,0.5);
-    }
-
-    textarea,
-    input[type="text"],
-    input[type="password"] {
-        border: none;
-        box-shadow:
-            inset 0 0 1px #777,
-            inset 1px 1px 4px rgba(0,0,0,0.1);
-    }
-
-    textarea:focus,
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-    box-shadow:
-        inset 0 0 1px #900,
-        inset 0 0 1px #900,
-        0 0 7px 1px rgba(64,0,0,0.2);
+    /* Increased font size to compensate for 0.5x viewport scaling. */
+    body {
+        font-size: 28px;
     }
 }

@@ -76,9 +76,9 @@ td:last-child, th:last-child {
 
     border-style: solid;
     border-color: #bbb #999 #999 #bbb;
-    box-shadow: 1px 1px 1px rgba(0,0,0, 0.1);
+    box-shadow: 0.1em 0.1em 0.1em rgba(0,0,0, 0.1);
 
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 0.25em 0.25em 0;
 
     background: #ddd;
     color: #888;

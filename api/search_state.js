@@ -13,7 +13,16 @@ exports.fetch = function (req, res) {
     }
 
     db.hgetall(req.session.guild_key, function (err, reply) {
-        db.quit();
+        var multi = db.multi(),
+            key = "activity:" + req.ip;
+
+        // Log activity so it's possible to know how many 'active' users there
+        // are.
+        multi.set(key, Date.now());
+        multi.expire(key, 6);
+        multi.exec(function () {
+            db.quit();
+        });
 
         if (!reply) {
             return res.send(500);
