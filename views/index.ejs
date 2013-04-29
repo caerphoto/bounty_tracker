@@ -23,7 +23,31 @@ hgroup {
 }
 </style>
 <![endif]-->
-    <meta name="viewport" content="width=device-width, minimum-scale=0.5, user-scalable=no, maximum-scale=0.5">
+
+<!-- Fancy and somewhat hacky way to make retina-bescreened devices use 0.5x
+scaling on their viewport. -->
+<style>
+  @media screen and (-webkit-min-device-pixel-ratio: 2) {
+    html:before {
+      content: "retina";
+      display: none;
+    }
+  }
+</style>
+<script>
+(function () {
+var r, h;
+if (window.getComputedStyle) {
+    h = window.getComputedStyle(document.head.parentElement, ':before');
+    r = h.getPropertyValue('content');
+    if (r === "retina") {
+        document.write('<meta name="viewport" content="width=device-width, minimum-scale=0.5, user-scalable=no, maximum-scale=0.5">');
+    }
+}
+}());
+</script>
+<!-- end retina hackiness -->
+
     <meta name="apple-mobile-web-app-capable" content="yes">
 <% cssfiles.forEach(function (filename) { %>
     <link rel="stylesheet" href="<%= filename %>"><% }); %>
