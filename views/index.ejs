@@ -37,10 +37,11 @@ queries will double base font size accordingly. -->
 </script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon-precomposed" href="/media/apple_touch_icon.png">
+    <link rel="shortcut icon" href="/media/favicon.ico">
 <% cssfiles.forEach(function (filename) { %>
     <link rel="stylesheet" href="<%= filename %>"><% }); %>
 
-    <link rel="shortcut icon" href="/media/favicon.ico">
     <title>Guild Bounty Tracker</title>
   </head>
   <body class="<%= body_class %>">
@@ -298,7 +299,7 @@ queries will double base font size accordingly. -->
 </table>
       </script>
 
-      <div id="npcs"></div>
+      <div id="npcs"><p class="working">Loading&hellip;</p></div>
 
       <div class="button-bar logged-in" id="list-controls">
         <button id="stop-hunting" class="action for-members" title="Click to unassign yourself from all targets.">Stop Hunting</button>
