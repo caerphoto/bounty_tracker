@@ -111,7 +111,8 @@ if (app.get("env") === "production") {
     // Only listen on localhost, so only traffic passed from nginx reaches the
     // app.
     app.listen(3000, "127.0.0.1");
+    utils.log("STARTUP", "port 3000", "production");
 } else {
     app.listen(3000);
+    utils.log("STARTUP", "port 3000", "development");
 }
-utils.log("STARTUP", "port 3000");
