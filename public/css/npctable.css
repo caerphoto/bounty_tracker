@@ -60,7 +60,15 @@ td:last-child, th:last-child {
 }
 
 .npc-row .player-names {
-    overflow-x: auto;
+    padding-left: 0;
+    overflow: visible;
+}
+
+.player-names-wrapper {
+    position: relative;
+    height: 100%;
+    padding-left: 1em;
+    overflow: visible;
 }
 
 .player-list li {
@@ -69,8 +77,8 @@ td:last-child, th:last-child {
     position: relative;
 
     box-sizing: border-box;
-    height: 100%;
     padding: 0 0.3em;
+    margin-top: 0.15em;
     border-width: 1px;
     margin-right: 0.3em;
 

@@ -67,7 +67,7 @@
     header,
     footer,
     #main {
-        padding: 1em 0.5em;
+        padding: 1em 0.3em;
         margin: 0.5em 0;
     }
 
@@ -118,8 +118,21 @@
         display: inline;
     }
 
+    .npc-row td,
+    .npc-row th {
+        padding: 0 0.3em;
+    }
+
     .npc-location {
         display: none;
+    }
+
+    .npc-row .npc-controls {
+        width: 4em;
+    }
+
+    .npc-row .npc-controls button {
+        padding: 0 0.3em;
     }
 }
 
