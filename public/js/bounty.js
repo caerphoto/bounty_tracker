@@ -20,6 +20,7 @@ $(function () {
 
         has_played_sound = false,
         prev_hash, // stores the previous location hash
+        last_scroll_pos, // stores current scroll postion, to prevent jumping on Cancel
 
         base_doc_title = document.title,
 
@@ -697,7 +698,7 @@ $(function () {
         return false;
     });
 
-    $(window).on("hashchange", function () {
+    $(window).on("hashchange", function (evt) {
         // Generic dialog shower/hider and input box focusser thing.
         var hash = window.location.hash,
             $input;
@@ -721,6 +722,7 @@ $(function () {
         prev_hash = hash;
 
         if (!hash || hash === "#") {
+            window.scroll(0, last_scroll_pos);
             return;
         }
 
@@ -737,6 +739,9 @@ $(function () {
                 }, 10); // bump focus action to the end of the queue
             }
         }
+
+        evt.preventDefault();
+        return false;
     });
 
     // Toggle NPC 'found' status on either button click.
@@ -815,6 +820,13 @@ $(function () {
 
     $manual_refresh.on("click", function () {
         fetchState();
+    });
+
+    // Prevent jumping to the top of the page after submitting/cancelling a
+    // form, both of which actions set the location hash to "" (either directly,
+    // or indirectly via the forms' submission handlers).
+    $body.on("click submit", 'a[href="#"],form', function () {
+        last_scroll_pos = window.scrollY;
     });
 
     // Idle timer: disable auto-sync if no activity for 3 hours.
