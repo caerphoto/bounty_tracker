@@ -1,5 +1,6 @@
 header,
 #main,
+#loading,
 footer,
 .dialog > form,
 .dialog > div {
@@ -13,13 +14,21 @@ footer,
 
 header,
 #main,
+#loading,
 footer {
     margin: 1em 0;
 }
 
+header {
+    font-size: 0.8rem;
+}
+
+footer {
+    font-size: 0.9rem;
+}
+
 header,
 footer {
-    font-size: 0.8em;
     overflow: hidden;
     position: relative;
 }
@@ -83,7 +92,7 @@ input:invalid {
     text-decoration: none;
     text-indent: -9999em;
 
-    /* 16px / 0.8em font size in footer */
+    /* 16px / 0.8em (font size in footer) */
     width: 1.25em;
     height: 1.25em;
 
@@ -107,4 +116,47 @@ p.working {
     background-color: #eee;
     border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.loading-label {
+    display: inline-block;
+    width: 6em;
+}
+
+#loading {
+    display: none;
+    font-size: 1.2em;
+}
+
+html.wf-loading #loading,
+html.loading #loading {
+    display: block;
+}
+
+html.wf-active #loading-fonts:after,
+#loading-scripts:after {
+    content: "✓";
+    font-weight: bold;
+    color: #5c8;
+}
+
+html.wf-loading #loading-fonts:after,
+html.loading #loading-scripts:after {
+    content: "...";
+    color: #333;
+    font-weight: normal;
+}
+
+html.wf-inactive #loading-fonts:after {
+    color: #c00;
+    content: ":(";
+}
+
+html.wf-loading header,
+html.wf-loading #main,
+html.wf-loading footer,
+html.loading header,
+html.loading #main,
+html.loading footer {
+    display: none;
 }

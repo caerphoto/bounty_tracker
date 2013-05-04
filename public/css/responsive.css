@@ -1,5 +1,5 @@
 @media screen and (max-width: 55em) {
-    body {
+    html {
         font-size: 0.9em;
     }
 
@@ -73,10 +73,6 @@
 
     header {
         font-size: 1em;
-    }
-
-    footer {
-        font-size: 0.7em;
     }
 
     header > form {
@@ -155,7 +151,7 @@
     only screen and (        min-device-pixel-ratio: 1.5) {
 
     /* Increased font size to compensate for 0.5x viewport scaling. */
-    body {
+    html {
         font-size: 28px;
     }
 }

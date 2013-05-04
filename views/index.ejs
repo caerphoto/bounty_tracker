@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="loading">
   <head>
 <!--[if lt IE 9]>
 <script>
@@ -43,8 +43,23 @@ queries will double base font size accordingly. -->
     <link rel="stylesheet" href="<%= filename %>"><% }); %>
 
     <title>Guild Bounty Tracker</title>
+
+    <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
   </head>
   <body class="<%= body_class %>">
+    <div id="loading">
+      <h1>Loading&hellip;</h1>
+      <ul>
+        <li><span class="loading-label">Scripts:</span>
+          <span id="loading-scripts"></span></li>
+
+        <li><span class="loading-label">Other stuff:</span>
+          <span id="loading-fonts"></span></li>
+      </ul>
+    </div>
+
     <header>
       <a href="#register-dialog" id="register-link" class="not-small
         logged-out">Register <span class="non-essential">your </span>guild</a>
@@ -71,7 +86,7 @@ queries will double base font size accordingly. -->
       </div>
     </header>
 
-    <section id="register-dialog" class="dialog logged-out">
+    <div id="register-dialog" class="dialog logged-out">
       <form id="register" action="api/register" method="POST">
         <h2>Register Guild</h2>
         <label for="register-guildname">Guild name:</label>
@@ -110,9 +125,9 @@ queries will double base font size accordingly. -->
           <input type="submit" value="Register Guild">
         </div>
       </form>
-    </section> <% // #register-dialog %>
+    </div> <% // #register-dialog %>
 
-    <section id="options-dialog" class="dialog logged-in for-admins">
+    <div id="options-dialog" class="dialog logged-in for-admins">
       <form id="options" action="api/guild_info" method="POST">
         <h2>Options</h2>
 
@@ -135,9 +150,9 @@ queries will double base font size accordingly. -->
           <input type="submit" value="OK">
         </div>
       </form>
-    </section>
+    </div>
 
-    <section id="forgot-password-dialog" class="dialog logged-out">
+    <div id="forgot-password-dialog" class="dialog logged-out">
       <form id="reset-password" action="api/reset_password" method="POST">
         <h2>Forgot Your Password?</h2>
         <p>Enter the guild name and admin email address in the boxes below then
@@ -155,9 +170,9 @@ queries will double base font size accordingly. -->
           <input type="submit" value="Reset">
         </div>
       </form>
-    </section>
+    </div>
 
-    <section id="member-name-dialog" class="dialog logged-in">
+    <div id="member-name-dialog" class="dialog logged-in">
       <form id="assign-player" action="api/assign_player" method="POST">
         <h2>Enter <span class="for-members">Your</span><span
             class="for-admins">Player</span> Name</h2>
@@ -174,7 +189,7 @@ queries will double base font size accordingly. -->
           <input type="submit" value="OK">
         </div>
       </form>
-    </section>
+    </div>
 
     <script type="text/mustache" id="error-template">
       <h2>Error</h2>
@@ -186,11 +201,11 @@ queries will double base font size accordingly. -->
       </div>
     </script>
 
-    <section id="error-dialog" class="dialog">
+    <div id="error-dialog" class="dialog">
       <div id="error"></div>
-    </section>
+    </div>
 
-    <section id="confirm-reset-dialog" class="dialog">
+    <div id="confirm-reset-dialog" class="dialog">
       <form id="confirm-reset" action="#">
         <h2>Confirm Reset</h2>
         <p>Please confirm you want to <em>reset all NPC states</em>.
@@ -200,9 +215,9 @@ queries will double base font size accordingly. -->
           <input type="submit" value="OK">
         </div>
       </form>
-    </section>
+    </div>
 
-    <section id="feedback-dialog" class="dialog">
+    <div id="feedback-dialog" class="dialog">
       <form id="feedback-form" action="api/feedback" method="POST">
         <h2>Leave Feedback</h2>
         <label for="feedback-message">What would you like to say?</label>
@@ -215,7 +230,7 @@ queries will double base font size accordingly. -->
           <input type="submit" value="Send">
         </div>
       </form>
-    </section>
+    </div>
 
     <section id="main">
       <h1>Guild Bounty Tracker</h1>
@@ -312,7 +327,7 @@ queries will double base font size accordingly. -->
         <a id="reset" href="#confirm-reset-dialog" class="reset button for-admins">Reset</a>
       </div>
 
-    </section>
+    </section> <% // #main %>
 
     <footer>
       <p>
@@ -339,9 +354,6 @@ queries will double base font size accordingly. -->
 
 <% jsfiles.forEach(function (filename) { %>
     <script src="<%= filename %>"></script><% }); %>
-
-    <script type="text/javascript" src="//use.typekit.net/hge8nui.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
