@@ -21,15 +21,18 @@ var express = require("express"),
     init;
 
 process.on("uncaughtException", function (err) {
-    var mailer = require("nodemailer").createTransport("SMTP", {
+    var mailer = require("nodemailer");
+
+    console.log("Uncaught exception on", new Date());
+    console.log(new Date(), err.stack);
+    console.trace();
+
+    mailer = mailer.createTransport("SMTP", {
         auth: {
             user: secrets.email_auth.user,
             pass: secrets.email_auth.password
         }
     });
-
-    console.log(new Date(), err.stack);
-    console.trace();
 
     mailer.sendMail({
         from: secrets.from_email,
