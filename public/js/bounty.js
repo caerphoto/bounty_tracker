@@ -101,9 +101,13 @@ $(function () {
             if (typeof callback === "function") {
                 callback(true);
             }
-        }).fail(function () {
+        }).fail(function (xhr) {
             if (typeof callback === "function") {
-                callback(false);
+                // 408 isn't really an error, it just means the server got bored
+                // waiting for something to happen so it was all like "Yeah man
+                // nothing going on here", so we can just make another request
+                // right away.
+                callback(xhr.status === 408);
             }
         });
 

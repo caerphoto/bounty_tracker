@@ -5,25 +5,77 @@ var redis = require("redis"),
 exports.fetch = function (req, res) {
     // Simplest method: return entire state as JSON if different, otherwise send
     // an HTTP 204 ("No content") response to indicate that nothing has changed.
-    var db = redis.createClient();
+    var sub = redis.createClient(),
+        db,
+        t;
 
     // Not logged in.
     if (!req.session.guild_key) {
-        return res.send(403);
+        return res.send(403, "Not logged in.");
     }
 
-    // Wait for a state update to be published, then send the state.
-    db.on("message", function (channel, message) {
-        // No need to stay subscribed or connected, as the client will send
-        // another request once it receives this one.
-        db.unsubscribe();
-        db.end();
+    function sendResponse(state, needs_unsub) {
+        req.session.prev_state = state;
+
+        // If no state was sent, there's no need to unsubscribe as no
+        // subscription was made in the first place.
+        if (needs_unsub) {
+            sub.unsubscribe();
+            sub.quit();
+        }
+
+        clearTimeout(t);
+
+        db = redis.createClient();
+        db.decr("user count:bounty");
+        db.quit();
 
         res.set("Content-Type", "application/json");
-        res.send(message);
-    });
+        if (state) {
+            res.send(state);
+        } else {
+            res.send(204);
+        }
+    }
 
-    db.subscribe(req.session.guild_key);
+    db = redis.createClient();
+    db.incr("user count:bounty");
+
+    db.hget(req.session.guild_key, "search_state", function (err, state) {
+        db.quit();
+
+        // If state has changed in the time between the previous response and
+        // this request being sent, reply immediately.
+        if (state !== req.session.prev_state) {
+            return sendResponse(state);
+        }
+
+        // State has not changed, so wait for a published message via Redis,
+        // then respond.
+
+        // Wait for a state update to be published, then send the state.
+        sub.on("message", function (channel, message) {
+            // OR true to ensure the unsubscription happens.
+            sendResponse(message, true);
+        });
+
+        sub.subscribe(req.session.guild_key);
+
+        // To monitor the number of active users, the key "user count:bounty" is
+        // incremented upon client connection, and decremented once either a
+        // response is sent, or a timeout of 10 minutes is reached.
+        t = setTimeout(function () {
+            sub.unsubscribe();
+            sub.end();
+
+            db = redis.createClient();
+            db.decr("user count:bounty");
+            db.quit();
+
+            res.send(408); // Timeout
+        }, 1000 * 60 * 10);
+
+    });
 };
 
 function removeFromList(player_name, list) {
