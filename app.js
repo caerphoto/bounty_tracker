@@ -20,6 +20,23 @@ var express = require("express"),
 
     init;
 
+process.on("uncaughtException", function (err) {
+    var mailer = require("nodemailer").createTransport("sendmail", {
+        path: "/usr/sbin/sendmail"
+    });
+
+    console.log(new Date(), err);
+
+    mailer.sendMail({
+        from: "ERROR@caer.me",
+        to: "andy@caer.me",
+        subject: "[ERROR] Uncaught exception in Bounty Tracker",
+        text: "Date:" + (new Date()) + "\n\n" + err
+    });
+
+    process.exit(1); // ABANDON SHIP
+});
+
 init = function (env) {
     var fs = require("fs"),
         f,

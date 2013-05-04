@@ -23,10 +23,10 @@ exports.log = function (req, res) {
             db.quit();
 
             mailer.sendMail({
-                from: "no-reply@caer.me",
-                to: "feedback.gbt@caer.me",
-                subject: "New Bounty Tracker feedback",
-                text: "New feedback from " + contact + ":\n\n" + msg
+                from: contact || "<anonymous>",
+                to: "andy@caer.me",
+                subject: "Bounty Tracker feedback",
+                text: msg
             }, function (mail_err) {
                 if (mail_err) {
                     console.log("Feedback mail error:" + mail_err);

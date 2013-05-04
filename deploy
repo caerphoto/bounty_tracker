@@ -24,6 +24,6 @@ ssh -i ~/.ssh/id_rsa $USER@$SERVER "cd $DEPLOY_PATH && \
     git pull && \
     npm install && \
     ./compile && \
-    NODE_ENV=$ENVIRONMENT forever restart --minUptime 5000 -a -l forever.log -o out.log -e error.log app.js"
+    NODE_ENV=$ENVIRONMENT forever restart --spinSleepTime 2000 --minUptime 5000 -a -l forever.log -o out.log -e error.log app.js"
 
 SUCCESS=true
