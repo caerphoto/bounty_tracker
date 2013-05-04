@@ -20,7 +20,6 @@ var express = require("express"),
 
     init;
 
-    /*
 process.on("uncaughtException", function (err) {
     var mailer = require("nodemailer");
 
@@ -39,7 +38,6 @@ process.on("uncaughtException", function (err) {
 
     process.exit(1); // ABANDON SHIP
 });
-*/
 
 init = function (env) {
     var fs = require("fs"),
