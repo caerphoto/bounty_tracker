@@ -131,21 +131,21 @@ exports.removePlayer = function (req, res) {
         db;
 
     if (!guild_key) {
-        return res.send(403);
+        return res.send(403, "You are not logged in.");
     }
 
     if (!req.session.is_admin && req.session.this_player !== player_name) {
-        return res.send(403);
+        return res.send(403, "HTTP 403 Forbidden: unable to deassign you. Assign youself to another NPC then try again.");
     }
 
     if (!player_name || !npc_short_name) {
-        return res.send(400);
+        return res.send(400, "HTTP 400 Invalid request: no player or NPC name given.");
     }
 
     db = redis.createClient();
     db.hget(guild_key, "search_state", function (err, state) {
         if (err || !state) {
-            return res.send(500);
+            return res.send(500, "HTTP 500: unable to retrieve search state.");
         }
 
         try {
@@ -160,7 +160,7 @@ exports.removePlayer = function (req, res) {
         db.hset(guild_key, "search_state", state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
                 if (!new_state) {
-                    return res.send(500);
+                    return res.send(500, "HTTP 500: unable to retrieve state after saving it.");
                 }
 
                 utils.log(
