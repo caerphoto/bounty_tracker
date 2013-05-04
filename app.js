@@ -21,15 +21,19 @@ var express = require("express"),
     init;
 
 process.on("uncaughtException", function (err) {
-    var mailer = require("nodemailer").createTransport("sendmail", {
-        path: "/usr/sbin/sendmail"
+    var mailer = require("nodemailer").createTransport("SMTP", {
+        auth: {
+            user: secrets.email_auth.user,
+            pass: secrets.email_auth.password
+        }
     });
 
-    console.log(new Date(), err);
+    console.log(new Date(), err.stack);
+    console.trace();
 
     mailer.sendMail({
-        from: "ERROR@caer.me",
-        to: "andy@caer.me",
+        from: secrets.from_email,
+        to: secrets.error_email,
         subject: "[ERROR] Uncaught exception in Bounty Tracker",
         text: "Date:" + (new Date()) + "\n\n" + err
     });

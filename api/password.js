@@ -1,7 +1,8 @@
 "use strict";
 
 var randomPassword,
-    sendEmail;
+    sendEmail,
+    secrets = require("../lib/secrets");
 
 function randomPassword(length) {
     var chars = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789_",
@@ -23,13 +24,17 @@ function sendEmail(guildname, email, password, callback) {
             "For extra security (and because it's not very memorable), please change it the next time you log in.",
             "- Guild Bounty Tracker · http://bounty.caer.me/"
         ].join("\r\n\r\n"),
-        mailer = require("nodemailer").createTransport("sendmail", {
-            path: "/usr/sbin/sendmail"
+
+        mailer = require("nodemailer").createTransport("SMTP", {
+            auth: {
+                user: secrets.email_auth.user,
+                pass: secrets.email_auth.password
+            }
         });
 
     try {
         mailer.sendMail({
-            from: "no-reply@caer.me",
+            from: secrets.from_email,
             to: email,
             subject: "[Guild Bounty Tracker] Password reset for " + guildname,
             text: msg

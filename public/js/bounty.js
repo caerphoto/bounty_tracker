@@ -89,22 +89,21 @@ $(function () {
             url: "api/search_state",
             type: "GET",
             dataType: "json",
-            cache: false, // necessary voodoo to prevent IE cacheing response
-            success: function (response) {
-                // Server may return HTTP 204, indicating success but that the
-                // state has not changed since the previous request.
-                if (response) {
-                    GBT.search_state = response;
-                    applyState("fetchState > ajax.success()");
-                }
-                if (typeof callback === "function") {
-                    callback(true);
-                }
-            },
-            error: function () {
-                if (typeof callback === "function") {
-                    callback(false);
-                }
+            cache: false // necessary to prevent IE cacheing response
+        }).done(function (response) {
+            // Response should always be present now that long-polling has been
+            // implemented.
+            if (response) {
+                GBT.search_state = response;
+                applyState("fetchState > ajax.success()");
+            }
+
+            if (typeof callback === "function") {
+                callback(true);
+            }
+        }).fail(function () {
+            if (typeof callback === "function") {
+                callback(false);
             }
         });
 
@@ -184,23 +183,21 @@ $(function () {
                 short_name: short_name,
                 found: !!found
             },
-            dataType: "json",
-            success: function (response) {
-                // Expects response to be either true or false, which should
-                // match the 'found' parameter passed to setNPCState().
-                GBT.search_state[short_name].found = response;
+            dataType: "json"
+        }).done(function (response) {
+            // Expects response to be either true or false, which should
+            // match the 'found' parameter passed to setNPCState().
+            GBT.search_state[short_name].found = response;
 
-                // TODO: this is a bit heavy-handed.
-                applyState("setNPCState");
+            // TODO: this is a bit heavy-handed.
+            applyState("setNPCState");
 
-                if (typeof callback === "function") {
-                    callback(true);
-                }
-            },
-            error: function (xhr) {
-                if (typeof callback === "function") {
-                    callback(false, xhr.responseText);
-                }
+            if (typeof callback === "function") {
+                callback(true);
+            }
+        }).fail(function (xhr) {
+            if (typeof callback === "function") {
+                callback(false, xhr.responseText);
             }
         });
     };
@@ -241,25 +238,23 @@ $(function () {
                 npc_short_name: npc_short_name,
                 player_name: player_name
             },
-            dataType: "json",
-            success: function (full_state) {
-                GBT.search_state = full_state;
-                if (!GBT.is_admin) {
-                    GBT.assignment = npc_short_name;
-                }
-                $npc_table.addClass("assigned");
-                applyState("assignPlayer > ajax.success()");
+            dataType: "json"
+        }).done(function (full_state) {
+            GBT.search_state = full_state;
+            if (!GBT.is_admin) {
+                GBT.assignment = npc_short_name;
+            }
+            $npc_table.addClass("assigned");
+            applyState("assignPlayer > ajax.success()");
 
-                if (typeof callback === "function") {
-                    callback(true);
-                }
-            },
-            error: function (xhr) {
-                // TODO: use proper dialog.
-                alert(xhr.responseText);
-                if (typeof callback === "function") {
-                    callback(false, xhr.responseText);
-                }
+            if (typeof callback === "function") {
+                callback(true);
+            }
+        }).fail(function (xhr) {
+            // TODO: use proper dialog.
+            alert(xhr.responseText);
+            if (typeof callback === "function") {
+                callback(false, xhr.responseText);
             }
         });
     };
@@ -279,20 +274,18 @@ $(function () {
                 npc_short_name: npc_short_name,
                 player_name: player_name
             },
-            dataType: "json",
-            success: function (full_state) {
-                GBT.search_state = full_state;
-                applyState("removePlayer > ajax.success()");
+            dataType: "json"
+        }).done(function (full_state) {
+            GBT.search_state = full_state;
+            applyState("removePlayer > ajax.success()");
 
-                if (typeof callback === "function") {
-                    callback(true);
-                }
-            },
-            error: function (xhr) {
-                // TODO: use proper dialog.
-                if (typeof callback === "function") {
-                    callback(false, xhr.responseText);
-                }
+            if (typeof callback === "function") {
+                callback(true);
+            }
+        }).fail(function (xhr) {
+            // TODO: use proper dialog.
+            if (typeof callback === "function") {
+                callback(false, xhr.responseText);
             }
         });
     };
@@ -309,20 +302,18 @@ $(function () {
         $.ajax({
             url: "api/reset_state",
             type: "POST",
-            dataType: "json",
-            success: function (clean_state) {
-                GBT.search_state = clean_state;
-                applyState("resetState > ajax.success()");
-                if (typeof callback === "function") {
-                    callback(true);
-                }
-            },
-            error: function (xhr) {
-                // TODO: use proper dialog.
-                alert(xhr.responseText);
-                if (typeof callback === "function") {
-                    callback(false, xhr.responseText);
-                }
+            dataType: "json"
+        }).done(function (clean_state) {
+            GBT.search_state = clean_state;
+            applyState("resetState > ajax.success()");
+            if (typeof callback === "function") {
+                callback(true);
+            }
+        }).fail(function (xhr) {
+            // TODO: use proper dialog.
+            alert(xhr.responseText);
+            if (typeof callback === "function") {
+                callback(false, xhr.responseText);
             }
         });
     };
@@ -338,8 +329,8 @@ $(function () {
         }
 
         fetchState(function (success) {
-            // If successful, reduce sync interval until at minimum, otherwise
-            // double it. The idea is to be tolerant of network problems.
+            var next_sync_delay;
+
             if (success) {
                 if (sync_interval > min_sync_interval) {
                     sync_interval = sync_interval / 2;
@@ -348,8 +339,12 @@ $(function () {
                 sync_interval = sync_interval * 2;
             }
 
+            // Wait a while if there was a problem with the sync request,
+            // otherwise send the next sync request immediately.
+            next_sync_delay = success ? 0 : sync_interval;
+
             if (document.getElementById("toggle-autosync").checked && GBT.guild_data) {
-                sync_timer = setTimeout(beginAutoSync, sync_interval);
+                sync_timer = setTimeout(beginAutoSync, next_sync_delay);
             }
         });
     };
@@ -402,29 +397,26 @@ $(function () {
                 member_pw: form.member_pw.value,
                 temporary: form.temporary.checked ? "true" : ""
             },
-            dataType: "json",
-            success: function (response) {
-                logIn(response);
+            dataType: "json"
+        }).done(function (response) {
+            logIn(response);
 
-                // TODO: change this to something less terrible
-                window.alert("Success!");
-            },
-            error: function (xhr) {
-                var error = JSON.parse(xhr.responseText),
-                    view = {
-                        message: error_messages[error[1]],
-                        code: xhr.status,
-                        prev_location: window.location.hash
-                    };
+            // TODO: change this to something less terrible
+            window.alert("Success!");
+        }).fail(function (xhr) {
+            var error = JSON.parse(xhr.responseText),
+                view = {
+                    message: error_messages[error[1]],
+                    code: xhr.status,
+                    prev_location: window.location.hash
+                };
 
-                view.message = view.message.replace("%s", field_names[error[0]]);
-                view.message = view.message.replace("%d", error[2]);
+            view.message = view.message.replace("%s", field_names[error[0]]);
+            view.message = view.message.replace("%d", error[2]);
 
-                errorDialog(view);
-            },
-            complete: function () {
-                $submit_button.removeClass("working");
-            }
+            errorDialog(view);
+        }).always(function () {
+            $submit_button.removeClass("working");
         });
 
         return false; // prevent default handling of form submission
@@ -443,29 +435,26 @@ $(function () {
                 guildname: form.guildname.value,
                 password: form.password.value
             },
-            dataType: "json",
-            success: function (response) {
-                form.password.value = "";
-                logIn(response);
-            },
-            error: function (xhr) {
-                var view = {
-                    message: "Invalid guild name or password.",
-                    code: xhr.status,
-                    prev_location: "#"
-                };
+            dataType: "json"
+        }).done(function (response) {
+            form.password.value = "";
+            logIn(response);
+        }).fail(function (xhr) {
+            var view = {
+                message: "Invalid guild name or password.",
+                code: xhr.status,
+                prev_location: "#"
+            };
 
-                if (xhr.status === 403) {
-                    errorDialog(view);
-                } else {
-                    // I know this is bad UX but it's low priority, since it's
-                    // unlikely to happen anyway.
-                    window.alert(xhr.status + " " + xhr.statusText);
-                }
-            },
-            complete: function () {
-                $submit_button.removeClass("working");
+            if (xhr.status === 403) {
+                errorDialog(view);
+            } else {
+                // I know this is bad UX but it's low priority, since it's
+                // unlikely to happen anyway.
+                window.alert(xhr.status + " " + xhr.statusText);
             }
+        }).always(function () {
+            $submit_button.removeClass("working");
         });
 
         return false;
@@ -480,26 +469,23 @@ $(function () {
         doLogout = function () {
             $.ajax({
                 url: "api/logout",
-                type: "POST",
-                success: function () {
-                    $body.removeClass("admin logged-in");
-                    $body.addClass("logged-out");
-                    window.location.hash = "";
-                    clearTimeout(sync_timer);
-                    document.title = base_doc_title;
-                    GBT.guild_data = false;
-                },
-                error: function () {
-                    // Something has gone terribly wrong if this happens.
-                    errorDialog({
-                        message: "Unable to log you out. Please try again in a few minutes.",
-                        code: "unknown",
-                        prev_location: ""
-                    });
-                },
-                complete: function () {
-                    $button.removeClass("working");
-                }
+                type: "POST"
+            }).done(function () {
+                $body.removeClass("admin logged-in");
+                $body.addClass("logged-out");
+                window.location.hash = "";
+                clearTimeout(sync_timer);
+                document.title = base_doc_title;
+                GBT.guild_data = false;
+            }).fail(function () {
+                // Something has gone terribly wrong if this happens.
+                errorDialog({
+                    message: "Unable to log you out. Please try again in a few minutes.",
+                    code: "unknown",
+                    prev_location: ""
+                });
+            }).always(function () {
+                $button.removeClass("working");
             });
         };
 
@@ -535,34 +521,31 @@ $(function () {
                 guildname: form.guildname.value,
                 admin_email: form.admin_email.value
             },
-            dataType: "json",
-            success: function () {
-                window.location.hash = "";
-                window.alert("Your password has been reset. Please check your email.");
+            dataType: "json"
+        }).done(function () {
+            window.location.hash = "";
+            window.alert("Your password has been reset. Please check your email.");
+        }).fail(function (xhr) {
+            var view = {
+                code: xhr.status,
+                prev_location: "#forgot-password-dialog"
             },
-            error: function (xhr) {
-                var view = {
-                    code: xhr.status,
-                    prev_location: "#forgot-password-dialog"
-                },
-                messages = {
-                    "400": "Neither field can be left blank.",
-                    "403": "Incorrect email address.",
-                    "404": "No guild found called <em>%s</em>."
-                };
+            messages = {
+                "400": "Neither field can be left blank.",
+                "403": "Incorrect email address.",
+                "404": "No guild found called <em>%s</em>."
+            };
 
-                if (messages[xhr.status.toString()]) {
-                    view.message = messages[xhr.status.toString()].
-                        replace("%s", form.guildname.value);
-                    errorDialog(view);
-                } else {
-                    // Should not happen, so use basic browser alert.
-                    window.alert(xhr.status + " " + xhr.statusText);
-                }
-            },
-            complete: function () {
-                $submit_button.removeClass("working");
+            if (messages[xhr.status.toString()]) {
+                view.message = messages[xhr.status.toString()].
+                    replace("%s", form.guildname.value);
+                errorDialog(view);
+            } else {
+                // Should not happen, so use basic browser alert.
+                window.alert(xhr.status + " " + xhr.statusText);
             }
+        }).always(function () {
+            $submit_button.removeClass("working");
         });
 
         return false;
@@ -591,32 +574,29 @@ $(function () {
             url: form.action,
             type: form.method,
             data: data,
-            dataType: "json",
-            success: function (response) {
-                GBT.guild_data.member_pw = response.member_pw;
-                GBT.guild_data.admin_email = response.admin_email;
+            dataType: "json"
+        }).done(function (response) {
+            GBT.guild_data.member_pw = response.member_pw;
+            GBT.guild_data.admin_email = response.admin_email;
 
-                form.admin_pw.value = "";
-                form.admin_pw_confirm.value = "";
+            form.admin_pw.value = "";
+            form.admin_pw_confirm.value = "";
 
-                window.location.hash = "";
-            },
-            error: function (xhr) {
-                var error = JSON.parse(xhr.responseText),
-                    view = {
-                        message: error_messages[error[1]],
-                        code: xhr.status,
-                        prev_location: window.location.hash
-                    };
+            window.location.hash = "";
+        }).fail(function (xhr) {
+            var error = JSON.parse(xhr.responseText),
+                view = {
+                    message: error_messages[error[1]],
+                    code: xhr.status,
+                    prev_location: window.location.hash
+                };
 
-                view.message = view.message.replace("%s", field_names[error[0]]);
-                view.message = view.message.replace("%d", error[2]);
+            view.message = view.message.replace("%s", field_names[error[0]]);
+            view.message = view.message.replace("%d", error[2]);
 
-                errorDialog(view);
-            },
-            complete: function () {
-                $submit_button.removeClass("working");
-            }
+            errorDialog(view);
+        }).always(function () {
+            $submit_button.removeClass("working");
         });
 
         return false;
@@ -676,23 +656,20 @@ $(function () {
             data: {
                 message: form.message.value,
                 contact: form.contact.value
-            },
-            complete: function () {
-                $button.removeClass("working");
-                window.location.hash = "";
-            },
-            success: function () {
-                form.message.value = "";
-
-                setTimeout(function () {
-                    window.alert("Thank you for your feedback :)");
-                }, 10);
-            },
-            error: function () {
-                setTimeout(function () {
-                    window.alert("There was a problem sending your feedback :(");
-                }, 10);
             }
+        }).done(function () {
+            form.message.value = "";
+
+            setTimeout(function () {
+                window.alert("Thank you for your feedback :)");
+            }, 10);
+        }).fail(function () {
+            setTimeout(function () {
+                window.alert("There was a problem sending your feedback :(");
+            }, 10);
+        }).always(function () {
+            $button.removeClass("working");
+            window.location.hash = "";
         });
 
         return false;

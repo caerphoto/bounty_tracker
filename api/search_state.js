@@ -12,30 +12,18 @@ exports.fetch = function (req, res) {
         return res.send(403);
     }
 
-    db.hgetall(req.session.guild_key, function (err, reply) {
-        var multi = db.multi(),
-            key = "activity:" + req.ip;
+    // Wait for a state update to be published, then send the state.
+    db.on("message", function (channel, message) {
+        // No need to stay subscribed or connected, as the client will send
+        // another request once it receives this one.
+        db.unsubscribe();
+        db.end();
 
-        // Log activity so it's possible to know how many 'active' users there
-        // are.
-        multi.set(key, Date.now());
-        multi.expire(key, 6);
-        multi.exec(function () {
-            db.quit();
-        });
-
-        if (!reply) {
-            return res.send(500);
-        }
-
-        if (reply.search_state === req.session.prev_state) {
-            return res.send(204); // No content
-        } else {
-            req.session.prev_state = reply.search_state;
-            res.set("Content-Type", "application/json");
-            return res.send(reply.search_state);
-        }
+        res.set("Content-Type", "application/json");
+        res.send(message);
     });
+
+    db.subscribe(req.session.guild_key);
 };
 
 function removeFromList(player_name, list) {
@@ -107,7 +95,6 @@ exports.assignPlayer = function (req, res) {
 
         db.hset(guild_key, "search_state", full_state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
-                db.quit();
                 if (!req.session.is_admin) {
                     req.session.assignment = npc_short_name;
                     req.session.this_player = req.body.player_name;
@@ -125,7 +112,9 @@ exports.assignPlayer = function (req, res) {
                     npc_short_name
                 );
 
-                req.session.prev_state = new_state;
+                db.publish(guild_key, new_state);
+                db.quit();
+
                 return res.send(new_state);
             });
         });
@@ -170,8 +159,6 @@ exports.removePlayer = function (req, res) {
 
         db.hset(guild_key, "search_state", state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
-                db.quit();
-
                 if (!new_state) {
                     return res.send(500);
                 }
@@ -184,7 +171,9 @@ exports.removePlayer = function (req, res) {
                     npc_short_name
                 );
 
-                req.session.prev_state = new_state;
+                db.publish(guild_key, new_state);
+                db.quit();
+
                 return res.send(new_state);
             });
         });
@@ -221,7 +210,7 @@ exports.setNPCState = function (req, res) {
 
         db.hset(guild_key, "search_state", state, function () {
             db.hget(guild_key, "search_state", function (err, new_state) {
-                db.quit();
+                var state_obj;
 
                 if (!new_state) {
                     return res.send(500);
@@ -245,17 +234,20 @@ exports.setNPCState = function (req, res) {
                     );
                 }
 
-                req.session.prev_state = new_state;
-
+                // Ensure state was stored then retrieved correctly.
                 try {
-                    new_state = JSON.parse(new_state);
+                    state_obj = JSON.parse(new_state);
                 } catch (e) {
-                    new_state = utils.createNewState();
+                    state_obj = utils.createNewState();
+                    new_state = JSON.stringify(state_obj);
                 }
+
+                db.publish(guild_key, new_state);
+                db.quit();
 
                 // No need to send the full state since we're only toggling a
                 // boolean.
-                return res.send(new_state[short_name].found);
+                return res.send(state_obj[short_name].found);
             });
         });
     });
@@ -284,7 +276,10 @@ exports.resetState = function (req, res) {
                 req.session.is_admin ? "a" : "m"
             );
 
+            db.publish(guild_key, new_state);
+            db.quit();
+
             return res.send(new_state);
         });
-    }); // db.hgetall()
+    }); // db.exists()
 };
