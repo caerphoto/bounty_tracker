@@ -25,12 +25,7 @@ function sendEmail(guildname, email, password, callback) {
             "- Guild Bounty Tracker · http://bounty.caer.me/"
         ].join("\r\n\r\n"),
 
-        mailer = require("nodemailer").createTransport("SMTP", {
-            auth: {
-                user: secrets.email_auth.user,
-                pass: secrets.email_auth.password
-            }
-        });
+        mailer = require("nodemailer").createTransport("SMTP", secrets.smtp_options);
 
     try {
         mailer.sendMail({

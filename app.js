@@ -27,18 +27,13 @@ process.on("uncaughtException", function (err) {
     console.log(new Date(), err.stack);
     console.trace();
 
-    mailer = mailer.createTransport("SMTP", {
-        auth: {
-            user: secrets.email_auth.user,
-            pass: secrets.email_auth.password
-        }
-    });
+    mailer = mailer.createTransport("SMTP", secrets.smtp_options);
 
     mailer.sendMail({
         from: secrets.from_email,
         to: secrets.error_email,
         subject: "[ERROR] Uncaught exception in Bounty Tracker",
-        text: "Date:" + (new Date()) + "\n\n" + err
+        text: "Date:" + (new Date()) + "\n\n" + err.stack
     });
 
     process.exit(1); // ABANDON SHIP
