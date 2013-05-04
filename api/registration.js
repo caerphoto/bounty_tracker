@@ -68,9 +68,6 @@ exports.create = function (req, res) {
                 db.expire(guild_key, ONE_DAY_IN_S);
             }
 
-            // Record registration as a login.
-            utils.recordLogin(guild_key);
-
             db.hgetall(guild_key, function (err, reply) {
                 var response,
                     TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
