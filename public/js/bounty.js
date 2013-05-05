@@ -244,6 +244,7 @@ $(function () {
             GBT.search_state = full_state;
             if (!GBT.is_admin) {
                 GBT.assignment = npc_short_name;
+                console.log(GBT.this_player);
             }
             $npc_table.addClass("assigned");
             applyState("assignPlayer > ajax.success()");
@@ -330,8 +331,6 @@ $(function () {
         }
 
         fetchState(function (success) {
-            var next_sync_delay;
-
             if (success) {
                 if (sync_interval > min_sync_interval) {
                     sync_interval = sync_interval / 2;
@@ -340,12 +339,8 @@ $(function () {
                 sync_interval = sync_interval * 2;
             }
 
-            // Wait a while if there was a problem with the sync request,
-            // otherwise send the next sync request immediately.
-            next_sync_delay = success ? 0 : sync_interval;
-
             if (document.getElementById("toggle-autosync").checked && GBT.guild_data) {
-                sync_timer = setTimeout(beginAutoSync, next_sync_delay);
+                sync_timer = setTimeout(beginAutoSync, sync_interval);
             }
         });
     };
@@ -776,6 +771,7 @@ $(function () {
     $("#stop-hunting").on("click", function () {
         var $button = $(this);
 
+        console.log(GBT.this_player, GBT.assignment);
         $button.addClass("working");
         removePlayer(GBT.this_player, GBT.assignment, function (success, msg) {
             $button.removeClass("working");

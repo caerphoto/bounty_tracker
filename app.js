@@ -20,7 +20,7 @@ var express = require("express"),
 
     init;
 
-process.on("uncaughtException", function (err) {
+process.on("DISABLEDuncaughtException", function (err) {
     var mailer = require("nodemailer");
 
     console.log("Uncaught exception on", new Date());

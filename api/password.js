@@ -2,7 +2,9 @@
 
 var randomPassword,
     sendEmail,
-    secrets = require("../lib/secrets");
+    secrets = require("../lib/secrets"),
+    redis = require("redis"),
+    db = redis.createClient();
 
 function randomPassword(length) {
     var chars = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789_",
@@ -42,10 +44,8 @@ function sendEmail(guildname, email, password, callback) {
 }
 
 exports.reset = function (req, res) {
-    var redis = require("redis"),
-        utils = require("../lib/utils"),
+    var utils = require("../lib/utils"),
         bcrypt = require("bcrypt"),
-        db = redis.createClient(),
         guild_key;
 
     if (!req.body.guildname || !req.body.admin_email) {
@@ -58,7 +58,6 @@ exports.reset = function (req, res) {
 
     db.exists(guild_key, function (err, exists) {
         if (!exists) {
-            db.quit();
             return res.send(404);
         }
         db.hmget(guild_key, "guildname", "admin_email", function (err, reply) {
@@ -79,7 +78,6 @@ exports.reset = function (req, res) {
                     }
 
                     db.hset(guild_key, "admin_pw", hash);
-                    db.quit();
 
                     utils.log(
                         "PASSWORD",

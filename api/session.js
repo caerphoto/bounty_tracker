@@ -1,5 +1,7 @@
 "use strict";
-var utils = require("../lib/utils");
+var utils = require("../lib/utils"),
+    redis = require("redis"),
+    db = redis.createClient();
 
 exports.destroy = function (req, res) {
     // Log out
@@ -8,18 +10,16 @@ exports.destroy = function (req, res) {
         req.session.guild_key.slice(6),
         req.session.is_admin ? "a" : "m"
     );
-    delete req.session.guild_key;
-    delete req.session.is_admin;
-    delete req.session.this_player;
-    delete req.session.assignment;
+    //delete req.session.guild_key;
+    //delete req.session.is_admin;
+    //delete req.session.this_player;
+    //delete req.session.assignment;
     req.session.destroy();
     res.send(200);
 };
 
 exports.create = function (req, res) {
-    var redis = require("redis"),
-        bcrypt = require("bcrypt"),
-        db = redis.createClient(),
+    var bcrypt = require("bcrypt"),
         guild_key;
 
     if (!req.body.guildname || !req.body.password) {
@@ -29,8 +29,6 @@ exports.create = function (req, res) {
     guild_key = utils.generateKey(req.body.guildname);
 
     db.hgetall(guild_key, function (err, reply) {
-        db.quit();
-
         if (!reply) {
             return res.send(403);
         }

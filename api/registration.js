@@ -1,12 +1,12 @@
-/*jslint node: true, devel: true*/
+var redis = require("redis"),
+    db = redis.createClient();
 
 exports.create = function (req, res) {
     "use strict";
 
     var utils = require("../lib/utils"),
-        redis = require("redis"),
-        bcrypt = require("bcrypt"),
         valid = utils.validateParams(req.body),
+        bcrypt = require("bcrypt"),
         required_fields = [
             "guildname",
             "admin_pw"
@@ -16,7 +16,6 @@ exports.create = function (req, res) {
             "admin_email",
             "member_pw"
         ],
-        db,
         guild_key;
 
     if (valid !== true) {
@@ -36,11 +35,6 @@ exports.create = function (req, res) {
     }
 
     guild_key = utils.generateKey(req.body.guildname);
-
-    db = redis.createClient();
-    db.on("error", function (err) {
-        console.log("Redis Error:", err);
-    });
 
     db.exists(guild_key, function (err, exists) {
         var values = {};
@@ -72,7 +66,6 @@ exports.create = function (req, res) {
                 var response,
                     TWO_WEEKS_IN_MS = 1209600000; // in milliseconds
 
-                db.quit();
                 if (reply) {
                     req.session.guild_key = guild_key;
                     req.session.is_admin = true;

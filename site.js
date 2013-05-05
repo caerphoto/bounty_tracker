@@ -1,6 +1,7 @@
 "use strict";
 var utils = require("./lib/utils"),
-    redis = require("redis");
+    redis = require("redis"),
+    db = redis.createClient();
 
 function renderNoGuild(req, res) {
     utils.log(
@@ -22,15 +23,7 @@ function renderNoGuild(req, res) {
 }
 
 exports.index = function (req, res) {
-    var db;
-
     if (req.session.guild_key) {
-        db = redis.createClient();
-
-        db.on("error", function (err) {
-            utils.log("Redis Error", err);
-        });
-
         db.hgetall(req.session.guild_key, function (err, reply) {
             var guild_data,
                 search_state,
@@ -78,8 +71,6 @@ exports.index = function (req, res) {
                 assignment: req.session.assignment || "",
                 search_state: search_state
             });
-
-            db.quit();
         });
     } else {
         // Not logged in

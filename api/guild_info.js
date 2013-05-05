@@ -1,10 +1,11 @@
+var redis = require("redis"),
+    db = redis.createClient();
+
 exports.update = function (req, res) {
     "use strict";
     var guild_key = req.session.guild_key,
-        redis = require("redis"),
         bcrypt = require("bcrypt"),
-        utils = require("../lib/utils"),
-        db = redis.createClient();
+        utils = require("../lib/utils");
 
     if (!guild_key || !req.session.is_admin) {
         return res.send(403); // Forbidden
@@ -14,7 +15,6 @@ exports.update = function (req, res) {
         var new_data = {};
 
         if (!exists) {
-            db.quit();
             return res.send(404);
         }
 
@@ -40,26 +40,26 @@ exports.update = function (req, res) {
             new_data.admin_pw = bcrypt.hashSync(req.body.admin_pw, 8);
         }
 
-        db.hmset(guild_key, new_data);
-        db.hgetall(guild_key, function (err, guild_data) {
-            var response_data;
+        db.hmset(guild_key, new_data, function () {
+            db.hgetall(guild_key, function (err, guild_data) {
+                var response_data;
 
-            db.quit();
-            if (!guild_data) {
-                return res.send(500);
-            }
+                if (!guild_data) {
+                    return res.send(500);
+                }
 
-            response_data = {
-                admin_email: guild_data.admin_email,
-                member_pw: guild_data.member_pw
-            };
+                response_data = {
+                    admin_email: guild_data.admin_email,
+                    member_pw: guild_data.member_pw
+                };
 
-            utils.log(
-                "UPDATE GUILD",
-                guild_data.guildname
-            );
+                utils.log(
+                    "UPDATE GUILD",
+                    guild_data.guildname
+                );
 
-            return res.json(response_data);
+                return res.json(response_data);
+            });
         });
     });
 
