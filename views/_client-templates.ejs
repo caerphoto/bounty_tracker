@@ -1,0 +1,53 @@
+<script type="text/mustache" id="error-template">
+<h2>Error</h2>
+<p>{{{message}}}</p>
+<p class="error-code">HTTP response code: {{code}}</p>
+
+<div class="button-bar">
+  <a href="{{prev_location}}" class="button">OK</a>
+</div>
+</script>
+
+<script id="player-list-template" type="text/mustache">
+{{#players}}
+  {{#this_player}}<li class="this-player">{{/this_player}}
+  {{^this_player}}<li>{{/this_player}}
+    <button class="remove-player for-admins" data-player_name="{{name}}">&minus;</button>
+    <span class="player-name">{{name}}</span>
+  </li>
+{{/players}}
+</script>
+
+<script id="npc-row-template" type="text/mustache">
+<table id="npc-table">
+  <thead>
+    <tr class="npc-row">
+      <th class="npc-name">NPC</th>
+      <th class="npc-location">Location</th>
+      <th class="player-names logged-in" colspan="2">Player(s)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {{#NPCs}}
+    <tr class="npc-row" id="npc-{{short_name}}" data-short_name="{{short_name}}">
+      <td class="npc-name">
+        <a class="full" href="{{url}}" target="_blank">{{{name}}}</a>
+        <a class="compact" href="{{url}}" target="_blank">{{{compact_name}}}</a>
+      </td>
+      <td class="npc-location">{{{location}}}</td>
+      <td class="player-names logged-in">
+        <div class="player-names-wrapper">
+          <a class="action button assign-player" href="#member-name-dialog"></a>
+          <ul class="player-list"></ul>
+        </div>
+      </td>
+      <td class="npc-controls logged-in">
+        <button class="action found">Found!</button>
+        <button class="lost">Lost :(</button>
+      </td>
+    </tr>
+  {{/NPCs}}
+  </tbody>
+</table>
+</script>
