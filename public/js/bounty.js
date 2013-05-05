@@ -91,24 +91,20 @@ $(function () {
             type: "GET",
             dataType: "json",
             cache: false // necessary to prevent IE cacheing response
-        }).done(function (response) {
-            // Response should always be present now that long-polling has been
-            // implemented.
-            if (response) {
-                GBT.search_state = response;
+        }).done(function (new_state) {
+            // If new_state is empty, it means the server got bored waiting for
+            // something to happen and just sent a 204 (no content) response.
+            if (new_state) {
+                GBT.search_state = new_state;
                 applyState("fetchState > ajax.success()");
             }
 
             if (typeof callback === "function") {
                 callback(true);
             }
-        }).fail(function (xhr) {
+        }).fail(function () {
             if (typeof callback === "function") {
-                // 408 isn't really an error, it just means the server got bored
-                // waiting for something to happen so it was all like "Yeah man
-                // nothing going on here", so we can just make another request
-                // right away.
-                callback(xhr.status === 408);
+                callback(false);
             }
         });
 

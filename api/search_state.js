@@ -45,7 +45,7 @@ exports.fetch = function (req, res) {
         db.quit();
 
         // If state has changed in the time between the previous response and
-        // this request being sent, reply immediately.
+        // this request being sent, return a reply immediately.
         if (state !== req.session.prev_state) {
             return sendResponse(state);
         }
@@ -55,7 +55,6 @@ exports.fetch = function (req, res) {
 
         // Wait for a state update to be published, then send the state.
         sub.on("message", function (channel, message) {
-            // OR true to ensure the unsubscription happens.
             sendResponse(message, true);
         });
 
@@ -68,7 +67,8 @@ exports.fetch = function (req, res) {
         //
         //     req.socket.setTimeout(11 * 60 * 1000);
         //
-        // the connection will time out after 2 minutes by default.
+        // the connection will time out after 2 minutes by default, and nginx
+        // will get upset and return a 502 "bad gateway" reponse to the client.
         t = setTimeout(function () {
             sub.unsubscribe();
             sub.end();
@@ -77,7 +77,7 @@ exports.fetch = function (req, res) {
             db.decr("user count:bounty");
             db.quit();
 
-            res.send(408); // Timeout
+            res.send(204);
         }, 60 * 1000);
 
     });
