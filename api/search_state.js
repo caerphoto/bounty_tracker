@@ -63,7 +63,12 @@ exports.fetch = function (req, res) {
 
         // To monitor the number of active users, the key "user count:bounty" is
         // incremented upon client connection, and decremented once either a
-        // response is sent, or a timeout of 10 minutes is reached.
+        // response is sent, or a timeout of 1 minute is reached.
+        // NOTE: unless this code is used:
+        //
+        //     req.socket.setTimeout(11 * 60 * 1000);
+        //
+        // the connection will time out after 2 minutes by default.
         t = setTimeout(function () {
             sub.unsubscribe();
             sub.end();
@@ -73,7 +78,7 @@ exports.fetch = function (req, res) {
             db.quit();
 
             res.send(408); // Timeout
-        }, 1000 * 60 * 10);
+        }, 60 * 1000);
 
     });
 };
