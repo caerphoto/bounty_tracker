@@ -12,19 +12,21 @@ exports.fetch = function (req, res) {
         return res.send(403, "Not logged in.");
     }
 
+    // The count is decreased after 6 seconds as a sort of buffer against the
+    // default 3-second request interval used by the client.
     db.incr("user count:bounty");
     setTimeout(function () {
         db.decr("user count:bounty");
-    }, 5000);
+    }, 6000);
 
     db.hget(req.session.guild_key, "search_state", function (err, state) {
         // If state has changed in the time between the previous response and
         // this request being sent, return a reply immediately.
-        res.set("Content-Type", "application/json");
         if (state === req.session.prev_state) {
             return res.send(204);
         } else {
             req.session.prev_state = state;
+            res.set("Content-Type", "application/json");
             return res.send(state);
         }
     });

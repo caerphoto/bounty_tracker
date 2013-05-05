@@ -680,8 +680,12 @@ $(function () {
         // in CSS because transitions are not supported to/from :target, and
         // this way also means finer-grained control over when things happen.
         // Bonus: it might work in IE8 too!
-        $(hash).removeClass("previous").addClass("current");
-        $(prev_hash).removeClass("current").addClass("previous");
+        // The setTimeout() wrapper is to allow the window to do its
+        // hashchange-induced scroll-to-top thing before the dialog is hidden.
+        setTimeout(function () {
+            $(hash).removeClass("previous").addClass("current");
+            $(prev_hash).removeClass("current").addClass("previous");
+        }, 10);
 
         // Removing the "previous" class means the dialog loses its "display:
         // block" property, so delay this until the opacity transition is (or
