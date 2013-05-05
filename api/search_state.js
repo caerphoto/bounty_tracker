@@ -24,6 +24,7 @@ exports.fetch = function (req, res) {
         if (state === req.session.prev_state) {
             return res.send(204);
         } else {
+            req.session.prev_state = state;
             return res.send(state);
         }
     });
