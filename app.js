@@ -43,7 +43,8 @@ init = function (env) {
     var fs = require("fs"),
         f,
         jsfiles = [], cssfiles = [],
-        is_comment = /^\s*#/;
+        is_comment = /^\s*#/,
+        db = require("redis").createClient();
 
     app.set("views", __dirname + "/views");
     app.set("view engine", "ejs");
@@ -60,6 +61,10 @@ init = function (env) {
     app.use(function (err, req, res, next) {
         console.error(err.stack);
         next(err);
+    });
+
+    db.set("user count:bounty", 0, function () {
+        db.end();
     });
 
     // Load individual files if in dev environment, otherwise load single
