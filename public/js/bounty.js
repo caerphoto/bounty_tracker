@@ -682,10 +682,8 @@ $(function () {
         // Bonus: it might work in IE8 too!
         // The setTimeout() wrapper is to allow the window to do its
         // hashchange-induced scroll-to-top thing before the dialog is hidden.
-        setTimeout(function () {
-            $(hash).removeClass("previous").addClass("current");
-            $(prev_hash).removeClass("current").addClass("previous");
-        }, 10);
+        $(hash).removeClass("previous").addClass("current");
+        $(prev_hash).removeClass("current").addClass("previous");
 
         // Removing the "previous" class means the dialog loses its "display:
         // block" property, so delay this until the opacity transition is (or
