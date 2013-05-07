@@ -63,7 +63,7 @@ init = function (env) {
         next(err);
     });
 
-    db.set("user count:bounty", 0, function () {
+    db.set("bounty:user count", 0, function () {
         db.end();
     });
 

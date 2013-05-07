@@ -14,9 +14,9 @@ exports.fetch = function (req, res) {
 
     // The count is decreased after 6 seconds as a sort of buffer against the
     // default 3-second request interval used by the client.
-    db.incr("user count:bounty");
+    db.incr("bounty:user count");
     setTimeout(function () {
-        db.decr("user count:bounty");
+        db.decr("bounty:user count");
     }, 6000);
 
     db.hget(req.session.guild_key, "search_state", function (err, state) {
