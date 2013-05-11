@@ -697,9 +697,13 @@ $(function () {
         prev_hash = hash;
 
         if (!hash || hash === "#") {
+            $body.removeClass("showing-dialog");
             window.scroll(0, last_scroll_pos);
             return;
+        } else {
+            $body.addClass("showing-dialog");
         }
+
 
         $input = $(hash + " > form > textarea").first().get(0);
         if ($input) {
