@@ -1,4 +1,9 @@
 /* Dialog and text-related input styles. */
+.dialog > form,
+.dialog > div {
+    background: #f8f8f8;
+    border-radius: 0.2em;
+}
 
 textarea,
 input[type="text"],
@@ -12,7 +17,6 @@ input[type="email"] {
     line-height: 1;
     border-radius: 3px;
     box-sizing: border-box;
-    box-shadow: inset 1px 1px 4px rgba(0,0,0,0.1);
 }
 
 textarea:focus,
@@ -21,7 +25,6 @@ input[type="password"]:focus,
 input[type="email"]:focus {
     outline: none;
     border-color: #8e1413;
-    box-shadow: inset 1px 1px 4px rgba(204,0,0,0.1);
     background-color: #fffbfb;
 }
 
@@ -133,6 +136,10 @@ input + .button-bar {
     margin-left: 0.5em;
     min-width: 5em;
     text-align: center;
+}
+
+.button-bar > :first-child {
+    margin-left: 0;
 }
 
 #reset-password > input {

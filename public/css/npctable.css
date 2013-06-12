@@ -4,11 +4,10 @@
     width: 100%;
     border-collapse: collapse;
     margin: 1em 0;
-    background: #fff;
 }
 
 .npc-row:nth-child(even) {
-    background: #f4f4f4;
+    background: #eee;
 }
 
 body.logged-in .npc-row.found {
@@ -77,18 +76,13 @@ td:last-child, th:last-child {
     position: relative;
 
     box-sizing: border-box;
-    padding: 0 0.3em;
+    padding: 0 0.4em;
     margin-top: 0.15em;
-    border-width: 1px;
     margin-right: 0.3em;
 
-    border-style: solid;
-    border-color: #bbb #999 #999 #bbb;
-    box-shadow: 0.1em 0.1em 0.1em rgba(0,0,0, 0.1);
+    border-radius: 0.2em 0.5em 0.5em 0.2em;
 
-    border-radius: 0 0.25em 0.25em 0;
-
-    background: #ddd;
+    background: #ccc;
     color: #888;
     text-shadow: none;
 }
