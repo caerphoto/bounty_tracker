@@ -114,6 +114,7 @@ $(function () {
         // Sets the whole NPC table's state according to the state object stored
         // in GBT.seach_state.
         var count = 0,
+            tracking_count = 0,
             state = GBT.search_state,
             this_player_u = "";
 
@@ -158,6 +159,10 @@ $(function () {
                 view.players = npc.players = [];
             }
 
+            if (npc.players && npc.players.length) {
+                tracking_count += 1;
+            }
+
             $list.html(Mustache.render(player_list_template, view));
             $row.toggleClass("assigned", GBT.assignment === short_name);
         });
@@ -172,7 +177,10 @@ $(function () {
         }
 
         $("#found-count").text(count);
-        document.title = "(" + count + ") " + base_doc_title;
+        document.title = [
+            "(", count, "/", tracking_count, ") ",
+            base_doc_title
+        ].join("");
     };
 
     setNPCState = function (short_name, found, callback) {

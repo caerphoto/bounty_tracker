@@ -56,6 +56,24 @@ header form,
     font-weight: 700;
 }
 
+.update {
+    border-left: 3px solid #b00;
+    padding-left: 1em;
+    margin-left: -1.1875em;
+    margin-bottom: 0;
+    padding-bottom: 1em;
+}
+
+.last.update {
+    margin-bottom: 1em;
+    padding-bottom: 0;
+}
+
+ul.update li {
+    list-style: disc;
+    margin-left: 2em;
+}
+
 .important.info {
     background: #fed;
     padding: 1em;

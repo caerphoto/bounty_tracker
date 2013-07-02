@@ -137,6 +137,6 @@ if (app.get("env") === "production") {
     app.listen(3000, "127.0.0.1");
     utils.log("STARTUP", "port 3000", "production");
 } else {
-    app.listen(3000);
+    app.listen(4000);
     utils.log("STARTUP", "port 3000", "development");
 }
