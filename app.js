@@ -138,5 +138,5 @@ if (app.get("env") === "production") {
     utils.log("STARTUP", "port 3000", "production");
 } else {
     app.listen(4000);
-    utils.log("STARTUP", "port 3000", "development");
+    utils.log("STARTUP", "port 4000", "development");
 }

@@ -76,6 +76,10 @@ exports.assignPlayer = function (req, res) {
             return res.send(500);
         }
 
+        if (!npc_short_name) {
+            return res.send(400);
+        }
+
         try {
             full_state = JSON.parse(full_state);
         } catch (e) {

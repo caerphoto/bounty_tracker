@@ -5,17 +5,20 @@ var utils = require("../lib/utils"),
 
 exports.destroy = function (req, res) {
     // Log out
-    utils.log(
-        "LOGOUT",
-        req.session.guild_key.slice(6),
-        req.session.is_admin ? "a" : "m"
-    );
-    //delete req.session.guild_key;
-    //delete req.session.is_admin;
-    //delete req.session.this_player;
-    //delete req.session.assignment;
-    req.session.destroy();
-    res.send(200);
+    if (req.session) {
+        utils.log(
+            "LOGOUT",
+            req.session.guild_key.slice(6),
+            req.session.is_admin ? "a" : "m"
+        );
+    }
+
+    if (req.session) {
+        req.session.destroy();
+        res.send(200);
+    } else {
+        res.send(404);
+    }
 };
 
 exports.create = function (req, res) {
