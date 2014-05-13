@@ -1,8 +1,9 @@
 {
   "name": "bounty-tracker",
   "description": "GW2 Guild Bounty tracker tool",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
+  "main": "app.js",
   "dependencies": {
     "express": "3.x",
     "ejs": "0.8.x",
