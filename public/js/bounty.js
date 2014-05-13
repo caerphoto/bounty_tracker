@@ -655,7 +655,7 @@ $(function () {
         $button.addClass("working");
 
         $.ajax({
-            url: form.action,
+            url: form.getAttribute("data-url"),
             type: form.method,
             data: {
                 message: form.message.value,

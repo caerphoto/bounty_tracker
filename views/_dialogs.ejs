@@ -121,7 +121,8 @@
 </div>
 
 <div id="feedback-dialog" class="dialog">
-  <form id="feedback-form" action="api/feedback" method="POST">
+  <%// action is set to # as an anti-spam mechanism - actual feedback is sent via AJAX %>
+  <form id="feedback-form" data-url="api/feedback" action="#" method="POST">
     <h2>Leave Feedback</h2>
     <label for="feedback-message">What would you like to say?</label>
     <textarea id="feedback-message" name="message"></textarea>
