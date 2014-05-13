@@ -2,9 +2,6 @@
 
 html {
     background-color: #fafafa;
-    /*background-image: url("/media/subtle_white_feathers.jpg");*/
-    font: 16px/1.6 "Source Sans Pro", "source-sans-pro", "Candara", sans-serif;
-    text-rendering: optimizeLegibility;
 }
 
 body {
@@ -13,7 +10,8 @@ body {
     max-width: 65em;
     margin: 0 auto;
     padding: 0;
-    font: inherit;
+    font: 16px/1.6 "Source Sans Pro", "Candara", sans-serif;
+    text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: none;
 }
 
