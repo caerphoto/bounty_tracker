@@ -1,137 +1,137 @@
 <% // Dialogs template partial, included in index.ejs %>
-    <div id="register-dialog" class="dialog logged-out">
-      <form id="register" action="api/register" method="POST">
-        <h2>Register Guild</h2>
-        <label for="register-guildname">Guild name:</label>
-        <input id="register-guildname" name="guildname" type="text">
-        <p class="info">The guild name is not case-sensitive, and can be up to
-        <em>70</em> characters in length.</p>
+<div id="register-dialog" class="dialog logged-out">
+  <form id="register" action="api/register" method="POST">
+    <h2>Register Guild</h2>
+    <label for="register-guildname">Guild name:</label>
+    <input id="register-guildname" name="guildname" type="text">
+    <p class="info">The guild name is not case-sensitive, and can be up to
+    <em>70</em> characters in length.</p>
 
-        <label for="register-admin-email">Admin email:</label>
-        <input id="register-admin-email" name="admin_email" type="text">
-        <p class="info">This is so you can reset the admin password if you
-        forget it. You can leave it blank but this is not recommended.</p>
+    <label for="register-admin-email">Admin email:</label>
+    <input id="register-admin-email" name="admin_email" type="text">
+    <p class="info">This is so you can reset the admin password if you
+    forget it. You can leave it blank but this is not recommended.</p>
 
-        <label for="register-admin-pw">Admin password:</label>
-        <input id="register-admin-pw" name="admin_pw" type="password">
-        <p class="info">This is your login password.</p>
+    <label for="register-admin-pw">Admin password:</label>
+    <input id="register-admin-pw" name="admin_pw" type="password">
+    <p class="info">This is your login password.</p>
 
-        <label for="register-admin-pw-confirm">Confirm admin password:</label>
-        <input id="register-admin-pw-confirm" name="admin_pw_confirm" type="password">
-        <span class="info">Just to make sure you made no mistakes typing the
-          password.</span>
+    <label for="register-admin-pw-confirm">Confirm admin password:</label>
+    <input id="register-admin-pw-confirm" name="admin_pw_confirm" type="password">
+    <span class="info">Just to make sure you made no mistakes typing the
+      password.</span>
 
-        <label for="register-member-pw">Member password:</label>
-        <input id="register-member-pw" name="member_pw" type="text">
-        <p class="info">This is the <em>shared password</em> that regular guild
-        members use to log in with.  It is <strong>not secure!</strong></p>
+    <label for="register-member-pw">Member password:</label>
+    <input id="register-member-pw" name="member_pw" type="text">
+    <p class="info">This is the <em>shared password</em> that regular guild
+    members use to log in with.  It is <strong>not secure!</strong></p>
 
-        <div class="checkbox-wrapper">
-          <input id="register-temporary" name="temporary" type="checkbox">
-          <label for="register-temporary">Temporary registration</label>
-        </div>
-        <p class="info">Check this box to have the Tracker only remember your
-        guild for one day.</p>
-
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="Register Guild">
-        </div>
-      </form>
-    </div> <% // #register-dialog %>
-
-    <div id="options-dialog" class="dialog logged-in for-admins">
-      <form id="options" action="api/guild_info" method="POST">
-        <h2>Options</h2>
-
-        <label for="options-member-pw">Member password:</label>
-        <input type="text" id="options-member-pw" name="member_pw"
-        value="<%= guild_data.member_pw %>">
-
-        <label for="options-admin-email">Admin email:</label>
-        <input type="email" id="options-admin-email" name="admin_email"
-        value="<%= guild_data.admin_email %>">
-
-        <label for="options-admin-pw">Change admin password:</label>
-        <input type="password" id="options-admin-pw" name="admin_pw">
-
-        <label for="options-admin-pw-confirm">Confirm new admin password:</label>
-        <input type="password" id="options-admin-pw-confirm" name="admin_pw_confirm">
-
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="OK">
-        </div>
-      </form>
+    <div class="checkbox-wrapper">
+      <input id="register-temporary" name="temporary" type="checkbox">
+      <label for="register-temporary">Temporary registration</label>
     </div>
+    <p class="info">Check this box to have the Tracker only remember your
+    guild for one day.</p>
 
-    <div id="forgot-password-dialog" class="dialog logged-out">
-      <form id="reset-password" action="api/reset_password" method="POST">
-        <h2>Forgot Your Password?</h2>
-        <p>Enter the guild name and admin email address in the boxes below then
-        click the <em>Reset</em> button to reset the <em>admin password</em> to
-        a new random one. An email will be sent containing the new password.</p>
-
-        <label for="forgot-password-guildname">Guild name:</label>
-        <input id="forgot-password-guildname" type="text" name="guildname">
-
-        <label for="forgot-password-admin-email">Admin email:</label>
-        <input id="forgot-password-admin-email" type="email" name="admin_email">
-
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="Reset">
-        </div>
-      </form>
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="Register Guild">
     </div>
+  </form>
+</div> <% // #register-dialog %>
 
-    <div id="member-name-dialog" class="dialog logged-in">
-      <form id="assign-player" action="api/assign_player" method="POST">
-        <h2>Enter <span class="for-members">Your</span><span
-            class="for-admins">Player</span> Name</h2>
-        <p>Type <span class="for-members">your</span><span class="for-admins">a
-          player</span> name in the box below, then click <em>OK</em> to assign
-        <span class="for-members">yourself</span><span class="for-admins">that
-          player</span> to <em id="assign-player-npc"></em>.</p>
+<div id="options-dialog" class="dialog logged-in for-admins">
+  <form id="options" action="api/guild_info" method="POST">
+    <h2>Options</h2>
 
-        <input type="text" id="assign-player-name" name="player_name">
-        <input type="hidden" name="npc_short_name">
+    <label for="options-member-pw">Member password:</label>
+    <input type="text" id="options-member-pw" name="member_pw"
+    value="<%= guild_data.member_pw %>">
 
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="OK">
-        </div>
-      </form>
+    <label for="options-admin-email">Admin email:</label>
+    <input type="email" id="options-admin-email" name="admin_email"
+    value="<%= guild_data.admin_email %>">
+
+    <label for="options-admin-pw">Change admin password:</label>
+    <input type="password" id="options-admin-pw" name="admin_pw">
+
+    <label for="options-admin-pw-confirm">Confirm new admin password:</label>
+    <input type="password" id="options-admin-pw-confirm" name="admin_pw_confirm">
+
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="OK">
     </div>
+  </form>
+</div>
 
-    <div id="error-dialog" class="dialog">
-      <div id="error"></div>
-    </div>
+<div id="forgot-password-dialog" class="dialog logged-out">
+  <form id="reset-password" action="api/reset_password" method="POST">
+    <h2>Forgot Your Password?</h2>
+    <p>Enter the guild name and admin email address in the boxes below then
+    click the <em>Reset</em> button to reset the <em>admin password</em> to
+    a new random one. An email will be sent containing the new password.</p>
 
-    <div id="confirm-reset-dialog" class="dialog">
-      <form id="confirm-reset" action="#">
-        <h2>Confirm Reset</h2>
-        <p>Please confirm you want to <em>reset all NPC states</em>.
-        <p>This will deassign all players and mark all NPCs as not found.</p>
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="OK">
-        </div>
-      </form>
-    </div>
+    <label for="forgot-password-guildname">Guild name:</label>
+    <input id="forgot-password-guildname" type="text" name="guildname">
 
-    <div id="feedback-dialog" class="dialog">
-      <form id="feedback-form" action="api/feedback" method="POST">
-        <h2>Leave Feedback</h2>
-        <label for="feedback-message">What would you like to say?</label>
-        <textarea id="feedback-message" name="message"></textarea>
-        <label for="feedback-contact">Contact details (email, Twitter, etc. –
-          <em>optional</em>; leave blank if you don’t need a response):</label>
-        <input type="text" name="contact" id="feedback-contact">
-        <div class="button-bar">
-          <a href="#" class="cancel button">Cancel</a>
-          <input type="submit" value="Send">
-        </div>
-      </form>
+    <label for="forgot-password-admin-email">Admin email:</label>
+    <input id="forgot-password-admin-email" type="email" name="admin_email">
+
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="Reset">
     </div>
+  </form>
+</div>
+
+<div id="member-name-dialog" class="dialog logged-in">
+  <form id="assign-player" action="api/assign_player" method="POST">
+    <h2>Enter <span class="for-members">Your</span><span
+        class="for-admins">Player</span> Name</h2>
+    <p>Type <span class="for-members">your</span><span class="for-admins">a
+      player</span> name in the box below, then click <em>OK</em> to assign
+    <span class="for-members">yourself</span><span class="for-admins">that
+      player</span> to <em id="assign-player-npc"></em>.</p>
+
+    <input type="text" id="assign-player-name" name="player_name">
+    <input type="hidden" name="npc_short_name">
+
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="OK">
+    </div>
+  </form>
+</div>
+
+<div id="error-dialog" class="dialog">
+  <div id="error"></div>
+</div>
+
+<div id="confirm-reset-dialog" class="dialog">
+  <form id="confirm-reset" action="#">
+    <h2>Confirm Reset</h2>
+    <p>Please confirm you want to <em>reset all NPC states</em>.
+    <p>This will deassign all players and mark all NPCs as not found.</p>
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="OK">
+    </div>
+  </form>
+</div>
+
+<div id="feedback-dialog" class="dialog">
+  <form id="feedback-form" action="api/feedback" method="POST">
+    <h2>Leave Feedback</h2>
+    <label for="feedback-message">What would you like to say?</label>
+    <textarea id="feedback-message" name="message"></textarea>
+    <label for="feedback-contact">Contact details (email, Twitter, etc. –
+      <em>optional</em>; leave blank if you don’t need a response):</label>
+    <input type="text" name="contact" id="feedback-contact">
+    <div class="button-bar">
+      <a href="#" class="cancel button">Cancel</a>
+      <input type="submit" value="Send">
+    </div>
+  </form>
+</div>
 
