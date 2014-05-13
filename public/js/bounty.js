@@ -650,12 +650,14 @@ $(function () {
 
     $("#feedback-form").on("submit", function () {
         var form = this,
-            $button = $(form.elements[1]);
+            $button = $(form.elements[1]),
+            url = form.getAttribute("data-url");
 
         $button.addClass("working");
 
+        console.log("URL:", url);
         $.ajax({
-            url: form.getAttribute("data-url"),
+            url: url,
             type: form.method,
             data: {
                 message: form.message.value,
