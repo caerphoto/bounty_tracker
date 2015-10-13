@@ -9,7 +9,7 @@ USER=deploy
 
 if [ $ENVIRONMENT = 'production' ]
 then
-    SERVER=( 'caer.me' )
+    SERVER=( 'andyf.me' )
 else
     SERVER=( 'caerphoto-staging' )
 fi

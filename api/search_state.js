@@ -3,6 +3,10 @@ var redis = require("redis"),
     utils = require("../lib/utils"),
     db = redis.createClient();
 
+function updateTimestamp(key) {
+    db.hset(key, "last_modified", Date.now());
+}
+
 exports.fetch = function (req, res) {
     // Simplest method: return entire state as JSON if different, otherwise send
     // an HTTP 204 ("No content") response to indicate that nothing has changed.
@@ -112,6 +116,7 @@ exports.assignPlayer = function (req, res) {
                     return res.send(500);
                 }
 
+                updateTimestamp(guild_key);
                 utils.log(
                     "ASSIGN",
                     guild_key.slice(6),
@@ -166,6 +171,7 @@ exports.removePlayer = function (req, res) {
                     return res.send(500, "HTTP 500: unable to retrieve state after saving it.");
                 }
 
+                updateTimestamp(guild_key);
                 utils.log(
                     "REMOVE",
                     guild_key.slice(6),
@@ -214,6 +220,7 @@ exports.setNPCState = function (req, res) {
                     return res.send(500);
                 }
 
+                updateTimestamp(guild_key);
                 if (found) {
                     utils.log(
                         "FOUND",
@@ -263,6 +270,7 @@ exports.resetState = function (req, res) {
         }
 
         db.hset(guild_key, "search_state", new_state, function () {
+            updateTimestamp(guild_key);
             utils.log(
                 "RESET",
                 guild_key.slice(6),
