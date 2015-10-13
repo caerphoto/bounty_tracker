@@ -4,7 +4,6 @@ $(function () {
     "use strict";
 
     var $body = $(document.body),
-        $html = $(document.body.parentElement),
         $npc_table = $("#npcs"),
         $manual_refresh = $("#manual-refresh"),
         $error = $("#error"),
@@ -855,5 +854,4 @@ $(function () {
     }
 
     window.location.hash = "";
-    $html.removeClass("loading");
 });

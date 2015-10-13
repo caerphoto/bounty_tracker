@@ -1,29 +1,6 @@
 <!DOCTYPE html>
-<html class="wf-loading">
+<html>
   <head>
-<!--[if lt IE 9]>
-<script>
-// Probably not worth doing this, since IE<9 doesn't support various other things anyway.
-document.createElement('header');
-document.createElement('nav');
-document.createElement('section');
-document.createElement('article');
-document.createElement('aside');
-document.createElement('footer');
-document.createElement('hgroup');
-</script>
-<style>
-header,
-nav,
-section,
-article,
-aside,
-footer,
-hgroup {
-  display: block;
-}
-</style>
-<![endif]-->
 
 <!-- Set viewport scaling based on whether screen is retina or not. CSS media
 queries will double base font size accordingly. -->
@@ -50,6 +27,14 @@ WebFontConfig = {
 };
 (function() {
   var wf = document.createElement('script');
+  wf.onerror = function () {
+  console.log('load error');
+    document.documentElement.className = '';
+  };
+  wf.onload = function () {
+  console.log('load success');
+    document.documentElement.className = '';
+  };
   wf.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
   wf.type = 'text/javascript';
   wf.async = 'true';
@@ -148,9 +133,9 @@ WebFontConfig = {
 
     <footer>
       <p>
-      By <a href="//caer.me/">Andy Farrell</a> &middot;
+      By <a href="//andyf.me/">Andy Farrell</a> &middot;
       <em>Caer.1605</em> in GW2 &middot;
-      <a class="icon" id="twitter-icon" href="https://twitter.com/caerphoto"
+      <a class="icon" id="twitter-icon" href="https://twitter.com/af_ahoy"
         target="_blank">twitter</a> &middot;
       source available <a href="https://github.com/caerphoto/bounty_tracker">on
         GitHub</a> &middot;
