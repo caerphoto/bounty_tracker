@@ -8,7 +8,7 @@ members with a password they can use to log in and update their hunt progress.
 
 The reference implementation is here:
 
-<http://bounty.caer.me/>
+<http://bounty.andyf.me/>
 
 The first step is to register your guild. This will create a guild account, with
 the Admin login being for you (and other officers, if you share the admin
@@ -25,19 +25,9 @@ in one go.
 
 ## Installing on your own server
 
-**NOTE:** The Bounty Tracker is a Node application, which probably means it
-can't be run on shared hosting as providers don't usually support installation
-of long-running software like Node (or Ruby/Rails or Python/Django).
-
-Although the app is written in Node, I understand many people will be using
-shared servers where the only options are PHP and MySQL, so once the Node
-version is up and running, I'll look into making the installation of the PHP
-version much simpler. Ideally it'd just be a case of running a `setup.php`
-script and everything is magically done for you. This won't be a priority,
-though, so don't hold your breath – my main focus is the Node version.
-
-Anyway, the instructions below are what worked for me, and may be incomplete as
-I wrote them after I'd installed the app on my server.
+If you want to set the app up on your own server, you're of course welcome to do
+so, but you'll need some experience dealing with Node applications. You'll also
+need, at minimum a working Redis database.
 
 ### Outline
 
@@ -75,10 +65,9 @@ still working on it.
 
 ### Download and install the app
 
-Once you have the dependencies installed (don't forget to start
-`redis-server`!), you need to decide where you're going to install the app. In
-development, just pick a directory where you normally develop stuff, e.g.
-`~/code/`, then run:
+Once you have the dependencies installed (and your Redis server is running), you
+need to decide where you're going to install the app. In development, just pick
+a directory where you normally develop stuff, e.g.  `~/code/`, then run:
 
     $ git clone git://github.com/caerphoto/bounty_tracker.git
     $ npm install
@@ -108,7 +97,7 @@ Once the app is running, you may be able to see it running at
 `http://yourdomain.tld:3000/`, but clearly this isn't ideal from an end-user
 point of view. That's where the final step comes in.
 
-[This SuperUser post]:http://superuser.com/questions/174343/unix-writing-permissions-for-two-users
+[this SuperUser post]:http://superuser.com/questions/174343/unix-writing-permissions-for-two-users
 
 ### Configuring your web server
 
@@ -126,7 +115,6 @@ vouch for it.
 
 ## TODO
 
-* Create setup script for the PHP version of the app.
-* Change PHP version to use MySQL, since it's more commonly used than Postgres.
-* Maybe bring the PHP version up to par with the Node one in terms of features?
-  I really don't like working with PHP so this is far from guaranteed.
+* NPC list needs maintenance.
+* Dulfy links might be out of date - possibly better to have links to maps of
+  paths directly?
